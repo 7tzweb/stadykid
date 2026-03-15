@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans+Hebrew:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9942f0",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#191022",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "Noto Sans Hebrew", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<title>מסך פתיחה - עולם הגורים החמודים</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display overflow-hidden">
+<!-- Main Background Container -->
+<div class="relative flex h-screen w-full flex-col items-center justify-between overflow-hidden bg-gradient-to-b from-[#fdf2ff] to-[#eaddff] dark:from-[#2a1b3d] dark:to-[#191022]">
+<!-- Decorative Background Elements -->
+<div class="absolute top-[-10%] left-[-10%] w-72 h-72 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="absolute bottom-[-5%] right-[-5%] w-96 h-96 bg-primary/20 rounded-full blur-3xl"></div>
+<!-- Top Bar with Parent Lock -->
+<header class="w-full px-6 py-6 flex justify-between items-center z-10">
+<div class="flex items-center gap-2 bg-white/60 dark:bg-primary/20 backdrop-blur-md px-4 py-2 rounded-full shadow-sm">
+<div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">pets</span>
+</div>
+<span class="text-primary font-bold text-lg">עולם הגורים</span>
+</div>
+<button class="flex items-center justify-center w-12 h-12 rounded-full bg-white/80 dark:bg-slate-800 text-slate-600 dark:text-slate-300 shadow-md border-2 border-primary/20">
+<span class="material-symbols-outlined">lock</span>
+</button>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center w-full max-w-4xl px-4 gap-8">
+<!-- Hero Title -->
+<div class="text-center space-y-2">
+<h1 class="text-4xl md:text-6xl font-bold text-primary tracking-tight drop-shadow-sm">
+                    עולם הגורים החמודים
+                </h1>
+<p class="text-slate-600 dark:text-slate-300 text-lg font-medium">בואו לשחק וללמוד עם חברים חדשים!</p>
+</div>
+<!-- Character Showcase -->
+<div class="relative flex items-end justify-center gap-4 md:gap-12 w-full py-8">
+<!-- Left Creature -->
+<div class="w-24 h-24 md:w-40 md:h-40 bg-gradient-to-tr from-pink-200 to-pink-100 rounded-full shadow-xl border-4 border-white flex items-center justify-center relative overflow-hidden group">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A cute pink fluffy round creature with large sparkling eyes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2lY4MJGYk_tCcc3KagcqwlHgzebebYLblQ7gVjmry4-dRxWkDCsEKftWUusWF-ui2Z9xzmHgeGLeARPxJfk0erWA2hhJTkCuA8ZqvYhw30-_DEzlkaW8EO7SWSLO919OdJZpLmJc091faXyyUENquCuIkFPEYw5AsL_vxO4OWBziSHy2NzHU62bfF2A6XbgX-qiHKzPQ6z4E9PmHrpQHvSWlAU10hnlFx1HE_Oze1nhXH9RBOoEX6Zm9uMAgn3o53EeX7FbrxZ3k')"></div>
+<div class="absolute bottom-2 w-16 h-2 bg-black/10 rounded-full blur-sm"></div>
+</div>
+<!-- Center Main Creature -->
+<div class="w-32 h-32 md:w-56 md:h-56 bg-gradient-to-tr from-purple-200 to-purple-100 rounded-full shadow-2xl border-6 border-white flex items-center justify-center relative z-20 overflow-hidden transform scale-110 mb-4">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A central ultra-cute purple fluffy creature with expressive eyes and a tiny smile" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDHYft6Ws1mvlCzkpRN5iqfORL-5bNcNU_B4D0QcKLqFqzxgJg6qRapMPqS7SobRg2Z_d7chnYu2BiGnFA2fK6Gx49mpEkHypehm-0V4XznQyIJTerq39tLSgH5_1H8PBCQP4ZhPKJMEYRN3k1cuZh2tousCYuYK3vRQJh32MbFnWcj9YZ50Pfc0C34PVCxH9nQbroq2FxP5wjzIomAIDFJ_3R1dC9UGA04Se8KiAMLsL8sTtr8tzVQynjpH5iu_UiCCufOzhBk7c4')"></div>
+<div class="absolute bottom-4 w-24 h-3 bg-black/10 rounded-full blur-sm"></div>
+</div>
+<!-- Right Creature -->
+<div class="w-24 h-24 md:w-40 md:h-40 bg-gradient-to-tr from-blue-200 to-blue-100 rounded-full shadow-xl border-4 border-white flex items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A cute light blue fluffy creature with big round eyes" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDIjK416GsxVLnR2sOp8Rxqp2TDBXCFoh4aGzLQLRE3RmOdpFqQc10oTkovh3070MLirweoC2gzLeoeqBAVJPxyHRMtTUaghSIiyVOixja9lWm4XNwBcqLjPISSM-NL3kOtcN2JX6JuuaG8hgtzwc9rSB0YCPTpsboFVUfr25AaUbbvxO0KPR9W8M2GV582pj1n3qBv5YqjnKChyY0dmeh0nFoVs-J1bcPJ1LuUBLGaHQhX4De9b_m1eXszlndG-z4iWvcMufFa-Fc')"></div>
+<div class="absolute bottom-2 w-16 h-2 bg-black/10 rounded-full blur-sm"></div>
+</div>
+</div>
+<!-- Action Area -->
+<div class="flex flex-col items-center gap-6 mt-4">
+<button class="group flex items-center justify-center gap-4 bg-primary hover:bg-primary/90 text-white px-12 py-6 rounded-full text-3xl font-bold shadow-[0_10px_0_0_#7a2ec5] transition-all active:translate-y-1 active:shadow-[0_4px_0_0_#7a2ec5]">
+<span class="material-symbols-outlined text-4xl FILL">play_arrow</span>
+<span>שחקו עכשיו</span>
+</button>
+</div>
+</main>
+<!-- Footer Decoration / Grass/Clouds -->
+<footer class="w-full h-32 relative">
+<div class="absolute bottom-0 w-full h-24 bg-white/40 dark:bg-white/5 backdrop-blur-sm rounded-t-[5rem]"></div>
+<div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-4">
+<div class="w-12 h-12 rounded-xl bg-white/80 flex items-center justify-center text-primary shadow-sm border border-primary/10">
+<span class="material-symbols-outlined">home</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-white/80 flex items-center justify-center text-primary shadow-sm border border-primary/10">
+<span class="material-symbols-outlined">shopping_basket</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-white/80 flex items-center justify-center text-primary shadow-sm border border-primary/10">
+<span class="material-symbols-outlined">settings</span>
+</div>
+</div>
+<!-- Floating particles -->
+<div class="absolute top-0 left-1/4 w-4 h-4 bg-yellow-300/40 rounded-full blur-sm"></div>
+<div class="absolute top-10 right-1/3 w-6 h-6 bg-pink-300/40 rounded-full blur-sm"></div>
+<div class="absolute bottom-20 left-10 w-8 h-8 bg-blue-300/40 rounded-full blur-sm"></div>
+</footer>
+</div>
+</body></html>

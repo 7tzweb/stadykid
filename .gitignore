@@ -1,0 +1,10 @@
+.DS_Store
+*.log
+
+g/node_modules/
+g/dist/
+g/dist-ssr/
+g/*.local
+
+.idea/
+.vscode/

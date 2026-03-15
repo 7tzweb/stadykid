@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "id": "space-english-001",
+  "worldId": "space-english",
+  "missionId": "space-docking",
+  "type": "multiple_choice",
+  "title": "תחנת עגינה",
+  "subject": "english",
+  "instructions": "בוחרים את המילה באנגלית שמתאימה לתמונה.",
+  "difficulty": "easy",
+  "answers": ["option-star"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "מילה מוכרת",
+      "body": "מחפשים את המילה שכבר שמענו בספירה או בשיר."
+    },
+    {
+      "step": 2,
+      "title": "תמונה בלב",
+      "body": "דמיינו את הכוכב ואז חפשו את המילה שנשמעת כמו Star."
+    },
+    {
+      "step": 3,
+      "title": "פסילת מילים אחרות",
+      "body": "Moon היא ירח, Sun היא שמש, Cloud הוא ענן."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "המילה הנכונה היא Star כי התמונה מראה כוכב."
+    }
+  ],
+  "rewards": {
+    "xp": 34,
+    "coins": 15
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 3
+  },
+  "assets": [],
+  "content": {
+    "prompt": "מהי המילה לכוכב?",
+    "question": "בחרו את המילה באנגלית המתאימה.",
+    "options": [
+      {
+        "id": "option-moon",
+        "label": "Moon",
+        "emoji": "🌙"
+      },
+      {
+        "id": "option-star",
+        "label": "Star",
+        "emoji": "⭐"
+      },
+      {
+        "id": "option-cloud",
+        "label": "Cloud",
+        "emoji": "☁️"
+      },
+      {
+        "id": "option-sun",
+        "label": "Sun",
+        "emoji": "🌞"
+      }
+    ],
+    "correctOptionId": "option-star",
+    "explanation": "המילה Star פירושה כוכב."
+  }
+}

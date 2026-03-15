@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "id": "forest-numbers-002",
+  "worldId": "forest-of-numbers",
+  "missionId": "forest-echo",
+  "type": "multiple_choice",
+  "title": "צלילי הספירה",
+  "subject": "math",
+  "instructions": "מסתכלים על סדרת המספרים ובוחרים איזה מספר מגיע אחר כך.",
+  "difficulty": "medium",
+  "answers": ["option-8"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "בודקים את הקפיצה",
+      "body": "בין כל מספר למספר הבא בודקים בכמה הוא גדל."
+    },
+    {
+      "step": 2,
+      "title": "סופרים בקצב קבוע",
+      "body": "כאן המספרים גדלים כל פעם באותו מספר."
+    },
+    {
+      "step": 3,
+      "title": "ממשיכים עוד צעד",
+      "body": "אם 2 הופך ל-4 ואז ל-6, צריך להוסיף שוב 2."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "אחרי 6 מגיע 8, כי כל פעם מוסיפים 2."
+    }
+  ],
+  "rewards": {
+    "xp": 38,
+    "coins": 15,
+    "badgeId": "math-sprout"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 3
+  },
+  "assets": [],
+  "content": {
+    "prompt": "איזה מספר ממשיך את הסדרה 2, 4, 6, ?",
+    "question": "בחרו את המספר הבא.",
+    "options": [
+      {
+        "id": "option-7",
+        "label": "7",
+        "emoji": "🍄"
+      },
+      {
+        "id": "option-8",
+        "label": "8",
+        "emoji": "🌰"
+      },
+      {
+        "id": "option-9",
+        "label": "9",
+        "emoji": "🍃"
+      },
+      {
+        "id": "option-10",
+        "label": "10",
+        "emoji": "🌼"
+      }
+    ],
+    "correctOptionId": "option-8",
+    "explanation": "הסדרה גדלה בקפיצות של 2, לכן אחרי 6 מגיע 8."
+  }
+}

@@ -1,0 +1,176 @@
+[
+  {
+    "id": "moon-fox",
+    "name": "שועל ירח",
+    "description": "יצור לילי עדין שאוהב ליטופים ושירי לילה קטנים.",
+    "priceStars": 24,
+    "accent": "#6366F1",
+    "eggImage": "/assets/pets/eggs/moon-fox-egg.svg",
+    "cardImage": "/assets/pets/puppies/moon-fox.svg",
+    "hatchDurationMinutes": 120,
+    "favoriteFood": "חלב ירח",
+    "favoriteGame": "רדיפת שביטים",
+    "personality": "רגיש, שקט וסקרן",
+    "sounds": {
+      "idleLabel": "פיו",
+      "happyLabel": "טרילי",
+      "needyLabel": "מיאו-ירח"
+    },
+    "needs": {
+      "hungerIntervalMinutes": 40,
+      "pettingIntervalMinutes": 22,
+      "playIntervalMinutes": 32,
+      "restIntervalMinutes": 50,
+      "pettingRewardClicks": 4,
+      "feedingRewardEveryCount": 3,
+      "rewardStars": {
+        "feed": 5,
+        "pet": 3,
+        "play": 4,
+        "rest": 2
+      }
+    },
+    "stages": [
+      {
+        "id": "moon-fox-baby",
+        "name": "שועל ירח קטן",
+        "image": "/assets/pets/puppies/moon-fox.svg",
+        "requiredLifetimeMinutes": 0,
+        "requiredCare": {
+          "feedCount": 0,
+          "petCount": 0,
+          "playCount": 0,
+          "restCount": 0
+        }
+      },
+      {
+        "id": "moon-fox-guardian",
+        "name": "שועל ירח שומר",
+        "image": "/assets/pets/puppies/moon-fox-guardian.svg",
+        "requiredLifetimeMinutes": 240,
+        "requiredCare": {
+          "feedCount": 4,
+          "petCount": 6,
+          "playCount": 3,
+          "restCount": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "bubble-dragon",
+    "name": "דרקון בועות",
+    "description": "דרקון קופצני שאוהב משחקים ורוצה הרבה תשומת לב.",
+    "priceStars": 36,
+    "accent": "#A855F7",
+    "eggImage": "/assets/pets/eggs/bubble-dragon-egg.svg",
+    "cardImage": "/assets/pets/puppies/bubble-dragon.svg",
+    "hatchDurationMinutes": 180,
+    "favoriteFood": "ענני תות",
+    "favoriteGame": "מרוץ בועות",
+    "personality": "אנרגטי, שמח ורעשני",
+    "sounds": {
+      "idleLabel": "פלאפ",
+      "happyLabel": "פופ-פופ",
+      "needyLabel": "ברר-בועה"
+    },
+    "needs": {
+      "hungerIntervalMinutes": 34,
+      "pettingIntervalMinutes": 24,
+      "playIntervalMinutes": 20,
+      "restIntervalMinutes": 46,
+      "pettingRewardClicks": 4,
+      "feedingRewardEveryCount": 4,
+      "rewardStars": {
+        "feed": 6,
+        "pet": 3,
+        "play": 5,
+        "rest": 2
+      }
+    },
+    "stages": [
+      {
+        "id": "bubble-dragon-baby",
+        "name": "דרקון בועות קטן",
+        "image": "/assets/pets/puppies/bubble-dragon.svg",
+        "requiredLifetimeMinutes": 0,
+        "requiredCare": {
+          "feedCount": 0,
+          "petCount": 0,
+          "playCount": 0,
+          "restCount": 0
+        }
+      },
+      {
+        "id": "bubble-dragon-rider",
+        "name": "דרקון עננים",
+        "image": "/assets/pets/puppies/bubble-dragon-rider.svg",
+        "requiredLifetimeMinutes": 320,
+        "requiredCare": {
+          "feedCount": 5,
+          "petCount": 4,
+          "playCount": 6,
+          "restCount": 3
+        }
+      }
+    ]
+  },
+  {
+    "id": "sun-corgi",
+    "name": "קורגי שמש",
+    "description": "גור חמים שאוהב לאכול, לנוח ולקבל ליטופים קטנים.",
+    "priceStars": 18,
+    "accent": "#F59E0B",
+    "eggImage": "/assets/pets/eggs/sun-corgi-egg.svg",
+    "cardImage": "/assets/pets/puppies/sun-corgi.svg",
+    "hatchDurationMinutes": 90,
+    "favoriteFood": "עוגיית דבש",
+    "favoriteGame": "תפיסת כדור זהב",
+    "personality": "חברי, נעים ומתכרבל",
+    "sounds": {
+      "idleLabel": "ווף",
+      "happyLabel": "וו-היי",
+      "needyLabel": "האו-חיבוק"
+    },
+    "needs": {
+      "hungerIntervalMinutes": 28,
+      "pettingIntervalMinutes": 18,
+      "playIntervalMinutes": 28,
+      "restIntervalMinutes": 38,
+      "pettingRewardClicks": 3,
+      "feedingRewardEveryCount": 3,
+      "rewardStars": {
+        "feed": 5,
+        "pet": 4,
+        "play": 4,
+        "rest": 3
+      }
+    },
+    "stages": [
+      {
+        "id": "sun-corgi-baby",
+        "name": "קורגי שמש קטן",
+        "image": "/assets/pets/puppies/sun-corgi.svg",
+        "requiredLifetimeMinutes": 0,
+        "requiredCare": {
+          "feedCount": 0,
+          "petCount": 0,
+          "playCount": 0,
+          "restCount": 0
+        }
+      },
+      {
+        "id": "sun-corgi-hero",
+        "name": "קורגי שמש אמיץ",
+        "image": "/assets/pets/puppies/sun-corgi-hero.svg",
+        "requiredLifetimeMinutes": 180,
+        "requiredCare": {
+          "feedCount": 4,
+          "petCount": 5,
+          "playCount": 3,
+          "restCount": 4
+        }
+      }
+    ]
+  }
+]

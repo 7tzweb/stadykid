@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "id": "logic-cave-001",
+  "worldId": "logic-cave",
+  "missionId": "logic-crystals",
+  "type": "match_pairs",
+  "title": "קריסטלים תואמים",
+  "subject": "logic",
+  "instructions": "מתאימים בין רמז לבין הפתרון הנכון.",
+  "difficulty": "medium",
+  "answers": ["pair-up", "pair-down", "pair-circle"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "מחפשים משמעות",
+      "body": "קראו כל צד בנפרד ואז חפשו את ההתאמה ההגיונית."
+    },
+    {
+      "step": 2,
+      "title": "זוג אחד כל פעם",
+      "body": "לא חייבים לפתור הכול יחד. בוחרים זוג בטוח ואז ממשיכים."
+    },
+    {
+      "step": 3,
+      "title": "שוללים תשובות",
+      "body": "אם חץ למעלה לא מתאים לעיגול, אפשר לפסול מהר."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "למעלה מתאים לחץ למעלה, למטה לחץ למטה, ועיגול לצורה עגולה."
+    }
+  ],
+  "rewards": {
+    "xp": 42,
+    "coins": 18,
+    "badgeId": "logic-lamp"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 4
+  },
+  "assets": [],
+  "content": {
+    "prompt": "חברו כל מושג לזוג שלו",
+    "pairs": [
+      {
+        "id": "pair-up",
+        "left": "למעלה",
+        "right": "⬆️"
+      },
+      {
+        "id": "pair-down",
+        "left": "למטה",
+        "right": "⬇️"
+      },
+      {
+        "id": "pair-circle",
+        "left": "עיגול",
+        "right": "⚪"
+      }
+    ],
+    "explanation": "כל מושג מתאים לסמל שמייצג אותו, ולכן ההתאמות הן ישירות וברורות."
+  }
+}

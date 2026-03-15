@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "id": "memory-island-001",
+  "worldId": "memory-island",
+  "missionId": "memory-shells",
+  "type": "memory_cards",
+  "title": "צדפים זוהרים",
+  "subject": "memory",
+  "instructions": "פותחים קלפים ומוצאים זוגות זהים.",
+  "difficulty": "easy",
+  "answers": ["pair-shell", "pair-fish", "pair-star"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "זוכרים מיקום",
+      "body": "אחרי כל פתיחה, זכרו איפה היה הקלף."
+    },
+    {
+      "step": 2,
+      "title": "לא למהר",
+      "body": "פתיחה איטית ומרוכזת עוזרת הרבה יותר מלחיצות מהירות."
+    },
+    {
+      "step": 3,
+      "title": "משווים זוגות",
+      "body": "חפשו אותו ציור או אותו אייקון בדיוק."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "יש כאן שלושה זוגות: צדף, דג וכוכב ים."
+    }
+  ],
+  "rewards": {
+    "xp": 32,
+    "coins": 13,
+    "badgeId": "memory-spark"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 5
+  },
+  "assets": [],
+  "content": {
+    "prompt": "מצאו את כל הזוגות באי הזיכרון",
+    "pairs": [
+      {
+        "id": "pair-shell",
+        "label": "צדף",
+        "emoji": "🐚"
+      },
+      {
+        "id": "pair-fish",
+        "label": "דג",
+        "emoji": "🐟"
+      },
+      {
+        "id": "pair-star",
+        "label": "כוכב ים",
+        "emoji": "⭐"
+      }
+    ],
+    "explanation": "כדי להצליח צריך לזכור איפה ראינו כל קלף ולהתאים אותו לאח התאום שלו."
+  }
+}

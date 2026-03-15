@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans+Hebrew:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9942f0",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#191022",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "Noto Sans Hebrew", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Spline Sans', 'Noto Sans Hebrew', sans-serif;
+        }
+        .path-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .island-card {
+            transition: transform 0.2s ease;
+        }
+        .island-card:hover {
+            transform: scale(1.05);
+        }
+        .node-bounce {
+            box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen overflow-x-hidden">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 px-6 py-4 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-4 text-primary">
+<div class="bg-primary/20 p-2 rounded-full">
+<span class="material-symbols-outlined text-primary text-3xl">map</span>
+</div>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em]">מפת שלבים - מסע קסום</h2>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-full h-12 w-12 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="flex items-center justify-center rounded-full h-12 w-12 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</header>
+<main class="flex-1 flex flex-col md:flex-row max-w-[1200px] mx-auto w-full p-4 gap-6">
+<aside class="w-full md:w-72 flex flex-col gap-6 order-2 md:order-1">
+<div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-primary/5">
+<div class="flex items-center gap-4 mb-4">
+<div class="relative">
+<img alt="Kids profile avatar" class="rounded-full size-14 border-4 border-primary/20" data-alt="A cute fluffy purple monster profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJYu-bGvzO5rc6xF_K93q3nZ-ZbewAbOm5m0-PNcEHHGEIZKnMj_ko8Ops481kWYaRYGPSbxrxPqQX4eTIV2aDUOuCRWd3-vg1XlMCyXNLQJY8axg_aQN5Sf2M2JQUj4Vza20Ia2-ta6bVshZByvK2UdbFLOt79Oz21Y-oHGqWRXq1xCQMi3NPUSQoP-tnkKiuDj_usBWYCRpsoo4YhpTZk2gw99jlvP8liaDoMSJB6XzjaI-R96j8IYIni1dVLYQ88JBX_3z5J98"/>
+<div class="absolute -bottom-1 -right-1 bg-yellow-400 text-[10px] font-bold px-2 py-0.5 rounded-full border-2 border-white shadow-sm">LVL 5</div>
+</div>
+<div class="flex flex-col">
+<h3 class="font-bold text-lg">שלום חבר!</h3>
+<p class="text-primary text-sm font-medium">אספן הכוכבים</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end mb-1">
+<span class="text-sm font-bold opacity-70">ההתקדמות שלי</span>
+<span class="text-primary font-bold">45%</span>
+</div>
+<div class="w-full h-4 bg-primary/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[45%]" style="box-shadow: 0 0 10px rgba(153, 66, 240, 0.4);"></div>
+</div>
+<p class="text-xs text-slate-500 dark:text-slate-400 text-center font-medium">עוד 3 שלבים לאי הבא!</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 p-4 rounded-xl bg-primary text-white shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-bold">בית</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl hover:bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">group</span>
+<span class="font-bold">חברים</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl hover:bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">emoji_events</span>
+<span class="font-bold">פרסים</span>
+</a>
+<a class="flex items-center gap-4 p-4 rounded-xl hover:bg-primary/5 transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">storefront</span>
+<span class="font-bold">חנות הקסמים</span>
+</a>
+</nav>
+<div class="grid grid-cols-2 gap-3">
+<div class="island-card bg-emerald-100 dark:bg-emerald-900/30 p-3 rounded-xl flex flex-col items-center gap-2 border border-emerald-200 cursor-pointer">
+<img alt="Forest Island" class="rounded-lg aspect-square object-cover w-full" data-alt="Cartoonish green magical forest island with sparkles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJpErR0ukMslSSWw4CIsQ7HkGO-p2WAA1qtCjWugL_o7MfapzimODfqa9c-BkGrfsskkVNaOUBA8Cf6VN-LKo3kvfTcgmKHOPgIthW8_FL5YCSJpWtmtztrZF6pSTW6lrlcs3UJSFanBW5m7wfPwXwPDOfykTVJf5T0OsaAFoXt9lHnHAj6Q4Kre1RiO406Q5x6h_5a_LLQwwXHov4fLskMnY6BKAeVhoF7CYuOOjxfQdDVkG5w7H5ebVOhiIujpywC_AFja5D8kI"/>
+<span class="text-xs font-bold text-emerald-700 dark:text-emerald-300">אי היער</span>
+</div>
+<div class="island-card bg-blue-100 dark:bg-blue-900/30 p-3 rounded-xl flex flex-col items-center gap-2 border border-blue-200 cursor-pointer opacity-80">
+<img alt="Castle Island" class="rounded-lg aspect-square object-cover w-full grayscale" data-alt="Magical floating castle with bright blue sky" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOXSg9_XJzkr7iaEwXjVcFMeWQ78mfK-wDkLGF6xvnl82Ivd9gvWhwN7kfsodBv98OOtSQo3VJqgemGj-fKEaAV7ggBdUqjoXav0S4OuFw-GzlgdZ0xgYQAACU8CWA598zcvrgQ-nigfaQMZjLnqufg393wuqpKLGP2x0rxoMdmKdqJ2NxEfGV_8hOeBhyJoHAqmJPvcTys2APqn6cq8GwbZ8H6gfHwtIzwOglBtgUheIK7NX1JcE62H4VnpnPZCrl7fL3GLLqwIU"/>
+<span class="text-xs font-bold text-blue-700 dark:text-blue-300">אי הטירה</span>
+</div>
+</div>
+</aside>
+<section class="flex-1 order-1 md:order-2 bg-white/50 dark:bg-slate-800/50 rounded-xl relative min-h-[600px] border-4 border-dashed border-primary/10 overflow-hidden">
+<svg class="path-svg" preserveaspectratio="none" viewbox="0 0 800 600">
+<path d="M 400 550 Q 550 500 600 400 T 400 250 T 200 150 T 400 50" fill="none" opacity="0.2" stroke="#9942f0" stroke-dasharray="20, 20" stroke-linecap="round" stroke-width="12"></path>
+</svg>
+<div class="relative z-10 w-full h-full p-10 flex flex-col items-center justify-between gap-16">
+<div class="absolute top-[50px] left-[400px] -translate-x-1/2 group">
+<div class="flex flex-col items-center gap-2">
+<div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center text-slate-400 border-4 border-white shadow-xl">
+<span class="material-symbols-outlined text-3xl">auto_awesome</span>
+</div>
+<span class="bg-slate-100 text-[10px] font-bold px-2 py-1 rounded-full text-slate-500 uppercase">משימת הכוכבים</span>
+</div>
+</div>
+<div class="absolute top-[150px] left-[200px] -translate-x-1/2 group">
+<div class="flex flex-col items-center gap-2">
+<div class="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center text-slate-400 border-4 border-white shadow-xl">
+<span class="material-symbols-outlined text-3xl">psychology</span>
+</div>
+<span class="bg-slate-100 text-[10px] font-bold px-2 py-1 rounded-full text-slate-500 uppercase">אתגר הזיכרון</span>
+</div>
+</div>
+<div class="absolute top-[250px] left-[400px] -translate-x-1/2 z-20">
+<div class="flex flex-col items-center gap-2">
+<div class="relative">
+<div class="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center text-white border-4 border-white shadow-xl node-bounce ring-4 ring-yellow-400/30 scale-110 cursor-pointer">
+<span class="material-symbols-outlined text-4xl">extension</span>
+</div>
+<div class="absolute -top-16 left-1/2 -translate-x-1/2 flex flex-col items-center">
+<div class="bg-white dark:bg-slate-700 px-3 py-1 rounded-full shadow-lg border-2 border-primary animate-bounce">
+<span class="text-xs font-bold text-primary">כאן משחקים!</span>
+</div>
+<img alt="Current pet character" class="w-16 h-16 drop-shadow-md" data-alt="Tiny cute cartoon fluffy purple pet sitting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlqv7qc03CmyvZKZR-k1JuO-CqpmoSC6z2fh-SACsrrrxgdBA2Fhqo8s_haHtHhlhTYLAguh_mZRZEMeXiAcEDuDKEkM2Tsu-DrHn2PxA8vygf-Ps21DZIDfC13OPzZYCUWsJO8ZsVVk6glhhh_MfzEJxpH4ddUInIwPvifnT2-e9MXBRkoBnAT0cdPWjVtENIeDds7wPTZNLcPFK3t-w-fE1Y-8JkCr0_AUiVUDG8NR2mYNL2QhUbej_QuBuSCuoa_FHU8kq1B7g"/>
+</div>
+</div>
+<span class="bg-yellow-400 text-white text-[12px] font-bold px-3 py-1 rounded-full uppercase shadow-sm">פאזל החברים</span>
+</div>
+</div>
+<div class="absolute top-[400px] left-[600px] -translate-x-1/2">
+<div class="flex flex-col items-center gap-2">
+<div class="w-16 h-16 bg-emerald-400 rounded-full flex items-center justify-center text-white border-4 border-white shadow-xl node-bounce cursor-pointer">
+<span class="material-symbols-outlined text-3xl">calculate</span>
+</div>
+<span class="bg-emerald-400 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase shadow-sm">משחקי מספרים</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-yellow-400 text-xs fill-1">star</span>
+<span class="material-symbols-outlined text-yellow-400 text-xs fill-1">star</span>
+<span class="material-symbols-outlined text-yellow-400 text-xs fill-1">star</span>
+</div>
+</div>
+</div>
+<div class="absolute top-[550px] left-[400px] -translate-x-1/2">
+<div class="flex flex-col items-center gap-2">
+<div class="w-16 h-16 bg-emerald-400 rounded-full flex items-center justify-center text-white border-4 border-white shadow-xl node-bounce cursor-pointer">
+<span class="material-symbols-outlined text-3xl">menu_book</span>
+</div>
+<span class="bg-emerald-400 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase shadow-sm">ספר הקסמים</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-yellow-400 text-xs fill-1">star</span>
+<span class="material-symbols-outlined text-yellow-400 text-xs fill-1">star</span>
+<span class="material-symbols-outlined text-slate-300 text-xs">star</span>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-6 right-6 flex gap-3 z-30">
+<button class="bg-white/90 dark:bg-slate-800/90 p-4 rounded-full shadow-lg border-2 border-primary/20 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">rocket_launch</span>
+</button>
+</div>
+<div class="absolute top-6 left-6 z-30">
+<div class="flex items-center gap-2 bg-white/90 dark:bg-slate-800/90 px-4 py-2 rounded-full shadow-sm border border-primary/10">
+<span class="material-symbols-outlined text-yellow-500 fill-1">stars</span>
+<span class="font-bold text-slate-700 dark:text-slate-200">124</span>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-white/50 dark:bg-background-dark/50 py-4 px-6 border-t border-primary/5 text-center">
+<p class="text-xs text-slate-400 font-medium tracking-wide">מסע הקסמים של חברים קטנים © 2024</p>
+</footer>
+</div>
+</div>
+</body></html>

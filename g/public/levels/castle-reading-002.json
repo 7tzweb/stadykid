@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "castle-reading-002",
+  "worldId": "castle-of-reading",
+  "missionId": "castle-library",
+  "type": "drag_and_drop",
+  "title": "ספריית החרוזים",
+  "subject": "reading",
+  "instructions": "גוררים כל מילה למילה שמתחרזת איתה.",
+  "difficulty": "medium",
+  "answers": ["item-dag", "item-or"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "מקשיבים לסוף המילה",
+      "body": "במילים מתחרזות הסוף נשמע דומה."
+    },
+    {
+      "step": 2,
+      "title": "אומרים בקול",
+      "body": "קריאה בקול עוזרת לשמוע אם שתי מילים מתאימות."
+    },
+    {
+      "step": 3,
+      "title": "מחפשים צליל חוזר",
+      "body": "דג וחג נשמעות דומה, וגם אור ודור."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "דג מתאים לחג, ואור מתאים לדור."
+    }
+  ],
+  "rewards": {
+    "xp": 40,
+    "coins": 16,
+    "badgeId": "story-key"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 3
+  },
+  "assets": [],
+  "content": {
+    "prompt": "התאימו כל מילה לחרוז שלה",
+    "items": [
+      {
+        "id": "item-dag",
+        "label": "דג"
+      },
+      {
+        "id": "item-or",
+        "label": "אור"
+      }
+    ],
+    "targets": [
+      {
+        "id": "target-hag",
+        "label": "חג",
+        "accepts": ["item-dag"]
+      },
+      {
+        "id": "target-dor",
+        "label": "דור",
+        "accepts": ["item-or"]
+      }
+    ],
+    "explanation": "מילים מתחרזות נשמעות דומה בסוף, לכן דג מתאים לחג ואור מתאים לדור."
+  }
+}

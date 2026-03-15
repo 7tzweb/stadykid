@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "id": "forest-numbers-001",
+  "worldId": "forest-of-numbers",
+  "missionId": "forest-bloom",
+  "type": "multiple_choice",
+  "title": "שביל הזרעים",
+  "subject": "math",
+  "instructions": "בוחרים את הכמות שמתאימה למספר וממשיכים בשביל.",
+  "difficulty": "easy",
+  "answers": ["group-4"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "סופרים לאט",
+      "body": "קודם מסתכלים על המספר, ואז מחפשים קבוצה עם אותה כמות."
+    },
+    {
+      "step": 2,
+      "title": "אצבע על כל בלוט",
+      "body": "עברו בלוט-בלוט כדי לא להתבלבל בספירה."
+    },
+    {
+      "step": 3,
+      "title": "השוואה בין אפשרויות",
+      "body": "אם קבוצה גדולה מדי או קטנה מדי, אפשר לפסול אותה."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "הקבוצה הנכונה היא 4 בלוטים, כי היא תואמת בדיוק למספר 4."
+    }
+  ],
+  "rewards": {
+    "xp": 30,
+    "coins": 12,
+    "badgeId": "math-sprout"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 3
+  },
+  "assets": [],
+  "content": {
+    "prompt": "איזו קבוצה מראה 4 בלוטים?",
+    "question": "בחרו את הכמות הנכונה.",
+    "options": [
+      {
+        "id": "group-2",
+        "label": "2 בלוטים",
+        "emoji": "🌰"
+      },
+      {
+        "id": "group-3",
+        "label": "3 בלוטים",
+        "emoji": "🌰"
+      },
+      {
+        "id": "group-4",
+        "label": "4 בלוטים",
+        "emoji": "🌰"
+      },
+      {
+        "id": "group-5",
+        "label": "5 בלוטים",
+        "emoji": "🌰"
+      }
+    ],
+    "correctOptionId": "group-4",
+    "explanation": "המספר 4 מתאים לקבוצה שיש בה בדיוק ארבעה בלוטים."
+  }
+}

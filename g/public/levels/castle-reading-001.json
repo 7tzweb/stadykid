@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "castle-reading-001",
+  "worldId": "castle-of-reading",
+  "missionId": "castle-gate",
+  "type": "drag_and_drop",
+  "title": "מפתח האותיות",
+  "subject": "reading",
+  "instructions": "גוררים כל מילה לשער שמתחיל באותה אות.",
+  "difficulty": "easy",
+  "answers": ["item-sefer", "item-bait"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "אות פותחת",
+      "body": "מסתכלים על האות הראשונה של כל מילה."
+    },
+    {
+      "step": 2,
+      "title": "קוראים בקול",
+      "body": "קריאה בקול עוזרת לשמוע את הצליל הראשון."
+    },
+    {
+      "step": 3,
+      "title": "בדיקה לפי שער",
+      "body": "אם השער הוא ב, רק מילה שמתחילה בב יכולה להיכנס אליו."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "ספר נכנס לשער ס, ובית נכנס לשער ב."
+    }
+  ],
+  "rewards": {
+    "xp": 35,
+    "coins": 14,
+    "badgeId": "story-key"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 3
+  },
+  "assets": [],
+  "content": {
+    "prompt": "התאימו מילה לשער הנכון",
+    "items": [
+      {
+        "id": "item-sefer",
+        "label": "ספר"
+      },
+      {
+        "id": "item-bait",
+        "label": "בית"
+      }
+    ],
+    "targets": [
+      {
+        "id": "target-samech",
+        "label": "שער האות ס",
+        "accepts": ["item-sefer"]
+      },
+      {
+        "id": "target-bet",
+        "label": "שער האות ב",
+        "accepts": ["item-bait"]
+      }
+    ],
+    "explanation": "המילה ספר מתחילה ב-ס והמילה בית מתחילה ב-ב, לכן כל אחת הולכת לשער שלה."
+  }
+}

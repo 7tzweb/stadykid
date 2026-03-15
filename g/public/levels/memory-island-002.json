@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "id": "memory-island-002",
+  "worldId": "memory-island",
+  "missionId": "memory-parade",
+  "type": "memory_cards",
+  "title": "מצעד הצבעים",
+  "subject": "memory",
+  "instructions": "פותחים קלפים ומוצאים זוגות של צבעים זהים.",
+  "difficulty": "medium",
+  "answers": ["pair-red", "pair-blue", "pair-green", "pair-yellow"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "זוכרים מיקום",
+      "body": "אחרי כל פתיחה זוכרים איפה הופיע הצבע."
+    },
+    {
+      "step": 2,
+      "title": "מחפשים התאמה מושלמת",
+      "body": "צריך למצוא אותו צבע בדיוק, לא צבע דומה."
+    },
+    {
+      "step": 3,
+      "title": "לא לפתוח מהר",
+      "body": "עדיף לחשוב שנייה לפני כל קלף חדש."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "יש כאן ארבעה זוגות: אדום, כחול, ירוק וצהוב."
+    }
+  ],
+  "rewards": {
+    "xp": 36,
+    "coins": 14,
+    "badgeId": "memory-spark"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 6
+  },
+  "assets": [],
+  "content": {
+    "prompt": "מצאו את כל זוגות הצבעים במצעד",
+    "pairs": [
+      {
+        "id": "pair-red",
+        "label": "אדום",
+        "emoji": "🟥"
+      },
+      {
+        "id": "pair-blue",
+        "label": "כחול",
+        "emoji": "🟦"
+      },
+      {
+        "id": "pair-green",
+        "label": "ירוק",
+        "emoji": "🟩"
+      },
+      {
+        "id": "pair-yellow",
+        "label": "צהוב",
+        "emoji": "🟨"
+      }
+    ],
+    "explanation": "כדי להצליח צריך לזכור איפה כל צבע הופיע, ואז לפתוח את בן הזוג שלו."
+  }
+}

@@ -1,0 +1,68 @@
+[
+  {
+    "id": "moon-fox-egg",
+    "name": "ביצת שועל ירח",
+    "price": 65,
+    "accent": "#6366F1",
+    "eggImage": "/assets/pets/eggs/moon-fox-egg.svg",
+    "hatchDurationMinutes": 120,
+    "stages": [
+      {
+        "id": "moon-fox",
+        "name": "שועל ירח",
+        "image": "/assets/pets/puppies/moon-fox.svg",
+        "requiredCompletedLevels": 0
+      },
+      {
+        "id": "moon-fox-guardian",
+        "name": "שועל ירח שומר",
+        "image": "/assets/pets/puppies/moon-fox-guardian.svg",
+        "requiredCompletedLevels": 5
+      }
+    ]
+  },
+  {
+    "id": "bubble-dragon-egg",
+    "name": "ביצת דרקון בועות",
+    "price": 80,
+    "accent": "#A855F7",
+    "eggImage": "/assets/pets/eggs/bubble-dragon-egg.svg",
+    "hatchDurationMinutes": 180,
+    "stages": [
+      {
+        "id": "bubble-dragon",
+        "name": "דרקון בועות",
+        "image": "/assets/pets/puppies/bubble-dragon.svg",
+        "requiredCompletedLevels": 0
+      },
+      {
+        "id": "bubble-dragon-rider",
+        "name": "דרקון עננים",
+        "image": "/assets/pets/puppies/bubble-dragon-rider.svg",
+        "requiredCompletedLevels": 7
+      }
+    ]
+  },
+  {
+    "id": "sun-corgi-egg",
+    "name": "ביצת קורגי שמש",
+    "price": 52,
+    "accent": "#F59E0B",
+    "eggImage": "/assets/pets/eggs/sun-corgi-egg.svg",
+    "hatchDurationMinutes": 90,
+    "stages": [
+      {
+        "id": "sun-corgi",
+        "name": "קורגי שמש",
+        "image": "/assets/pets/puppies/sun-corgi.svg",
+        "requiredCompletedLevels": 0
+      },
+      {
+        "id": "sun-corgi-hero",
+        "name": "קורגי שמש אמיץ",
+        "image": "/assets/pets/puppies/sun-corgi-hero.svg",
+        "requiredCompletedLevels": 4
+      }
+    ]
+  }
+]

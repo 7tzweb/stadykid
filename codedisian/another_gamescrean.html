@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans+Hebrew:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9942f0",
+                        "background-light": "#fef7ff",
+                        "background-dark": "#191022",
+                        "candy-pink": "#ff85d0",
+                        "candy-blue": "#70e0ff",
+                        "candy-yellow": "#ffe14d",
+                        "candy-green": "#a2ff86"
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "Noto Sans Hebrew", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1.5rem", "lg": "2.5rem", "xl": "4rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Spline Sans", "Noto Sans Hebrew", sans-serif;
+        }
+        .nursery-bg {
+            background: linear-gradient(180deg, #fef7ff 0%, #fff0f9 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .floating-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col nursery-bg overflow-x-hidden">
+<!-- Background Decor Elements (Nursery Style) -->
+<div class="floating-bubble w-32 h-32 -top-10 -left-10 bg-candy-pink/20"></div>
+<div class="floating-bubble w-48 h-48 top-40 -right-20 bg-candy-blue/20"></div>
+<div class="floating-bubble w-24 h-24 bottom-10 left-20 bg-candy-yellow/20"></div>
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between px-6 py-4 bg-white/60 backdrop-blur-md border-b-4 border-primary/10 rounded-b-xl sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="flex items-center justify-center size-12 rounded-full bg-candy-pink shadow-lg shadow-candy-pink/30 border-4 border-white">
+<span class="material-symbols-outlined text-white text-2xl" style="font-variation-settings: 'FILL' 1">favorite</span>
+</div>
+<div class="flex flex-col">
+<div class="h-4 w-32 bg-slate-200 rounded-full overflow-hidden border-2 border-white shadow-inner">
+<div class="h-full bg-candy-pink" style="width: 80%;"></div>
+</div>
+<span class="text-xs font-bold text-slate-500 mt-1 mr-1">חיים</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-white/80 px-4 py-2 rounded-full border-2 border-primary/20 shadow-sm">
+<span class="material-symbols-outlined text-candy-yellow text-2xl" style="font-variation-settings: 'FILL' 1">stars</span>
+<span class="text-primary font-bold text-lg">1,240</span>
+</div>
+<div class="size-12 rounded-full border-4 border-white bg-candy-blue shadow-md overflow-hidden">
+<div class="w-full h-full bg-cover bg-center" data-alt="Small circular avatar of a cute creature" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuADTch_IyqxaDXE29d2rUG4z9XPHuUc0PDo7qbAeHzSeNFnnUmZubNCHdQrgO0T1bdEjEyOrsIb17GfMXSgpvGAcL5HFC5noJgx8udnrDpEWm83lxB40rvnKfs7Fe1uKdasIFrAbxC87-lcnh-D9-MhU7L6j0Kfr84lagxsy_M10ChNf85NhBKxkL1DT-3g6NIweTDgilAxfmSoBQhC1SIqNABewJxvlE907FFocGBWYdMGTpZa9EMsX-3qcIU3aivS_iHU8zlU2bU')"></div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 flex-col items-center justify-center px-4 py-8 relative">
+<!-- Mascot Side Character -->
+<div class="absolute bottom-4 right-4 md:right-20 z-10">
+<div class="flex flex-col items-center">
+<!-- Speech Bubble -->
+<div class="bg-white p-4 rounded-lg shadow-xl mb-4 relative border-2 border-primary/10">
+<p class="text-primary font-bold text-lg">אתה יכול לעשות את זה!</p>
+<div class="absolute -bottom-2 right-6 w-4 h-4 bg-white border-r-2 border-b-2 border-primary/10 rotate-45"></div>
+</div>
+<!-- The Mascot (Fluvsies Style) -->
+<div class="w-40 h-40 bg-contain bg-no-repeat bg-center" data-alt="A cute pink fluffy creature with big eyes and glittery ears" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDXg3LJBuI7lT4q4jTd1JIfgAP3_H3tBl-lgmgcaSGIPkJZtTGG7R6tnF2UKbzq3cKY3lq8lAc_pGT8miV9B7JK5VFzmJF6AdiiT1hydhXnBj9Um6tL33wbW-2Enn-O1uW6-008qkD5ZPQXQ58N-qLLwuvEy4-7Q3pY22ydUl9MPIauVhE-Vqp9_MBIrvEkK4oSDEWxsADicRgUoyIkpNMGLYuWarkkoQivcMzElkiC2Ne49yQ5Ildw6QWapDXWK39_HLm2yjpGHnc')"></div>
+</div>
+</div>
+<!-- Central Learning Task -->
+<div class="w-full max-w-2xl bg-white/40 backdrop-blur-sm p-8 rounded-xl border-4 border-white shadow-2xl flex flex-col items-center">
+<div class="mb-10 text-center">
+<h2 class="text-slate-500 text-xl font-medium mb-2">פתור את התרגיל:</h2>
+<div class="flex items-center justify-center gap-6 bg-white py-6 px-10 rounded-lg shadow-inner border-4 border-primary/5">
+<span class="text-6xl font-black text-primary">5</span>
+<span class="text-5xl font-bold text-candy-pink">+</span>
+<span class="text-6xl font-black text-primary">3</span>
+<span class="text-5xl font-bold text-candy-pink">=</span>
+<span class="text-6xl font-black text-slate-300">?</span>
+</div>
+</div>
+<!-- Answer Grid -->
+<div class="grid grid-cols-2 gap-6 w-full max-w-md">
+<!-- Option 1 -->
+<button class="group relative bg-candy-blue hover:scale-105 transition-transform p-1 rounded-lg shadow-[0_8px_0_0_#48a9c5]">
+<div class="bg-white/20 absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-center justify-center h-24 w-full bg-candy-blue rounded-lg border-4 border-white/40">
+<span class="text-4xl font-black text-white">7</span>
+</div>
+</button>
+<!-- Option 2 (Correct Style Highlight) -->
+<button class="group relative bg-candy-green hover:scale-105 transition-transform p-1 rounded-lg shadow-[0_8px_0_0_#6bc454]">
+<div class="bg-white/20 absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-center justify-center h-24 w-full bg-candy-green rounded-lg border-4 border-white/40">
+<span class="text-4xl font-black text-white">8</span>
+</div>
+</button>
+<!-- Option 3 -->
+<button class="group relative bg-candy-pink hover:scale-105 transition-transform p-1 rounded-lg shadow-[0_8px_0_0_#c55a9b]">
+<div class="bg-white/20 absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-center justify-center h-24 w-full bg-candy-pink rounded-lg border-4 border-white/40">
+<span class="text-4xl font-black text-white">6</span>
+</div>
+</button>
+<!-- Option 4 -->
+<button class="group relative bg-candy-yellow hover:scale-105 transition-transform p-1 rounded-lg shadow-[0_8px_0_0_#c5ae3a]">
+<div class="bg-white/20 absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<div class="flex items-center justify-center h-24 w-full bg-candy-yellow rounded-lg border-4 border-white/40">
+<span class="text-4xl font-black text-white">9</span>
+</div>
+</button>
+</div>
+</div>
+<!-- Progress Indicator Bottom -->
+<div class="mt-12 w-full max-w-md">
+<div class="flex justify-between items-center mb-2 px-2">
+<span class="text-primary font-bold">התקדמות השלב</span>
+<span class="text-primary font-bold">4 / 10</span>
+</div>
+<div class="h-6 bg-white rounded-full border-4 border-primary/10 p-1 shadow-inner">
+<div class="h-full bg-gradient-to-r from-primary to-candy-pink rounded-full" style="width: 40%;"></div>
+</div>
+</div>
+</main>
+<!-- Footer Tools -->
+<footer class="p-6 flex justify-center gap-8">
+<button class="size-16 rounded-full bg-white shadow-xl flex items-center justify-center text-candy-blue border-4 border-candy-blue/20 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">lightbulb</span>
+</button>
+<button class="size-16 rounded-full bg-white shadow-xl flex items-center justify-center text-candy-pink border-4 border-candy-pink/20 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">refresh</span>
+</button>
+<button class="size-16 rounded-full bg-white shadow-xl flex items-center justify-center text-candy-green border-4 border-candy-green/20 hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">volume_up</span>
+</button>
+</footer>
+</div>
+</div>
+</body></html>

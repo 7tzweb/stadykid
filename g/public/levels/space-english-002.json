@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "id": "space-english-002",
+  "worldId": "space-english",
+  "missionId": "space-comet",
+  "type": "multiple_choice",
+  "title": "מרדף שביט",
+  "subject": "english",
+  "instructions": "בוחרים את המילה באנגלית שמתאימה למילה בעברית.",
+  "difficulty": "medium",
+  "answers": ["option-moon"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "נזכרים בתמונה",
+      "body": "חושבים על הירח בשמיים ואז נזכרים איך קוראים לו באנגלית."
+    },
+    {
+      "step": 2,
+      "title": "פוסלים מילים אחרות",
+      "body": "Sun היא שמש, Star הוא כוכב, Cloud הוא ענן."
+    },
+    {
+      "step": 3,
+      "title": "אומרים בקול",
+      "body": "המילה Moon נשמעת כמו המילה שלמדנו לירח."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "המילה הנכונה היא Moon כי פירושה ירח."
+    }
+  ],
+  "rewards": {
+    "xp": 39,
+    "coins": 16
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 3
+  },
+  "assets": [],
+  "content": {
+    "prompt": "איזו מילה באנגלית אומרת ירח?",
+    "question": "בחרו את המילה המתאימה.",
+    "options": [
+      {
+        "id": "option-star",
+        "label": "Star",
+        "emoji": "⭐"
+      },
+      {
+        "id": "option-moon",
+        "label": "Moon",
+        "emoji": "🌙"
+      },
+      {
+        "id": "option-sun",
+        "label": "Sun",
+        "emoji": "🌞"
+      },
+      {
+        "id": "option-cloud",
+        "label": "Cloud",
+        "emoji": "☁️"
+      }
+    ],
+    "correctOptionId": "option-moon",
+    "explanation": "המילה Moon פירושה ירח."
+  }
+}

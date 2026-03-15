@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>מרכז בקרה להורים - האפליקציה הקסומה</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#9942f0",
+                "background-light": "#f7f6f8",
+                "background-dark": "#191022",
+              },
+              fontFamily: {
+                "display": ["Spline Sans", "system-ui", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Spline Sans', sans-serif;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9942f033;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex min-h-screen">
+<!-- Sidebar Navigation -->
+<aside class="w-72 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col p-6 gap-8 sticky top-0 h-screen">
+<div class="flex items-center gap-3 px-2">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">auto_fix_high</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-none">אקדמיה קסומה</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">מרכז בקרה להורים</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-full bg-primary/10 text-primary font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>סקירה כללית</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">child_care</span>
+<span>הילדים שלי</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span>דוחות התקדמות</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>הגדרות חשבון</span>
+</a>
+</nav>
+<div class="bg-primary/5 rounded-xl p-4 border border-primary/10">
+<p class="text-sm font-medium text-primary mb-2">זקוק לעזרה?</p>
+<p class="text-xs text-slate-500 dark:text-slate-400 mb-3">צוות התמיכה שלנו זמין עבורך לכל שאלה על הלמידה של ילדיך.</p>
+<button class="w-full py-2 bg-white dark:bg-slate-800 rounded-full text-xs font-bold text-primary border border-primary/20 shadow-sm">צור קשר</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-8 lg:p-12 overflow-y-auto">
+<!-- Header Section -->
+<header class="flex flex-wrap justify-between items-end gap-6 mb-10">
+<div class="space-y-2">
+<h2 class="text-3xl font-black tracking-tight">שלום, יוסי 👋</h2>
+<p class="text-slate-500 dark:text-slate-400">הנה מה שקרה היום בממלכת הלמידה של הילדים</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-4 bg-white dark:bg-slate-900 px-6 py-2 rounded-full border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex -space-x-3 space-x-reverse">
+<div class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 overflow-hidden bg-slate-200" data-alt="Avatar of child named Noam" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAlsFlliTp-zrR5lkTDG6p5Lzkmj9NB_GNQxnCV_CKyyGQTivfNZEHvSFeJ7iTrlX9UiUWbWtEaOKwazHqaXqd8QuuX48_sZihRRbbd-_PlC8vaA4qnhjeqTc3eNunsNc_d8lGidZIfewV0e2MVSlm9Sa5AlV83fj_4B565btEblKE1XqtRben-MYXo1MMskL135-b5jw1YhX5LAdQbD7RAdWCepqmQF3FXrjShXxiyJVJPMDI0G644uCHW1_Mk--l0VsVX1luKwSk')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-white dark:border-slate-900 overflow-hidden bg-slate-200 ring-2 ring-primary" data-alt="Avatar of child named Maya" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBxkT3GZxrBXOhi_bfPvhAAM4GqF2gGKSmOYAAqBbfDJHrHfjEeVNgqgZXkSCJDQnvUstvIWpFdKbTF20Ff5KXdJW_p2Ni33QCEYZcTbNH5EQytoTZU8rYedbzXX0awG5j7aUm1Qa2GFvNB16HpE1FKQII2swyxrC6zFWCjckac9CYvB37BI_5IIy_qBDOYhg90huAvtOGX6pFTykrW9He5NFnAC1AkW5ehqKaCz-oIRhO4xPK3fOyeNtPAWavVR8i811PQ0ZLFpmk')"></div>
+</div>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+<p class="font-bold text-slate-800 dark:text-slate-200">מאיה</p>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</div>
+<button class="bg-primary text-white px-6 py-3 rounded-full font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-transform flex items-center gap-2">
+<span class="material-symbols-outlined text-xl">add</span>
+                        הוספת ילד
+                    </button>
+</div>
+</header>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Learning Time Card -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex justify-between items-start mb-6">
+<h3 class="text-lg font-bold">זמן למידה היום</h3>
+<span class="material-symbols-outlined text-primary">schedule</span>
+</div>
+<div class="relative flex flex-col items-center py-4">
+<svg class="w-40 h-40 transform -rotate-90">
+<circle class="text-slate-100 dark:text-slate-800" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary rounded-full" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="110" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-4xl font-black">45</span>
+<span class="text-xs text-slate-500 font-medium">מתוך 60 דק'</span>
+</div>
+</div>
+<div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-green-600">trending_up</span>
+<p class="text-sm text-green-700 dark:text-green-400 font-medium">עליה של 15% מאתמול</p>
+</div>
+</div>
+<!-- Subjects Performance Card -->
+<div class="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex justify-between items-start mb-8">
+<h3 class="text-lg font-bold">ניתוח נושאי למידה</h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-xs font-bold text-slate-400"><div class="w-2 h-2 rounded-full bg-primary"></div> חזק</span>
+<span class="flex items-center gap-1 text-xs font-bold text-slate-400"><div class="w-2 h-2 rounded-full bg-orange-400"></div> טעון שיפור</span>
+</div>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-bold">
+<span>חשבון וגיאומטריה</span>
+<span class="text-primary">92%</span>
+</div>
+<div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-bold">
+<span>אנגלית - אוצר מילים</span>
+<span class="text-primary">78%</span>
+</div>
+<div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[78%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-bold text-orange-600">
+<span>מדעים וטבע</span>
+<span>45%</span>
+</div>
+<div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-orange-400 w-[45%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-bold">
+<span>קריאה והבנת הנקרא</span>
+<span class="text-primary">85%</span>
+</div>
+<div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[85%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Magic Recommendations -->
+<div class="lg:col-span-1 flex flex-col gap-6">
+<div class="bg-gradient-to-br from-primary to-[#734c9a] p-8 rounded-xl text-white relative overflow-hidden">
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl opacity-20">auto_awesome</span>
+<h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined">lightbulb</span>
+                            טיפ קסום עבור מאיה
+                        </h3>
+<p class="text-white/90 text-sm leading-relaxed mb-6">
+                            נראה שמאיה מתקשה מעט בנושא "מדעים". מומלץ להפעיל את 'אתגר הטבע' כדי לעודד אותה לחקור יותר.
+                        </p>
+<button class="bg-white text-primary px-4 py-2 rounded-full text-xs font-bold hover:bg-opacity-90 transition-all">הפעל אתגר עכשיו</button>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-100 dark:border-slate-800">
+<h3 class="text-sm font-bold mb-4">פעילות אחרונה</h3>
+<div class="space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-sm">psychology</span>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold">השלימה שלב בחשבון</p>
+<p class="text-[10px] text-slate-400">לפני 15 דקות</p>
+</div>
+<span class="text-xs font-bold text-primary">+20 נק'</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-sm">military_tech</span>
+</div>
+<div class="flex-1">
+<p class="text-xs font-bold">קיבלה תג "חוקרת אנגלית"</p>
+<p class="text-[10px] text-slate-400">לפני שעה</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Controls and Management -->
+<div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Screen Time Slider -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-bold">הגבלת זמן מסך</h3>
+<span class="text-primary font-bold">60 דק'</span>
+</div>
+<input class="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary" max="120" min="15" step="15" type="range" value="60"/>
+<div class="flex justify-between mt-3 text-[10px] text-slate-400 font-bold">
+<span>15 דק'</span>
+<span>120 דק'</span>
+</div>
+<div class="mt-8 flex items-center justify-between p-4 bg-background-light dark:bg-slate-800/50 rounded-xl">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">bedtime</span>
+<span class="text-sm font-medium">מצב שינה אוטומטי</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-[-100%] rtl:peer-checked:after:translate-x-[-100%] peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<!-- Subject Toggles -->
+<div class="bg-white dark:bg-slate-900 p-8 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+<h3 class="font-bold mb-6">ניהול תכני למידה</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium">חשבון בסיסי</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-[-100%] after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium">לימוד אותיות א'-ב'</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-[-100%] after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium">מדעים וסביבה</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-[-100%] after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium">אנגלית למתחילים</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 rounded-full peer dark:bg-slate-700 peer-checked:after:translate-x-[-100%] after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

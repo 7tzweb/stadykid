@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="he"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&amp;family=Noto+Sans+Hebrew:wght@300;400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9942f0",
+                        "background-light": "#f7f6f8",
+                        "background-dark": "#191022",
+                    },
+                    fontFamily: {
+                        "display": ["Spline Sans", "Noto Sans Hebrew", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>body {
+    font-family: "Spline Sans", "Noto Sans Hebrew", sans-serif
+    }
+.forest-bg {
+    background: linear-gradient(to bottom, #a1ffce, #faffd1);
+    position: relative;
+    overflow: hidden
+    }
+.forest-elements {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCBwhg_tuBl-RJSuHqEwYiVHm2Uu2yhWMAdl5klhn-6LYC82fb4qN6qQphZCRihHSpXzARS5Vq_H9UhDaGQH0280fMaUPcHxrKPvyse6_dHEVguusdQUybwZCvTgdFjSjTWgcu1rUBQbaYpnh3z07CfJH0Zafg03tXJLI-WfM3yf8gt9mfwRo91pQEevi4kH0uXLM-s5e9b75uVRHe2Qzj3-riKZY1rWBN4O5T9MLC0-Nm5Nx6_E2NIFgnDDisEyt-eJeV0_xl0_Xk);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    position: absolute;
+    inset: 0;
+    z-index: 0
+    }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col forest-bg group/design-root overflow-x-hidden">
+<div class="forest-elements" data-alt="A bright magical cartoon forest background with soft trees"></div>
+<div class="layout-container flex h-full grow flex-col relative z-10">
+<!-- Header / Top Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 bg-white/80 backdrop-blur-md px-6 md:px-10 py-4 sticky top-0">
+<div class="flex items-center gap-4 text-slate-900">
+<div class="size-10 bg-primary flex items-center justify-center rounded-xl shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white text-2xl">school</span>
+</div>
+<h2 class="text-slate-900 text-xl font-bold leading-tight tracking-tight">משחק - לומדים בכיף</h2>
+</div>
+<div class="flex flex-1 justify-end gap-3 md:gap-6 items-center">
+<div class="flex gap-2 items-center bg-white/50 p-1.5 rounded-full border border-primary/10">
+<button class="flex items-center justify-center rounded-full h-10 w-10 bg-red-100 text-red-500 shadow-sm">
+<span class="material-symbols-outlined fill-1">favorite</span>
+</button>
+<button class="flex items-center justify-center rounded-full h-10 w-10 bg-red-100 text-red-500 shadow-sm">
+<span class="material-symbols-outlined fill-1">favorite</span>
+</button>
+<button class="flex items-center justify-center rounded-full h-10 w-10 bg-slate-200 text-slate-400 shadow-sm">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+<button class="flex items-center justify-center rounded-full h-10 w-10 bg-yellow-100 text-yellow-600 shadow-sm border border-yellow-200">
+<span class="material-symbols-outlined">lightbulb</span>
+</button>
+<div class="size-10 rounded-full border-2 border-primary overflow-hidden shadow-md">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Cute child avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDwllaxhdehOWAUgcnTPl8JccxqVCG6kWH76M0WNRsQu_e4zrobcQyUovKp8BiG5ZgVG9EtN1Ae09gMp3M9s7MVd82gjXwHrXLnFt58QayLJ53aOsKlHc6WAl0k0MtFyRsZ1ltFtgTBeDjKY3LvNENaHmTT1IWDqcpQBzOYQehYKYNm1C1zcI8DuCKgJC20HtKrbKYjDg2mp-Mtk4mMaXRmnAYUd7C98Hrf0sTLpqzvxraaek6g-57l4-3-W60liNpZRbxlVozsME"/>
+</div>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-8">
+<!-- Progress Bar Section -->
+<div class="w-full max-w-[600px] flex flex-col gap-2 mb-12">
+<div class="flex justify-between items-center px-2">
+<span class="text-slate-700 font-bold text-sm">התקדמות השלב</span>
+<span class="text-primary font-black text-sm">40%</span>
+</div>
+<div class="h-4 w-full bg-white rounded-full p-1 shadow-inner border border-primary/5">
+<div class="h-full rounded-full bg-primary shadow-[0_0_10px_rgba(153,66,240,0.5)]" style="width: 40%;"></div>
+</div>
+</div>
+<div class="relative w-full max-w-4xl flex flex-col md:flex-row items-center gap-12">
+<!-- Pet Character Side -->
+<div class="hidden md:flex flex-col items-center gap-4 order-last md:order-first">
+<div class="relative bg-white p-6 rounded-xl shadow-xl border-2 border-primary/10 after:content-[''] after:absolute after:top-1/2 after:-right-4 after:-translate-y-1/2 after:border-y-[15px] after:border-y-transparent after:border-l-[15px] after:border-l-white">
+<p class="text-primary font-bold text-lg text-center">אתה יכול לעשות את זה! <br/> תחשוב חזק!</p>
+</div>
+<div class="w-48 h-48 drop-shadow-2xl">
+<img alt="Pet" class="w-full h-full object-contain" data-alt="A cute purple robot pet character smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1hVEVTI0CTmC1bashpchalwFwahbW_rkUOoP8NpDPrsrZYHtQ0Vqxgy0NLIkobtpLSc_IZdzUQuMh4Uu1MJvQPhw3UBn3C1yzsGSyx7mpgvquinRD174FZTwxibtMEJQPvnrMJTHMOFP2P5Q7WNeONthOwy4ggHcTC4hdbltpiiaPgp3QwzrzidVRTxkgEeJynwqyE8RJu4uiYZDOS0gKDNs3UOAnnWc63vYDBwHymS0Pf0VmkrjFUcqXabbtJgMQ0_cBqU5dPW8"/>
+</div>
+</div>
+<!-- Main Problem Card -->
+<div class="flex-1 w-full max-w-lg bg-white rounded-xl shadow-[0_20px_50px_rgba(153,66,240,0.15)] p-12 border border-primary/5 flex flex-col items-center gap-8 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
+<div class="bg-primary/5 p-4 rounded-full">
+<span class="material-symbols-outlined text-primary text-4xl">calculate</span>
+</div>
+<h1 class="text-6xl md:text-8xl font-black text-slate-800 tracking-tighter">3 + 5 = ?</h1>
+<p class="text-slate-500 text-xl font-medium">מהי התשובה הנכונה?</p>
+</div>
+</div>
+<!-- Answer Buttons -->
+<div class="mt-16 w-full max-w-3xl">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+<button class="group relative flex flex-col items-center justify-center bg-white hover:bg-primary hover:text-white text-slate-800 h-24 md:h-32 rounded-lg shadow-lg border-b-8 border-slate-200 hover:border-primary/50 transition-all active:translate-y-1 active:border-b-0">
+<span class="text-3xl md:text-4xl font-black">6</span>
+</button>
+<button class="group relative flex flex-col items-center justify-center bg-white hover:bg-primary hover:text-white text-slate-800 h-24 md:h-32 rounded-lg shadow-lg border-b-8 border-slate-200 hover:border-primary/50 transition-all active:translate-y-1 active:border-b-0">
+<span class="text-3xl md:text-4xl font-black">7</span>
+</button>
+<button class="group relative flex flex-col items-center justify-center bg-white hover:bg-primary hover:text-white text-slate-800 h-24 md:h-32 rounded-lg shadow-lg border-b-8 border-slate-200 hover:border-primary/50 transition-all active:translate-y-1 active:border-b-0">
+<span class="text-3xl md:text-4xl font-black">8</span>
+</button>
+<button class="group relative flex flex-col items-center justify-center bg-white hover:bg-primary hover:text-white text-slate-800 h-24 md:h-32 rounded-lg shadow-lg border-b-8 border-slate-200 hover:border-primary/50 transition-all active:translate-y-1 active:border-b-0">
+<span class="text-3xl md:text-4xl font-black">9</span>
+</button>
+</div>
+</div>
+<!-- Mobile Pet (visible only on small screens) -->
+<div class="md:hidden flex items-center gap-4 mt-12 bg-white/60 p-4 rounded-xl border border-primary/10 backdrop-blur-sm">
+<img alt="Pet" class="w-16 h-16" data-alt="Small cute robot icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV4mRiQdBdIg0zqP1tiE6HR2SeysACpIVBL9kJtDLRz2wChGOwZpO9p2Ex5iRWUlKy_jFbI0azDfJsBdZNJgjEYR5kIqqJ3dF15owha0wgZ9FUQe27D_iwqoNJpl2yEpMKhKicvLe_q8kxzhKeQZqEuYIjKNcT61Q_sGigW5rVVM1nz9vue6M88kAeIQJq2zT0bvNya8bVTU_je1TeNmkUFQaRTQ_NMU4ocjSgufQX8p0vnoSkMSBxFCI0KsnWRWfTsV5uVU8MTW0"/>
+<div class="bg-white p-3 rounded-lg shadow-sm border border-primary/10">
+<p class="text-primary font-bold text-sm">קדימה, אתה יכול!</p>
+</div>
+</div>
+</main>
+<!-- Bottom Action -->
+<footer class="p-6 flex justify-center">
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-8 py-3 rounded-full bg-white text-slate-600 font-bold shadow-md hover:bg-slate-50 transition-colors">
+<span class="material-symbols-outlined">pause</span>
+<span>הפסקה</span>
+</button>
+<button class="flex items-center gap-2 px-8 py-3 rounded-full bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:brightness-110 transition-all">
+<span>שלח תשובה</span>
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

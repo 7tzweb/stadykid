@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "id": "logic-cave-002",
+  "worldId": "logic-cave",
+  "missionId": "logic-echo",
+  "type": "match_pairs",
+  "title": "הדים במערה",
+  "subject": "logic",
+  "instructions": "מחברים כל מילה למילה ההפוכה לה.",
+  "difficulty": "hard",
+  "answers": ["pair-hot", "pair-open", "pair-high"],
+  "hints": [
+    {
+      "step": 1,
+      "title": "מחפשים הפכים",
+      "body": "בכל זוג יש שתי מילים שמשמעותן הפוכה."
+    },
+    {
+      "step": 2,
+      "title": "פותרים אחד אחד",
+      "body": "מתחילים מזוג שקל לזהות ואז ממשיכים."
+    },
+    {
+      "step": 3,
+      "title": "בודקים משמעות",
+      "body": "חם לא יכול להתאים לפתוח, כי אלה לא הפכים."
+    },
+    {
+      "step": 4,
+      "title": "פתרון מלא",
+      "body": "חם מתאים לקר, פתוח מתאים לסגור, וגבוה מתאים לנמוך."
+    }
+  ],
+  "rewards": {
+    "xp": 45,
+    "coins": 19,
+    "badgeId": "logic-lamp"
+  },
+  "completionRules": {
+    "passingScore": 100,
+    "maxMistakes": 4
+  },
+  "assets": [],
+  "content": {
+    "prompt": "חברו כל מילה להיפך שלה",
+    "pairs": [
+      {
+        "id": "pair-hot",
+        "left": "חם",
+        "right": "קר"
+      },
+      {
+        "id": "pair-open",
+        "left": "פתוח",
+        "right": "סגור"
+      },
+      {
+        "id": "pair-high",
+        "left": "גבוה",
+        "right": "נמוך"
+      }
+    ],
+    "explanation": "כדי לפתור מחפשים בכל פעם מילה עם משמעות הפוכה: חם וקר, פתוח וסגור, גבוה ונמוך."
+  }
+}
