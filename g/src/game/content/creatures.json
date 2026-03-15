@@ -21,11 +21,14 @@
       "pettingIntervalMinutes": 22,
       "playIntervalMinutes": 32,
       "restIntervalMinutes": 50,
-      "pettingRewardClicks": 4,
+      "hungerIntervalSeconds": 85,
+      "pettingIntervalSeconds": 40,
+      "pettingRewardClicks": 3,
+      "feedingFillItems": 3,
       "feedingRewardEveryCount": 3,
       "rewardStars": {
         "feed": 5,
-        "pet": 3,
+        "pet": 1,
         "play": 4,
         "rest": 2
       }
@@ -79,11 +82,14 @@
       "pettingIntervalMinutes": 24,
       "playIntervalMinutes": 20,
       "restIntervalMinutes": 46,
-      "pettingRewardClicks": 4,
+      "hungerIntervalSeconds": 75,
+      "pettingIntervalSeconds": 40,
+      "pettingRewardClicks": 3,
+      "feedingFillItems": 4,
       "feedingRewardEveryCount": 4,
       "rewardStars": {
         "feed": 6,
-        "pet": 3,
+        "pet": 1,
         "play": 5,
         "rest": 2
       }
@@ -137,11 +143,14 @@
       "pettingIntervalMinutes": 18,
       "playIntervalMinutes": 28,
       "restIntervalMinutes": 38,
+      "hungerIntervalSeconds": 70,
+      "pettingIntervalSeconds": 40,
       "pettingRewardClicks": 3,
+      "feedingFillItems": 3,
       "feedingRewardEveryCount": 3,
       "rewardStars": {
         "feed": 5,
-        "pet": 4,
+        "pet": 1,
         "play": 4,
         "rest": 3
       }

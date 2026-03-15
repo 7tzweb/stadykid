@@ -88,7 +88,10 @@ export interface CreatureNeedsDefinition {
   pettingIntervalMinutes: number
   playIntervalMinutes: number
   restIntervalMinutes: number
+  hungerIntervalSeconds?: number
+  pettingIntervalSeconds?: number
   pettingRewardClicks: number
+  feedingFillItems: number
   feedingRewardEveryCount: number
   rewardStars: CreatureRewardDefinition
 }

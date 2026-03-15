@@ -107,6 +107,10 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
 }
 
+function getFillClipPath(progress: number) {
+  return `inset(${(1 - progress) * 100}% 0 0 0)`
+}
+
 function createSceneCreature(creatureId: string): SceneCreature {
   const hash = hashCreatureId(creatureId)
 
@@ -173,9 +177,11 @@ export function PetHomeScreen() {
   const [careBurst, setCareBurst] = useState<CareBurstState | null>(null)
   const [reactionBubble, setReactionBubble] = useState<CreatureReactionState | null>(null)
   const [heartProgressByCreatureId, setHeartProgressByCreatureId] = useState<Record<string, number>>({})
+  const [feedProgressByCreatureId, setFeedProgressByCreatureId] = useState<Record<string, number>>({})
   const [starRewardCreatureId, setStarRewardCreatureId] = useState<string | null>(null)
   const announcedHatchRef = useRef(new Set<string>())
   const heartProgressRef = useRef<Record<string, number>>({})
+  const feedProgressRef = useRef<Record<string, number>>({})
   const sceneRef = useRef<HTMLDivElement | null>(null)
 
   const homeCreatures = ownedCreatures.filter((creature) => creature.placedInHome)
@@ -359,6 +365,18 @@ export function PetHomeScreen() {
     }))
   }
 
+  function updateFeedProgress(creatureId: string, progress: number) {
+    feedProgressRef.current = {
+      ...feedProgressRef.current,
+      [creatureId]: progress,
+    }
+
+    setFeedProgressByCreatureId((current) => ({
+      ...current,
+      [creatureId]: progress,
+    }))
+  }
+
   function showReaction(creatureId: string, emoji: string) {
     setReactionBubble({ creatureId, emoji })
   }
@@ -371,32 +389,29 @@ export function PetHomeScreen() {
       return
     }
 
-    const currentProgress = heartProgressRef.current[creatureId] ?? 0
-
-    setSelectedCreatureId(creatureId)
-    setCareBurst({ creatureId, action: 'pet' })
-
     const petNeed = getCreatureNeedState(creature, ownedCreature, now).entries.find((entry) => entry.action === 'pet')
 
     if (!petNeed?.isDue) {
       return
     }
 
+    setSelectedCreatureId(creatureId)
+    setCareBurst({ creatureId, action: 'pet' })
+
+    const currentProgress = heartProgressRef.current[creatureId] ?? 0
     const nextProgress = Math.min(1, currentProgress + 1 / Math.max(1, creature.needs.pettingRewardClicks))
 
-    if (nextProgress >= 0.96) {
-      updateHeartProgress(creatureId, 1)
+    updateHeartProgress(creatureId, nextProgress)
 
-      if (careForCreature(creatureId, 'pet', 1)) {
-        setStarRewardCreatureId(creatureId)
-      }
-
-      window.setTimeout(() => updateHeartProgress(creatureId, 0), 420)
-
+    if (nextProgress < 0.999) {
       return
     }
 
-    updateHeartProgress(creatureId, nextProgress)
+    if (careForCreature(creatureId, 'pet', 1)) {
+      setStarRewardCreatureId(creatureId)
+    }
+
+    window.setTimeout(() => updateHeartProgress(creatureId, 0), 380)
   }
 
   function handleFeedCreature(creatureId: string) {
@@ -407,22 +422,40 @@ export function PetHomeScreen() {
       return false
     }
 
+    const feedNeed = getCreatureNeedState(creature, ownedCreature, now).entries.find((entry) => entry.action === 'feed')
+
+    if (!feedNeed?.isDue) {
+      return false
+    }
+
     const nextFeedCount = ownedCreature.care.feedCount + 1
     const rewardStars =
       nextFeedCount % Math.max(1, creature.needs.feedingRewardEveryCount) === 0 ? 1 : 0
+
+    setSelectedCreatureId(creatureId)
+    setCareBurst({ creatureId, action: 'feed' })
+    const currentProgress = feedProgressRef.current[creatureId] ?? 0
+    const nextProgress = Math.min(1, currentProgress + 1 / Math.max(1, creature.needs.feedingFillItems))
+
+    updateFeedProgress(creatureId, nextProgress)
+
+    if (nextProgress < 0.999) {
+      return true
+    }
+
     const didFeed = careForCreature(creatureId, 'feed', rewardStars)
 
     if (!didFeed) {
       return false
     }
 
-    setSelectedCreatureId(creatureId)
-    setCareBurst({ creatureId, action: 'feed' })
     showReaction(creatureId, '😊')
 
     if (rewardStars > 0) {
       setStarRewardCreatureId(creatureId)
     }
+
+    window.setTimeout(() => updateFeedProgress(creatureId, 0), 520)
 
     return true
   }
@@ -523,10 +556,6 @@ export function PetHomeScreen() {
       window.removeEventListener('pointerup', handlePointerEnd)
       window.removeEventListener('pointercancel', handlePointerEnd)
       setDraggedCreatureId(null)
-
-      if (!moved) {
-        handlePetCreature(creatureId)
-      }
     }
 
     window.addEventListener('pointermove', handlePointerMove)
@@ -808,11 +837,13 @@ export function PetHomeScreen() {
           const pulse = careBurst?.creatureId === ownedCreature.creatureId ? careBurst.action : null
           const reaction = reactionBubble?.creatureId === ownedCreature.creatureId ? reactionBubble.emoji : null
           const heartProgress = heartProgressByCreatureId[ownedCreature.creatureId] ?? 0
+          const feedProgress = feedProgressByCreatureId[ownedCreature.creatureId] ?? 0
           const isSelected = resolvedSelectedCreatureId === ownedCreature.creatureId
           const bob = Math.sin((sceneCreature.phase / 24) * Math.PI * 2) * (sceneCreature.pauseTicks ? 2 : 5)
           const NeedIcon = needs?.primaryNeed ? careIcons[needs.primaryNeed] : null
-          const showHeartMeter = hatched
-          const showNeedBubble = hatched && needs?.primaryNeed && needs.primaryNeed !== 'pet' && NeedIcon
+          const showHeartMeter = hatched && (needs?.primaryNeed === 'pet' || heartProgress > 0)
+          const showFeedMeter = hatched && (needs?.primaryNeed === 'feed' || feedProgress > 0)
+          const showNeedBubble = hatched && needs?.primaryNeed && needs.primaryNeed !== 'pet' && needs.primaryNeed !== 'feed' && NeedIcon
           const showStarReward = starRewardCreatureId === ownedCreature.creatureId
 
           return (
@@ -834,32 +865,64 @@ export function PetHomeScreen() {
                   type="button"
                 />
 
-              {showHeartMeter && (
-                <button
-                  className="absolute left-1/2 top-0 z-30 -translate-x-1/2"
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    handlePetCreature(ownedCreature.creatureId)
-                  }}
-                  onPointerDown={(event) => event.stopPropagation()}
-                  type="button"
-                >
-                  <div
-                    className={`relative flex h-16 w-16 items-center justify-center rounded-full bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,236,242,0.94))] shadow-[0_18px_40px_rgba(56,37,87,0.14)] ${
-                      needs?.primaryNeed === 'pet' || pulse === 'pet' ? 'ring-4 ring-[#fecdd3]/85' : ''
-                    }`}
+                {showHeartMeter && (
+                  <button
+                    className="absolute left-1/2 top-0 z-30 -translate-x-1/2"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      handlePetCreature(ownedCreature.creatureId)
+                    }}
+                    onPointerDown={(event) => event.stopPropagation()}
+                    type="button"
                   >
-                    {(needs?.primaryNeed === 'pet' || pulse === 'pet') && (
-                      <div className="absolute inset-0 rounded-full border-4 border-[#fda4af]/70 animate-ping" />
-                    )}
-                    <Heart className="h-7 w-7 text-[#f9a8d4]" />
-                    <Heart
-                      className="absolute h-7 w-7 fill-current text-[#e11d48] transition-all duration-200"
-                      style={{ clipPath: `inset(${(1 - heartProgress) * 100}% 0 0 0)` }}
-                    />
-                  </div>
-                </button>
-              )}
+                    <div
+                      className={`relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,236,242,0.94))] shadow-[0_18px_40px_rgba(56,37,87,0.14)] ${
+                        needs?.primaryNeed === 'pet' || pulse === 'pet' ? 'ring-4 ring-[#fecdd3]/85' : ''
+                      }`}
+                    >
+                      {(needs?.primaryNeed === 'pet' || pulse === 'pet') && (
+                        <div className="absolute inset-0 rounded-full border-4 border-[#fda4af]/70 animate-ping" />
+                      )}
+                      <div
+                        className="absolute inset-0 bg-[linear-gradient(180deg,#fb7185_0%,#ec4899_100%)] transition-all duration-500"
+                        style={{ clipPath: getFillClipPath(heartProgress) }}
+                      />
+                      <Heart
+                        className={`relative h-7 w-7 transition ${
+                          heartProgress > 0.04 ? 'fill-current text-white' : 'text-[#ec4899]'
+                        }`}
+                      />
+                    </div>
+                  </button>
+                )}
+
+                {showFeedMeter && (
+                  <button
+                    className="absolute left-1/2 top-0 z-30 -translate-x-1/2"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setFoodMode('feed')
+                      setOpenPanel('food')
+                    }}
+                    onPointerDown={(event) => event.stopPropagation()}
+                    type="button"
+                  >
+                    <div
+                      className={`relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,248,220,0.94))] shadow-[0_18px_40px_rgba(56,37,87,0.14)] ${
+                        needs?.primaryNeed === 'feed' || pulse === 'feed' ? 'ring-4 ring-[#fde68a]/85' : ''
+                      }`}
+                    >
+                      {(needs?.primaryNeed === 'feed' || pulse === 'feed') && (
+                        <div className="absolute inset-0 rounded-full border-4 border-[#fde68a]/75 animate-ping" />
+                      )}
+                      <div
+                        className="absolute inset-0 bg-[linear-gradient(180deg,#fde68a_0%,#f59e0b_100%)] transition-all duration-700"
+                        style={{ clipPath: getFillClipPath(feedProgress) }}
+                      />
+                      <Milk className={`relative h-7 w-7 transition ${feedProgress > 0.04 ? 'text-white' : 'text-[#d97706]'}`} />
+                    </div>
+                  </button>
+                )}
 
               {showNeedBubble && (
                 <>

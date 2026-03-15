@@ -119,20 +119,33 @@ function getLastActionAt(ownedCreature: OwnedCreature, action: CreatureCareActio
   return typeof value === 'string' ? new Date(value).getTime() : new Date(ownedCreature.purchasedAt).getTime()
 }
 
+function getNeedIntervalMs(creature: CreatureDefinition, action: CreatureCareAction) {
+  if (action === 'feed') {
+    return typeof creature.needs.hungerIntervalSeconds === 'number'
+      ? creature.needs.hungerIntervalSeconds * 1000
+      : creature.needs.hungerIntervalMinutes * 60_000
+  }
+
+  if (action === 'pet') {
+    return typeof creature.needs.pettingIntervalSeconds === 'number'
+      ? creature.needs.pettingIntervalSeconds * 1000
+      : creature.needs.pettingIntervalMinutes * 60_000
+  }
+
+  if (action === 'play') {
+    return creature.needs.playIntervalMinutes * 60_000
+  }
+
+  return creature.needs.restIntervalMinutes * 60_000
+}
+
 export function getCreatureNeedState(
   creature: CreatureDefinition,
   ownedCreature: OwnedCreature,
   now = Date.now(),
 ) {
-  const intervals = {
-    feed: creature.needs.hungerIntervalMinutes,
-    pet: creature.needs.pettingIntervalMinutes,
-    play: creature.needs.playIntervalMinutes,
-    rest: creature.needs.restIntervalMinutes,
-  } as const
-
-  const entries = (Object.keys(intervals) as CreatureCareAction[]).map((action) => {
-    const dueAfter = intervals[action] * 60_000
+  const entries = (['feed', 'pet', 'play', 'rest'] as CreatureCareAction[]).map((action) => {
+    const dueAfter = getNeedIntervalMs(creature, action)
     const elapsed = now - getLastActionAt(ownedCreature, action)
 
     return {
