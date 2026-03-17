@@ -385,7 +385,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
           const equippedItems = creature.equippedItems.includes(action.payload.itemId)
             ? creature.equippedItems.filter((itemId) => itemId !== action.payload.itemId)
-            : [...creature.equippedItems, action.payload.itemId]
+            : creature.equippedItems.length >= 4
+              ? creature.equippedItems
+              : [...creature.equippedItems, action.payload.itemId]
 
           return {
             ...creature,

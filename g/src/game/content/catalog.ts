@@ -243,6 +243,15 @@ export const shopCatalog: ShopItem[] = [
     accent: '#16A34A',
   },
   {
+    id: 'sunny-cap',
+    category: 'Clothes',
+    name: 'כובע שמש',
+    description: 'שומר על הגור מוכן ליום מואר בחצר.',
+    price: 22,
+    icon: '🧢',
+    accent: '#FB7185',
+  },
+  {
     id: 'sun-pin',
     category: 'Accessories',
     name: 'סיכת שמש',
@@ -259,6 +268,15 @@ export const shopCatalog: ShopItem[] = [
     price: 24,
     icon: '☁️',
     accent: '#06B6D4',
+  },
+  {
+    id: 'sunny-shades',
+    category: 'Accessories',
+    name: 'משקפי שמש',
+    description: 'נותנים לגור מראה קיצי ושמח במיוחד.',
+    price: 26,
+    icon: '🕶️',
+    accent: '#0F172A',
   },
 ]
 

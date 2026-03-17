@@ -99,6 +99,13 @@ const careBubbleClasses = {
   rest: 'bg-white/94 text-[#0f766e]',
 } satisfies Record<CreatureCareAction, string>
 
+const equippedItemPositions = [
+  { right: '-8px', top: '8px' },
+  { left: '-8px', top: '8px' },
+  { right: '-10px', top: '34px' },
+  { left: '-10px', top: '34px' },
+] as const
+
 function hashCreatureId(input: string) {
   return input.split('').reduce((total, character) => total + character.charCodeAt(0), 0)
 }
@@ -979,14 +986,12 @@ export function PetHomeScreen() {
                   src={hatched ? stage?.image ?? creature.cardImage : creature.eggImage}
                 />
                 {hatched &&
-                  ownedCreature.equippedItems.slice(0, 2).map((itemId, index) => (
+                  ownedCreature.equippedItems.slice(0, 4).map((itemId, index) => (
                     <span
                       className="absolute rounded-full bg-white/92 px-2 py-1 text-xs font-bold text-slate-700 shadow-sm"
                       key={itemId}
                       style={{
-                        right: index === 0 ? '-6px' : 'auto',
-                        left: index === 1 ? '-6px' : 'auto',
-                        top: `${10 + index * 18}px`,
+                        ...equippedItemPositions[index],
                         transform: 'scaleX(-1)',
                       }}
                     >
