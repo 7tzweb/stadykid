@@ -2,22 +2,22 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 import { Card } from '@/components/ui/Card'
-import type { MatchPairsLevel } from '@/game/engine/level-schema'
+import type { MatchPairsActivity } from '@/game/engine/level-schema'
 import type { MiniGameRendererProps } from '@/game/runtime/renderer-types'
 import { shuffleItems } from '@/game/runtime/utils'
 
 export function MatchPairsGame({
-  level,
+  activity,
   onSuccess,
   onMistake,
   disabled,
-}: MiniGameRendererProps<MatchPairsLevel>) {
+}: MiniGameRendererProps<MatchPairsActivity>) {
   const [selectedLeftId, setSelectedLeftId] = useState<string | null>(null)
   const [selectedRightId, setSelectedRightId] = useState<string | null>(null)
   const [matchedIds, setMatchedIds] = useState<string[]>([])
   const [hasCompleted, setHasCompleted] = useState(false)
   const [shuffledPairs] = useState(() =>
-    shuffleItems(level.content.pairs.map((pair) => ({ id: pair.id, right: pair.right }))),
+    shuffleItems(activity.content.pairs.map((pair) => ({ id: pair.id, right: pair.right }))),
   )
 
   function resolveSelection(nextLeftId: string | null, nextRightId: string | null) {
@@ -34,11 +34,11 @@ export function MatchPairsGame({
       setSelectedLeftId(null)
       setSelectedRightId(null)
 
-      if (!hasCompleted && nextMatchedIds.length === level.content.pairs.length) {
+      if (!hasCompleted && nextMatchedIds.length === activity.content.pairs.length) {
         setHasCompleted(true)
         onSuccess({
           score: 100,
-          explanation: level.content.explanation,
+          explanation: activity.content.explanation,
         })
       }
 
@@ -75,12 +75,12 @@ export function MatchPairsGame({
     <Card className="space-y-4 p-4 lg:p-5">
       <div className="space-y-2 text-center">
         <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">התאמת זוגות</p>
-        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{level.content.prompt}</h3>
+        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{activity.content.prompt}</h3>
       </div>
 
       <div className="grid gap-3 lg:grid-cols-2">
         <div className="space-y-3">
-          {level.content.pairs.map((pair) => {
+          {activity.content.pairs.map((pair) => {
             const isMatched = matchedIds.includes(pair.id)
 
             return (

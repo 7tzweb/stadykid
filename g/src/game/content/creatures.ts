@@ -1,4 +1,6 @@
 import creatureCatalogJson from './creatures.json'
+import creaturePriceOverridesJson from './creature-price-overrides.json'
+import { generatedCreatureCatalog } from './generated-creatures'
 
 import type {
   CreatureCareAction,
@@ -8,7 +10,24 @@ import type {
   OwnedCreature,
 } from '@/types/models'
 
-export const creatureCatalog = creatureCatalogJson as CreatureDefinition[]
+const creaturePriceOverrides = creaturePriceOverridesJson as Record<string, number>
+
+function applyCreaturePriceOverride(creature: CreatureDefinition): CreatureDefinition {
+  const overriddenPrice = creaturePriceOverrides[creature.id]
+
+  if (typeof overriddenPrice !== 'number') {
+    return creature
+  }
+
+  return {
+    ...creature,
+    priceStars: overriddenPrice,
+  }
+}
+
+export const creatureCatalog = [...(creatureCatalogJson as CreatureDefinition[]), ...generatedCreatureCatalog].map(
+  applyCreaturePriceOverride,
+)
 
 const careTimestampByAction: Record<CreatureCareAction, keyof OwnedCreature> = {
   feed: 'lastFedAt',
@@ -24,16 +43,20 @@ const careCountByAction: Record<CreatureCareAction, keyof OwnedCreature['care']>
   rest: 'restCount',
 }
 
+const randomizedCareIntervalsMinutes = [1, 2, 3] as const
+
 export function createOwnedCreature(creatureId: string, purchasedAt = new Date().toISOString()): OwnedCreature {
   return {
     creatureId,
     purchasedAt,
     placedInHome: false,
+    placedHomeWorldId: null,
     lastFedAt: null,
     lastPettedAt: null,
     lastPlayedAt: null,
     lastRestedAt: null,
     lastSoundAt: null,
+    specialRequestCount: 0,
     care: {
       feedCount: 0,
       petCount: 0,
@@ -119,17 +142,25 @@ function getLastActionAt(ownedCreature: OwnedCreature, action: CreatureCareActio
   return typeof value === 'string' ? new Date(value).getTime() : new Date(ownedCreature.purchasedAt).getTime()
 }
 
-function getNeedIntervalMs(creature: CreatureDefinition, action: CreatureCareAction) {
+function hashSeed(input: string) {
+  return input.split('').reduce((total, character) => total + character.charCodeAt(0), 0)
+}
+
+function getRandomizedCareIntervalMs(ownedCreature: OwnedCreature, action: Extract<CreatureCareAction, 'feed' | 'pet'>) {
+  const referenceTimestamp = ownedCreature[careTimestampByAction[action]] ?? ownedCreature.purchasedAt
+  const seed = `${ownedCreature.creatureId}:${action}:${referenceTimestamp}`
+  const selectedMinutes = randomizedCareIntervalsMinutes[hashSeed(seed) % randomizedCareIntervalsMinutes.length]
+
+  return selectedMinutes * 60_000
+}
+
+function getNeedIntervalMs(creature: CreatureDefinition, ownedCreature: OwnedCreature, action: CreatureCareAction) {
   if (action === 'feed') {
-    return typeof creature.needs.hungerIntervalSeconds === 'number'
-      ? creature.needs.hungerIntervalSeconds * 1000
-      : creature.needs.hungerIntervalMinutes * 60_000
+    return getRandomizedCareIntervalMs(ownedCreature, action)
   }
 
   if (action === 'pet') {
-    return typeof creature.needs.pettingIntervalSeconds === 'number'
-      ? creature.needs.pettingIntervalSeconds * 1000
-      : creature.needs.pettingIntervalMinutes * 60_000
+    return getRandomizedCareIntervalMs(ownedCreature, action)
   }
 
   if (action === 'play') {
@@ -145,7 +176,7 @@ export function getCreatureNeedState(
   now = Date.now(),
 ) {
   const entries = (['feed', 'pet', 'play', 'rest'] as CreatureCareAction[]).map((action) => {
-    const dueAfter = getNeedIntervalMs(creature, action)
+    const dueAfter = getNeedIntervalMs(creature, ownedCreature, action)
     const elapsed = now - getLastActionAt(ownedCreature, action)
 
     return {
@@ -180,32 +211,32 @@ export function formatMinutesLabel(minutes: number) {
   const remainingMinutes = minutes % 60
 
   if (!hours) {
-    return `${remainingMinutes} דקות`
+    return `${remainingMinutes} דַּקּוֹת`
   }
 
   if (!remainingMinutes) {
-    return `${hours} שעות`
+    return `${hours} שָׁעוֹת`
   }
 
-  return `${hours} שעות ו-${remainingMinutes} דקות`
+  return `${hours} שָׁעוֹת וְ-${remainingMinutes} דַּקּוֹת`
 }
 
 export function getCreatureMoodLabel(action: CreatureCareAction | null) {
   if (action === 'feed') {
-    return 'רעב'
+    return 'רָעֵב'
   }
 
   if (action === 'pet') {
-    return 'מחפש ליטוף'
+    return 'מְחַפֵּשׂ לִטּוּף'
   }
 
   if (action === 'play') {
-    return 'רוצה לשחק'
+    return 'רוֹצֶה לְשַׂחֵק'
   }
 
   if (action === 'rest') {
-    return 'צריך מנוחה'
+    return 'צָרִיךְ מְנוּחָה'
   }
 
-  return 'שמח ומטייל'
+  return 'שָׂמֵחַ וּמְטַיֵּל'
 }

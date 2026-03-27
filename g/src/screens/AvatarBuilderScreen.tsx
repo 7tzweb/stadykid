@@ -12,10 +12,10 @@ import type { AvatarSelection } from '@/types/models'
 
 const bodyColors = ['#FFD166', '#7BDFF2', '#CDB4FF', '#FBCFE8', '#A7F3D0']
 const avatarTabs = [
-  { id: 'hair', label: 'שיער' },
-  { id: 'eyes', label: 'עיניים' },
-  { id: 'clothes', label: 'בגדים' },
-  { id: 'pets', label: 'חיית מחמד' },
+  { id: 'hair', label: 'שֵׂעָר' },
+  { id: 'eyes', label: 'עֵינַיִם' },
+  { id: 'clothes', label: 'בְּגָדִים' },
+  { id: 'pets', label: 'חַיַּת מַחְמָד' },
 ] as const
 
 type AvatarTab = (typeof avatarTabs)[number]['id']
@@ -85,9 +85,9 @@ export function AvatarBuilderScreen() {
 
   return (
     <ScreenLayout
-      eyebrow="בניית דמות"
-      subtitle="בוחרים איך הדמות נראית ואז ממשיכים ישר למפת המשחקים."
-      title={`בניית דמות עבור ${profile.name}`}
+      eyebrow="בְּנִיַּת דְּמוּת"
+      subtitle="בּוֹחֲרִים אֵיךְ הַדְּמוּת נִרְאֵית וְאָז מַמְשִׁיכִים יָשָׁר לְמַפַּת הַמִּשְׂחָקִים."
+      title={`בְּנִיַּת דְּמוּת עבור ${profile.name}`}
       tone="lilac"
     >
       <div className="space-y-6">
@@ -95,19 +95,19 @@ export function AvatarBuilderScreen() {
           accent="#8b5cf6"
           items={[
             {
-              title: 'בוחרים קטגוריה',
-              description: 'שיער, עיניים, בגדים או חיית מחמד.',
+              title: 'בּוֹחֲרִים קָטֵגוֹרְיָה',
+              description: 'שֵׂעָר, עֵינַיִם, בְּגָדִים או חַיַּת מַחְמָד.',
             },
             {
-              title: 'לוחצים על מה שאוהבים',
-              description: 'כל לחיצה משנה מיד את הדמות.',
+              title: 'לוֹחֲצִים עַל מַה שֶׁאוֹהֲבִים',
+              description: 'כָּל לְחִיצָה מְשַׁנָּה מִיָּד אֶת הַדְּמוּת.',
             },
             {
-              title: 'מסיימים וממשיכים',
-              description: 'בסוף לוחצים על הכפתור להתחלת ההרפתקה.',
+              title: 'מְסַיְּמִים וּמַמְשִׁיכִים',
+              description: 'בַּסּוֹף לוֹחֲצִים עַל הַכַּפְתּוֹר לְהַתְחָלַת הַהַרְפַּתְקָה.',
             },
           ]}
-          title="איך בונים את הדמות?"
+          title="אֵיךְ בּוֹנִים אֶת הַדְּמוּת?"
         />
 
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
@@ -143,7 +143,7 @@ export function AvatarBuilderScreen() {
               </div>
               <div className="mt-4 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-slate-700">
                 <Sparkles className="h-4 w-4 text-[#8b5cf6]" />
-                חיית מחמד נבחרת: {avatarSeed.pet}
+                חַיַּת מַחְמָד נבחרת: {avatarSeed.pet}
               </div>
             </div>
 
@@ -204,7 +204,7 @@ export function AvatarBuilderScreen() {
                   navigate('/worlds')
                 }}
               >
-                שומרים ומתחילים לשחק
+                שומרים ומַתְחִילִים לְשַׂחֵק
               </Button>
               <Button onClick={() => navigate('/profiles')} variant="secondary">
                 חזרה לפרופילים

@@ -2,15 +2,15 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 import { Card } from '@/components/ui/Card'
-import type { MultipleChoiceLevel } from '@/game/engine/level-schema'
+import type { MultipleChoiceActivity } from '@/game/engine/level-schema'
 import type { MiniGameRendererProps } from '@/game/runtime/renderer-types'
 
 export function MultipleChoiceGame({
-  level,
+  activity,
   onSuccess,
   onMistake,
   disabled,
-}: MiniGameRendererProps<MultipleChoiceLevel>) {
+}: MiniGameRendererProps<MultipleChoiceActivity>) {
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null)
   const [isCompleted, setIsCompleted] = useState(false)
 
@@ -21,11 +21,11 @@ export function MultipleChoiceGame({
 
     setSelectedOptionId(optionId)
 
-    if (optionId === level.content.correctOptionId) {
+    if (optionId === activity.content.correctOptionId) {
       setIsCompleted(true)
       onSuccess({
         score: 100,
-        explanation: level.content.explanation,
+        explanation: activity.content.explanation,
       })
       return
     }
@@ -37,13 +37,13 @@ export function MultipleChoiceGame({
     <Card className="space-y-4 p-4 lg:p-5">
       <div className="space-y-2 text-center">
         <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">בחירה מתוך אפשרויות</p>
-        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{level.content.prompt}</h3>
-        <p className="text-base text-slate-600">{level.content.question}</p>
+        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{activity.content.prompt}</h3>
+        <p className="text-base text-slate-600">{activity.content.question}</p>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {level.content.options.map((option) => {
-          const isCorrect = option.id === level.content.correctOptionId
+        {activity.content.options.map((option) => {
+          const isCorrect = option.id === activity.content.correctOptionId
           const isSelected = option.id === selectedOptionId
 
           return (

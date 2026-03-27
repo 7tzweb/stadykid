@@ -13,9 +13,9 @@ export function ParentGateScreen() {
 
   return (
     <ScreenLayout
-      eyebrow="שער הורים"
-      subtitle="שכבת הגנה פשוטה לפני מעבר לאזור הורים. קוד הדמו כרגע הוא 2468."
-      title="אימות הורה"
+      eyebrow="שַׁעַר הוֹרִים"
+      subtitle="שכבת הגנה פשוטה לפני מעבר לאֵזוֹר הוֹרִים. קוד הדמו כרגע הוא 2468."
+      title="אִמּוּת הוֹרֶה"
       tone="lilac"
     >
       <Card className="mx-auto mt-10 max-w-xl space-y-5 text-center">
@@ -38,10 +38,10 @@ export function ParentGateScreen() {
                 return
               }
 
-              setError('הקוד לא נכון. בקובץ הדמו הקוד הוא 2468.')
+              setError('הַקּוֹד לֹא נָכוֹן. בְּקוֹבֶץ הַדֵּמוֹ הַקּוֹד הוּא 2468.')
             }}
           >
-            כניסה לאזור הורים
+            כניסה לאֵזוֹר הוֹרִים
           </Button>
           <Button onClick={() => navigate('/')} variant="secondary">
             חזרה

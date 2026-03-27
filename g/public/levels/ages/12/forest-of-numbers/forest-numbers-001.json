@@ -1,0 +1,1523 @@
+{
+  "version": 1,
+  "id": "forest-numbers-001",
+  "worldId": "forest-of-numbers",
+  "missionId": "forest-bloom",
+  "title": "שביל הזרעים",
+  "subject": "math",
+  "instructions": "קוראים, סופרים או פותרים, ובוחרים את התשובה הנכונה.",
+  "difficulty": "hard",
+  "rewards": {
+    "xp": 90,
+    "coins": 36,
+    "starsPerQuestion": 3,
+    "badgeId": "math-sprout"
+  },
+  "completionRules": {
+    "passingScore": 70,
+    "maxMistakes": 90
+  },
+  "assets": [],
+  "activities": [
+    {
+      "id": "forest-numbers-001-q01",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--4 + 3?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-4 ועוד 3 שווה -1."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--4 + 3?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "-1",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "0",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "-2",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "7",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-4 ועוד 3 שווה -1."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q02",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--3 + 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-3 ועוד 4 שווה 1."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--3 + 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "1",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "2",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "0",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "7",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-3 ועוד 4 שווה 1."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q03",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--2 + 5?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-2 ועוד 5 שווה 3."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--2 + 5?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "3",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "4",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "2",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "7",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-2 ועוד 5 שווה 3."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q04",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--1 + 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-1 ועוד 6 שווה 5."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--1 + 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "5",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "6",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "4",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "7",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-1 ועוד 6 שווה 5."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q05",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-0 + 3?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "0 ועוד 3 שווה 3."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-0 + 3?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "3",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "4",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "2",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "3",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "0 ועוד 3 שווה 3."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q06",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--4 + 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-4 ועוד 4 שווה 0."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--4 + 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "1",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "-1",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "8",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-4 ועוד 4 שווה 0."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q07",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--3 + 5?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-3 ועוד 5 שווה 2."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--3 + 5?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "2",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "3",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "1",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "8",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-3 ועוד 5 שווה 2."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q08",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--2 + 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-2 ועוד 6 שווה 4."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--2 + 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "5",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "3",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "8",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-2 ועוד 6 שווה 4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q09",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל--1 + 3?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "-1 ועוד 3 שווה 2."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל--1 + 3?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "2",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "3",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "1",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "4",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "-1 ועוד 3 שווה 2."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q10",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-0 + 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "0 ועוד 4 שווה 4."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-0 + 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "5",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "3",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "4",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "0 ועוד 4 שווה 4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q11",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 2 = 9?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 2 מ-9, ולכן x = 7."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 2 = 9?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "7",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "2",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 2 מ-9, ולכן x = 7."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q12",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 3 = 11?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 3 מ-11, ולכן x = 8."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 3 = 11?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "9",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "7",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "3",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 3 מ-11, ולכן x = 8."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q13",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 4 = 7?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 4 מ-7, ולכן x = 3."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 4 = 7?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "3",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "2",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "4",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 4 מ-7, ולכן x = 3."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q14",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 5 = 9?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 5 מ-9, ולכן x = 4."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 5 = 9?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "3",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "5",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 5 מ-9, ולכן x = 4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q15",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 6 = 11?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 6 מ-11, ולכן x = 5."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 6 = 11?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "6",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 6 מ-11, ולכן x = 5."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q16",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 2 = 8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 2 מ-8, ולכן x = 6."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 2 = 8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "7",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "2",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 2 מ-8, ולכן x = 6."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q17",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 3 = 10?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 3 מ-10, ולכן x = 7."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 3 = 10?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "7",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "3",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 3 מ-10, ולכן x = 7."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q18",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 4 = 12?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 4 מ-12, ולכן x = 8."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 4 = 12?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "9",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "7",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "4",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 4 מ-12, ולכן x = 8."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q19",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 5 = 8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 5 מ-8, ולכן x = 3."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 5 = 8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "3",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "2",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "5",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 5 מ-8, ולכן x = 3."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q20",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מהו x אם x + 6 = 10?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כדי למצוא את x מחסרים 6 מ-10, ולכן x = 4."
+        }
+      ],
+      "content": {
+        "prompt": "מהו x אם x + 6 = 10?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "3",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "6",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כדי למצוא את x מחסרים 6 מ-10, ולכן x = 4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q21",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 2:3 והחלק הימני הוא 12, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 8."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 2:3 והחלק הימני הוא 12, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "8",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "10",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "7",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "10",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 8."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q22",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 3:4 והחלק הימני הוא 8, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 6."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 3:4 והחלק הימני הוא 8, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "6",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "9",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "5",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "8",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 6."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q23",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 4:5 והחלק הימני הוא 15, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 12."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 4:5 והחלק הימני הוא 15, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "12",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "16",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "11",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "14",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 12."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q24",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 5:6 והחלק הימני הוא 24, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 20."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 5:6 והחלק הימני הוא 24, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "20",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "25",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "19",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "22",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 20."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q25",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 2:7 והחלק הימני הוא 14, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 4."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 2:7 והחלק הימני הוא 14, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "6",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "3",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "6",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q26",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 3:3 והחלק הימני הוא 9, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 9."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 3:3 והחלק הימני הוא 9, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "9",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "12",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "8",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "11",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 9."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q27",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 4:4 והחלק הימני הוא 16, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 16."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 4:4 והחלק הימני הוא 16, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "16",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "20",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "15",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "18",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 16."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q28",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 5:5 והחלק הימני הוא 10, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 10."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 5:5 והחלק הימני הוא 10, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "10",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "15",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "9",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "12",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 10."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q29",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 2:6 והחלק הימני הוא 18, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 6."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 2:6 והחלק הימני הוא 18, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "6",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "8",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "5",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "8",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 6."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q30",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "אם היחס הוא 3:7 והחלק הימני הוא 28, מהו החלק השמאלי?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 12."
+        }
+      ],
+      "content": {
+        "prompt": "אם היחס הוא 3:7 והחלק הימני הוא 28, מהו החלק השמאלי?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "12",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "15",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "11",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "14",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא 12."
+      }
+    }
+  ]
+}

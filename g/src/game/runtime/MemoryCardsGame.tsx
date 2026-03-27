@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 import { Card } from '@/components/ui/Card'
-import type { MemoryCardsLevel } from '@/game/engine/level-schema'
+import type { MemoryCardsActivity } from '@/game/engine/level-schema'
 import type { MiniGameRendererProps } from '@/game/runtime/renderer-types'
 import { shuffleItems } from '@/game/runtime/utils'
 
@@ -13,9 +13,9 @@ interface DeckCard {
   emoji: string
 }
 
-function createDeck(level: MemoryCardsLevel): DeckCard[] {
+function createDeck(activity: MemoryCardsActivity): DeckCard[] {
   return shuffleItems(
-    level.content.pairs.flatMap((pair) => [
+    activity.content.pairs.flatMap((pair) => [
       {
         id: `${pair.id}-a`,
         pairId: pair.id,
@@ -33,12 +33,12 @@ function createDeck(level: MemoryCardsLevel): DeckCard[] {
 }
 
 export function MemoryCardsGame({
-  level,
+  activity,
   onSuccess,
   onMistake,
   disabled,
-}: MiniGameRendererProps<MemoryCardsLevel>) {
-  const [deck] = useState(() => createDeck(level))
+}: MiniGameRendererProps<MemoryCardsActivity>) {
+  const [deck] = useState(() => createDeck(activity))
   const [flippedCardIds, setFlippedCardIds] = useState<string[]>([])
   const [matchedPairIds, setMatchedPairIds] = useState<string[]>([])
   const [hasCompleted, setHasCompleted] = useState(false)
@@ -74,11 +74,11 @@ export function MemoryCardsGame({
       setMatchedPairIds(nextMatchedPairIds)
       setFlippedCardIds([])
 
-      if (!hasCompleted && nextMatchedPairIds.length === level.content.pairs.length) {
+      if (!hasCompleted && nextMatchedPairIds.length === activity.content.pairs.length) {
         setHasCompleted(true)
         onSuccess({
           score: 100,
-          explanation: level.content.explanation,
+          explanation: activity.content.explanation,
         })
       }
 
@@ -96,8 +96,8 @@ export function MemoryCardsGame({
   return (
     <Card className="space-y-4 p-4 lg:p-5">
       <div className="space-y-2 text-center">
-        <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">קלפי זיכרון</p>
-        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{level.content.prompt}</h3>
+        <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">קלפי זִיכָּרוֹן</p>
+        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{activity.content.prompt}</h3>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { badgeCatalog, getShopItemById, subjectLabels, worldCatalog } from '@/game/content/catalog'
+import { getHomeWorldById } from '@/game/content/home-worlds'
 import {
   formatCountdown,
   getCreatureById,
@@ -46,9 +47,9 @@ export function ProgressScreen() {
           חזרה לבית
         </Button>
       }
-      eyebrow="התקדמות"
-      subtitle="פירוט ויזואלי של רמה, נקודות, כוכבים, התקדמות בעולמות והמצב של היצורים בבית."
-      title="ההתקדמות שלי"
+      eyebrow="הִתְקַדְּמוּת"
+      subtitle="פירוט ויזואלי של רמה, נקודות, כוכבים, הִתְקַדְּמוּת בעולמות והמצב של היצורים בבית."
+      title="ההִתְקַדְּמוּת שלי"
       tone="mint"
     >
       <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
@@ -64,7 +65,7 @@ export function ProgressScreen() {
               {currentChildProfile?.name}
             </p>
           </div>
-          <ProgressBar accent="#f26a4b" label="נקודות ניסיון" value={(xp % 500) / 5} valueLabel={`${xp} נקודות`} />
+          <ProgressBar accent="#f26a4b" label="נְקֻדּוֹת נִסָּיוֹן" value={(xp % 500) / 5} valueLabel={`${xp} נְקֻדּוֹת`} />
           <div className="rounded-[24px] bg-[#fff7ed] px-4 py-4">
             <p className="text-sm font-semibold text-slate-500">כוכבים שצברתי</p>
             <p className="mt-2 inline-flex items-center gap-2 text-2xl font-bold text-slate-900">
@@ -75,14 +76,14 @@ export function ProgressScreen() {
           <div className="rounded-[24px] bg-[#eefaf6] px-4 py-4">
             <p className="text-sm font-semibold text-slate-500">היצור המוביל</p>
             <p className="mt-2 text-2xl font-bold text-slate-900">
-              {featuredStage?.name ?? (ownedCreatures.length ? 'ביצה בתהליך בקיעה' : 'עדיין אין יצור חדש')}
+              {featuredStage?.name ?? (ownedCreatures.length ? 'בֵּיצָה בְּתַהֲלִיךְ בְּקִיעָה' : 'עֲדַיִן אֵין יְצוּר חָדָשׁ')}
             </p>
           </div>
         </Card>
 
         <div className="space-y-6">
           <Card className="space-y-4">
-            <h2 className="font-display text-3xl text-slate-900">התקדמות בעולמות</h2>
+            <h2 className="font-display text-3xl text-slate-900">הִתְקַדְּמוּת בעולמות</h2>
             <div className="grid gap-4 md:grid-cols-2">
               {worldCatalog.map((world) => {
                 const subjectProgress = progressBySubject[world.subject] ?? {
@@ -101,7 +102,7 @@ export function ProgressScreen() {
                         <p className="text-sm text-slate-500">{subjectLabels[world.subject] ?? world.subtitle}</p>
                       </div>
                     </div>
-                    <ProgressBar accent={world.accentColor} className="mt-4" label="השלמה" value={percentage} />
+                    <ProgressBar accent={world.accentColor} className="mt-4" label="הַשְׁלָמָה" value={percentage} />
                   </Card>
                 )
               })}
@@ -127,6 +128,9 @@ export function ProgressScreen() {
                   const stage = hatched ? getCurrentCreatureStage(creature, ownedCreature, now) : null
                   const nextStage = hatched ? getNextCreatureStage(creature, ownedCreature, now) : null
                   const needState = hatched ? getCreatureNeedState(creature, ownedCreature, now) : null
+                  const assignedHomeWorld = ownedCreature.placedHomeWorldId
+                    ? getHomeWorldById(ownedCreature.placedHomeWorldId)
+                    : null
 
                   return (
                     <Card className="overflow-hidden p-0" key={ownedCreature.creatureId}>
@@ -141,7 +145,7 @@ export function ProgressScreen() {
                         <div className="absolute right-4 top-4 rounded-full bg-white/90 px-4 py-2 text-sm font-semibold text-slate-700 backdrop-blur">
                           {hatched
                             ? getCreatureMoodLabel(needState?.primaryNeed ?? null)
-                            : `בוקע בעוד ${formatCountdown(getTimeUntilCreatureHatch(creature, ownedCreature, now))}`}
+                            : `בּוֹקֵעַ בְּעוֹד ${formatCountdown(getTimeUntilCreatureHatch(creature, ownedCreature, now))}`}
                         </div>
                         <div className="relative flex min-h-[280px] items-end p-4">
                           <div className="w-full rounded-[24px] bg-white/92 px-4 py-4 shadow-lg backdrop-blur">
@@ -150,15 +154,15 @@ export function ProgressScreen() {
                                 {hatched ? stage?.name ?? creature.name : creature.name}
                               </h3>
                               <span className="rounded-full bg-[#fff7ed] px-3 py-2 text-sm font-bold text-[#f59e0b]">
-                                {ownedCreature.placedInHome ? 'בבית' : 'בסרגל'}
+                                {assignedHomeWorld?.name ?? 'בַּסַּרְגָּל'}
                               </span>
                             </div>
                             <p className="mt-3 text-sm text-slate-600">
                               {hatched
                                 ? nextStage
-                                  ? `השלב הבא: ${nextStage.name}. צריך עוד ${Math.max(0, nextStage.requiredCare.feedCount - ownedCreature.care.feedCount)} האכלות לפחות.`
-                                  : 'היצור כבר הגיע לשלב הגדילה הגבוה ביותר כרגע.'
-                                : 'הביצה כבר נרכשה ונמצאת בתהליך בקיעה.'}
+                                  ? `הַשָּׁלָב הַבָּא: ${nextStage.name}. צָרִיךְ עוֹד ${Math.max(0, nextStage.requiredCare.feedCount - ownedCreature.care.feedCount)} הַאֲכָלוֹת לְפָחוֹת.`
+                                  : 'הַיְּצוּר כְּבָר הִגִּיעַ לִשְׁלַב הַגְּדִילָה הַגָּבוֹהַּ בְּיוֹתֵר כָּרֶגַע.'
+                                : 'הַבֵּיצָה כְּבָר נִרְכְּשָׁה וְנִמְצֵאת בְּתַהֲלִיךְ בְּקִיעָה.'}
                             </p>
                           </div>
                         </div>
@@ -187,7 +191,7 @@ export function ProgressScreen() {
           </Card>
 
           <Card className="space-y-4">
-            <h2 className="font-display text-3xl text-slate-900">האביזרים והבגדים שלי</h2>
+            <h2 className="font-display text-3xl text-slate-900">האביזרים והבְּגָדִים שלי</h2>
             {inventory.length ? (
               <div className="flex flex-wrap gap-3">
                 {inventory.map((itemId) => (
@@ -200,7 +204,7 @@ export function ProgressScreen() {
                 ))}
               </div>
             ) : (
-              <p className="text-sm font-semibold text-slate-500">עדיין לא נרכשו פריטים מהחנות.</p>
+              <p className="text-sm font-semibold text-slate-500">עדיין לא נרכשו פריטים מהחֲנוּת.</p>
             )}
           </Card>
         </div>

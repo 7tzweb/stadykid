@@ -1,0 +1,1523 @@
+{
+  "version": 1,
+  "id": "forest-numbers-001",
+  "worldId": "forest-of-numbers",
+  "missionId": "forest-bloom",
+  "title": "שביל הזרעים",
+  "subject": "math",
+  "instructions": "קוראים, סופרים או פותרים, ובוחרים את התשובה הנכונה.",
+  "difficulty": "medium",
+  "rewards": {
+    "xp": 90,
+    "coins": 36,
+    "starsPerQuestion": 3,
+    "badgeId": "math-sprout"
+  },
+  "completionRules": {
+    "passingScore": 70,
+    "maxMistakes": 90
+  },
+  "assets": [],
+  "activities": [
+    {
+      "id": "forest-numbers-001-q01",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/2?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/2 שווה ל-0.5."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/2?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.75",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/2 שווה ל-0.5."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q02",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/4 שווה ל-0.25."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.25",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.35",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "0.75",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/4 שווה ל-0.25."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q03",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-3/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "3/4 שווה ל-0.75."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-3/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.75",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.85",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "1",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1.25",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "3/4 שווה ל-0.75."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q04",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/10?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/10 שווה ל-0.1."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/10?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.1",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.2",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.35",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "0.6",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/10 שווה ל-0.1."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q05",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/2?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/2 שווה ל-0.5."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/2?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.75",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/2 שווה ל-0.5."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q06",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/4 שווה ל-0.25."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.25",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.35",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "0.75",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/4 שווה ל-0.25."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q07",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-3/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "3/4 שווה ל-0.75."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-3/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.75",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.85",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "1",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1.25",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "3/4 שווה ל-0.75."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q08",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/10?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/10 שווה ל-0.1."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/10?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.1",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.2",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.35",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "0.6",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/10 שווה ל-0.1."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q09",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/2?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/2 שווה ל-0.5."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/2?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.75",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/2 שווה ל-0.5."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q10",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה מספר עשרוני שווה ל-1/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/4 שווה ל-0.25."
+        }
+      ],
+      "content": {
+        "prompt": "איזה מספר עשרוני שווה ל-1/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "0.25",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "0.35",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "0.5",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "0.75",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/4 שווה ל-0.25."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q11",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-22 × 8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "22 כפול 8 שווה 176."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-22 × 8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "176",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "184",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "154",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "186",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "22 כפול 8 שווה 176."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q12",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-23 × 9?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "23 כפול 9 שווה 207."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-23 × 9?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "207",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "216",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "184",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "217",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "23 כפול 9 שווה 207."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q13",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-24 × 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "24 כפול 4 שווה 96."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-24 × 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "96",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "100",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "72",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "106",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "24 כפול 4 שווה 96."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q14",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-25 × 5?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "25 כפול 5 שווה 125."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-25 × 5?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "125",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "130",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "100",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "135",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "25 כפול 5 שווה 125."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q15",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-26 × 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "26 כפול 6 שווה 156."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-26 × 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "156",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "162",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "130",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "166",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "26 כפול 6 שווה 156."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q16",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-27 × 7?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "27 כפול 7 שווה 189."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-27 × 7?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "189",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "196",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "162",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "199",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "27 כפול 7 שווה 189."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q17",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-28 × 8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "28 כפול 8 שווה 224."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-28 × 8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "224",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "232",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "196",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "234",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "28 כפול 8 שווה 224."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q18",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-29 × 9?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "29 כפול 9 שווה 261."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-29 × 9?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "261",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "270",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "232",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "271",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "29 כפול 9 שווה 261."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q19",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-30 × 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "30 כפול 4 שווה 120."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-30 × 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "120",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "124",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "90",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "130",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "30 כפול 4 שווה 120."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q20",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה התשובה ל-31 × 5?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "31 כפול 5 שווה 155."
+        }
+      ],
+      "content": {
+        "prompt": "מה התשובה ל-31 × 5?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "155",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-2",
+            "label": "160",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-3",
+            "label": "124",
+            "emoji": "🔢"
+          },
+          {
+            "id": "option-4",
+            "label": "165",
+            "emoji": "🔢"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "31 כפול 5 שווה 155."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q21",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 4 ורוחבו 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 20."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 4 ורוחבו 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "20",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "24",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "22",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "18",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 20."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q22",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 5 ורוחבו 7?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 24."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 5 ורוחבו 7?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "24",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "35",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "26",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "22",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 24."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q23",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 6 ורוחבו 8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 28."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 6 ורוחבו 8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "48",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "26",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 28."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q24",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 7 ורוחבו 9?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 32."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 7 ורוחבו 9?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "32",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "63",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "34",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "30",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 32."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q25",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 8 ורוחבו 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 28."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 8 ורוחבו 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "48",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "26",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 28."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q26",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 4 ורוחבו 7?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 22."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 4 ורוחבו 7?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "22",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "24",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "20",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 22."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q27",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 5 ורוחבו 8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 26."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 5 ורוחבו 8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "26",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "40",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "24",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 26."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q28",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 6 ורוחבו 9?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 30."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 6 ורוחבו 9?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "54",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "32",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "28",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 30."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q29",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 7 ורוחבו 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 26."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 7 ורוחבו 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "26",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "42",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "24",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 26."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q30",
+      "type": "multiple_choice",
+      "difficulty": "medium",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה ההיקף של מלבן שאורכו 8 ורוחבו 7?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 30."
+        }
+      ],
+      "content": {
+        "prompt": "מה ההיקף של מלבן שאורכו 8 ורוחבו 7?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "56",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "32",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "28",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא 30."
+      }
+    }
+  ]
+}

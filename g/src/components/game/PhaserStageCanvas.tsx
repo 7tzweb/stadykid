@@ -89,7 +89,7 @@ function createStageSceneConfig(
       footer.strokeRoundedRect(96, 292, width - 192, 72, 22)
 
       this.add
-        .text(width / 2, 328, 'מנוע Phaser פעיל כאן כרקע אינטראקטיבי למסך המשחק', {
+        .text(width / 2, 328, 'מנוע Phaser פָּעִיל כאן כרקע אינטראקטיבי למסך המשחק', {
           fontFamily: 'Rubik, sans-serif',
           fontSize: '18px',
           color: '#334155',
@@ -107,7 +107,13 @@ export function PhaserStageCanvas({ level }: { level: GameLevel }) {
       return
     }
 
-    const meta = getLevelTypeMeta(level.type)
+    const primaryActivity = level.activities[0]
+
+    if (!primaryActivity) {
+      return
+    }
+
+    const meta = getLevelTypeMeta(primaryActivity.type)
     const parent = containerRef.current
     parent.innerHTML = ''
     let isDisposed = false

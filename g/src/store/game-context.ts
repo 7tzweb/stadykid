@@ -5,6 +5,7 @@ import type {
   AvatarSelection,
   ChildProfile,
   CreatureCareAction,
+  CreaturePlacementResult,
   CreaturePurchaseResult,
   DailyLimits,
   GameSettings,
@@ -19,6 +20,7 @@ export interface CompleteMissionInput {
   score: number
   xpEarned: number
   coinsEarned: number
+  starsEarned?: number
   explanation: string
 }
 
@@ -26,6 +28,7 @@ export interface GameContextValue extends GameState {
   currentChildProfile: ChildProfile | null
   setCurrentUser: (user: AppUser | null) => void
   setCurrentChildProfile: (childId: string) => void
+  setCurrentHomeWorld: (homeWorldId: string) => void
   addChildProfile: (profile: ChildProfile) => void
   updateChildProfile: (profile: ChildProfile) => void
   updateAvatar: (childId: string, avatarSeed: AvatarSelection) => void
@@ -36,8 +39,9 @@ export interface GameContextValue extends GameState {
   addStars: (value: number) => void
   buyItem: (itemId: string, price: number) => boolean
   buyCreature: (creatureId: string, priceStars: number) => CreaturePurchaseResult
-  toggleCreaturePlacement: (creatureId: string) => void
+  toggleCreaturePlacement: (creatureId: string, homeWorldId: string) => CreaturePlacementResult
   careForCreature: (creatureId: string, action: CreatureCareAction, rewardStars: number) => boolean
+  completeSpecialRequest: (creatureId: string, rewardStars: number) => boolean
   toggleCreatureItem: (creatureId: string, itemId: string) => void
   updateSettings: (input: Partial<GameSettings>) => void
   updateDailyLimits: (input: Partial<DailyLimits>) => void

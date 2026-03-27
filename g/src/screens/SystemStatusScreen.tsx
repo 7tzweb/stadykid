@@ -14,34 +14,34 @@ export function SystemStatusScreen() {
     <ScreenLayout
       actions={
         <Button onClick={() => navigate('/settings')} variant="secondary">
-          חזרה להגדרות
+          חזרה להַגְדָּרוֹת
         </Button>
       }
-      eyebrow="סטטוס"
-      subtitle="מסך תחזוקה שמרכז את מצב ה-Firebase, מנוע השלבים, Capacitor ומספר קבצי ה-JSON."
-      title="סטטוס המערכת"
+      eyebrow="סְטָטוּס"
+      subtitle="מָסַךְ תַּחְזוּקָה שֶׁמְּרַכֵּז אֶת מַצַּב ה־Firebase, מָנוֹעַ הַשְּׁלָבִים, Capacitor וּמִסְפַּר קִבְצֵי ה־JSON."
+      title="סְטָטוּס המערכת"
       tone="sky"
     >
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {[
           {
             title: 'Firebase',
-            value: isFirebaseConfigured ? 'מוגדר' : 'מצב דמו',
+            value: isFirebaseConfigured ? 'מוּגְדָּר' : 'מַצָּב דֵּמוֹ',
             icon: <Database className="h-8 w-8" />,
           },
           {
-            title: 'שלבי JSON',
-            value: `${levelManifest.length} קבצים`,
+            title: 'שַׁלְבֵי JSON',
+            value: `${levelManifest.length} קְבָצִים`,
             icon: <CheckCircle2 className="h-8 w-8" />,
           },
           {
-            title: 'מנוע משחק',
-            value: 'Phaser והרצה דינמית',
+            title: 'מָנוֹעַ מִשְׂחָק',
+            value: 'Phaser וְהַרְצָאָה דִּינָמִית',
             icon: <Gamepad2 className="h-8 w-8" />,
           },
           {
             title: 'Capacitor',
-            value: 'מוכן להגדרה',
+            value: 'מוּכָן לַהַגְדָּרָה',
             icon: <Smartphone className="h-8 w-8" />,
           },
         ].map((item) => (

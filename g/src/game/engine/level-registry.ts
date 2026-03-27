@@ -20,7 +20,7 @@ export const levelTypeRegistry: Record<
     accentColor: '#8B5CF6',
   },
   memory_cards: {
-    label: 'כרטיסי זיכרון',
+    label: 'כרטיסי זִיכָּרוֹן',
     icon: '🃏',
     accentColor: '#0EA5E9',
   },

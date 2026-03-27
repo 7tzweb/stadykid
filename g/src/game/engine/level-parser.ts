@@ -1,4 +1,9 @@
-import { gameLevelSchema, type GameLevel } from '@/game/engine/level-schema'
+import {
+  legacyGameLevelSchema,
+  normalizeLegacyGameLevel,
+  stageLevelSchema,
+  type GameLevel,
+} from '@/game/engine/level-schema'
 
 export class LevelValidationError extends Error {
   issues: string[]
@@ -11,13 +16,19 @@ export class LevelValidationError extends Error {
 }
 
 export function parseGameLevel(rawValue: unknown): GameLevel {
-  const result = gameLevelSchema.safeParse(rawValue)
+  const stageResult = stageLevelSchema.safeParse(rawValue)
 
-  if (!result.success) {
-    throw new LevelValidationError(
-      result.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`),
-    )
+  if (stageResult.success) {
+    return stageResult.data
   }
 
-  return result.data
+  const legacyResult = legacyGameLevelSchema.safeParse(rawValue)
+
+  if (legacyResult.success) {
+    return normalizeLegacyGameLevel(legacyResult.data)
+  }
+
+  throw new LevelValidationError(
+    stageResult.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`),
+  )
 }

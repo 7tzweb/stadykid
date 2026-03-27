@@ -1,4 +1,4 @@
-import type { GameLevel } from '@/game/engine/level-schema'
+import type { GameActivity } from '@/game/engine/level-schema'
 import { DragAndDropGame } from '@/game/runtime/DragAndDropGame'
 import { MatchPairsGame } from '@/game/runtime/MatchPairsGame'
 import { MemoryCardsGame } from '@/game/runtime/MemoryCardsGame'
@@ -6,24 +6,24 @@ import { MultipleChoiceGame } from '@/game/runtime/MultipleChoiceGame'
 import type { GameCompletion } from '@/game/runtime/renderer-types'
 
 interface MiniGameHostProps {
-  level: GameLevel
+  activity: GameActivity
   disabled?: boolean
   onSuccess: (completion: GameCompletion) => void
   onMistake: (message: string) => void
 }
 
 export function MiniGameHost({
-  level,
+  activity,
   disabled,
   onSuccess,
   onMistake,
 }: MiniGameHostProps) {
-  switch (level.type) {
+  switch (activity.type) {
     case 'multiple_choice':
       return (
         <MultipleChoiceGame
+          activity={activity}
           disabled={disabled}
-          level={level}
           onMistake={onMistake}
           onSuccess={onSuccess}
         />
@@ -32,8 +32,8 @@ export function MiniGameHost({
     case 'drag_and_drop':
       return (
         <DragAndDropGame
+          activity={activity}
           disabled={disabled}
-          level={level}
           onMistake={onMistake}
           onSuccess={onSuccess}
         />
@@ -41,14 +41,14 @@ export function MiniGameHost({
 
     case 'match_pairs':
       return (
-        <MatchPairsGame disabled={disabled} level={level} onMistake={onMistake} onSuccess={onSuccess} />
+        <MatchPairsGame disabled={disabled} activity={activity} onMistake={onMistake} onSuccess={onSuccess} />
       )
 
     case 'memory_cards':
       return (
         <MemoryCardsGame
+          activity={activity}
           disabled={disabled}
-          level={level}
           onMistake={onMistake}
           onSuccess={onSuccess}
         />

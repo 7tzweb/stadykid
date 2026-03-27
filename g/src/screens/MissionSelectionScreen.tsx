@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { ScreenLayout } from '@/components/layout/ScreenLayout'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
-import { StepGuide } from '@/components/ui/StepGuide'
 import { getWorldById, missionCatalog } from '@/game/content/catalog'
 import { useGame } from '@/hooks/useGame'
 
@@ -34,31 +33,12 @@ export function MissionSelectionScreen() {
           חזרה למפה
         </Button>
       }
-      eyebrow="בחירת משימה"
+      eyebrow="בְּחִירַת מְשִׂימָה"
       subtitle={world.description}
       title={world.name}
       tone="sand"
     >
       <div className="space-y-6">
-        <StepGuide
-          accent={world.accentColor}
-          items={[
-            {
-              title: 'קוראים את שם המשימה',
-              description: 'בוחרים את המשימה שנראית לכם מתאימה.',
-            },
-            {
-              title: 'מחפשים כפתור כתום',
-              description: 'כפתור כתום אומר שאפשר להתחיל לשחק.',
-            },
-            {
-              title: 'נכנסים למשחק',
-              description: 'אחרי הלחיצה עוברים ישר למסך המשחק.',
-            },
-          ]}
-          title="כך בוחרים משחק"
-        />
-
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {missions.map((mission, index) => {
             const previousMission = missions[index - 1]
@@ -109,7 +89,7 @@ export function MissionSelectionScreen() {
                   ) : (
                     <div className="flex items-center gap-3 rounded-[24px] bg-white/80 px-4 py-4 text-sm font-semibold text-slate-600">
                       <Lock className="h-5 w-5" />
-                      צריך להשלים את המשימה הקודמת כדי לפתוח
+                      צריך להשלים את המשימה הקודמת כדי לפָּתוּחַ
                     </div>
                   )}
                 </div>

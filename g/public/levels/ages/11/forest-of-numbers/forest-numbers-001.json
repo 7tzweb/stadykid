@@ -1,0 +1,1523 @@
+{
+  "version": 1,
+  "id": "forest-numbers-001",
+  "worldId": "forest-of-numbers",
+  "missionId": "forest-bloom",
+  "title": "שביל הזרעים",
+  "subject": "math",
+  "instructions": "קוראים, סופרים או פותרים, ובוחרים את התשובה הנכונה.",
+  "difficulty": "hard",
+  "rewards": {
+    "xp": 90,
+    "coins": 36,
+    "starsPerQuestion": 3,
+    "badgeId": "math-sprout"
+  },
+  "completionRules": {
+    "passingScore": 70,
+    "maxMistakes": 90
+  },
+  "assets": [],
+  "activities": [
+    {
+      "id": "forest-numbers-001-q01",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 1/4 + 2/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 3/4."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 1/4 + 2/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "3/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "4/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "2/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1/4",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 3/4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q02",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 2/6 + 3/6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/6."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 2/6 + 3/6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "5/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "6/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "3/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "2/6",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/6."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q03",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 1/8 + 4/8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/8."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 1/8 + 4/8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "5/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "6/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "4/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1/8",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/8."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q04",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 2/4 + 2/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 4/4."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 2/4 + 2/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "5/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "2/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "2/4",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 4/4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q05",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 1/6 + 3/6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 4/6."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 1/6 + 3/6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "5/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "3/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1/6",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 4/6."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q06",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 2/8 + 4/8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 6/8."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 2/8 + 4/8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "6/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "7/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "4/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "2/8",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 6/8."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q07",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 1/4 + 2/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 3/4."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 1/4 + 2/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "3/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "4/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "2/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1/4",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 3/4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q08",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 2/6 + 3/6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/6."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 2/6 + 3/6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "5/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "6/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "3/6",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "2/6",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/6."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q09",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 1/8 + 4/8?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/8."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 1/8 + 4/8?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "5/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "6/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "4/8",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "1/8",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 5/8."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q10",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 2/4 + 2/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 4/4."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 2/4 + 2/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "4/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-2",
+            "label": "5/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-3",
+            "label": "2/4",
+            "emoji": "🧮"
+          },
+          {
+            "id": "option-4",
+            "label": "2/4",
+            "emoji": "🧮"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא 4/4."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q11",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 40% מתוך 100?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "40% מתוך 100 הם 40."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 40% מתוך 100?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "40",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "50",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "30",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "60",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "40% מתוך 100 הם 40."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q12",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 50% מתוך 150?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "50% מתוך 150 הם 75."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 50% מתוך 150?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "75",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "85",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "65",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "95",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "50% מתוך 150 הם 75."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q13",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 60% מתוך 200?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "60% מתוך 200 הם 120."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 60% מתוך 200?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "120",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "130",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "110",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "140",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "60% מתוך 200 הם 120."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q14",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 70% מתוך 250?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "70% מתוך 250 הם 175."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 70% מתוך 250?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "175",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "185",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "165",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "195",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "70% מתוך 250 הם 175."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q15",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 10% מתוך 300?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "10% מתוך 300 הם 30."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 10% מתוך 300?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "30",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "40",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "20",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "50",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "10% מתוך 300 הם 30."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q16",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 20% מתוך 100?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "20% מתוך 100 הם 20."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 20% מתוך 100?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "20",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "30",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "10",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "40",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "20% מתוך 100 הם 20."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q17",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 30% מתוך 150?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "30% מתוך 150 הם 45."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 30% מתוך 150?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "45",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "55",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "35",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "65",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "30% מתוך 150 הם 45."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q18",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 40% מתוך 200?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "40% מתוך 200 הם 80."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 40% מתוך 200?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "80",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "90",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "70",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "100",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "40% מתוך 200 הם 80."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q19",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 50% מתוך 250?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "50% מתוך 250 הם 125."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 50% מתוך 250?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "125",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "135",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "115",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "145",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "50% מתוך 250 הם 125."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q20",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "כמה הם 60% מתוך 300?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "60% מתוך 300 הם 180."
+        }
+      ],
+      "content": {
+        "prompt": "כמה הם 60% מתוך 300?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "180",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "190",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "170",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "200",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "60% מתוך 300 הם 180."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q21",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 5 ורוחבו 3?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 15."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 5 ורוחבו 3?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "15",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "20",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "18",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "8",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 15."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q22",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 6 ורוחבו 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 24."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 6 ורוחבו 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "24",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "30",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "28",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "10",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 24."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q23",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 7 ורוחבו 5?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 35."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 7 ורוחבו 5?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "35",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "42",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "40",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "12",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 35."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q24",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 8 ורוחבו 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 48."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 8 ורוחבו 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "48",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "56",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "54",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "14",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 48."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q25",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 9 ורוחבו 3?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 27."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 9 ורוחבו 3?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "27",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "36",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "30",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "12",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 27."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q26",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 5 ורוחבו 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 20."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 5 ורוחבו 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "20",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "25",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "24",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "9",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 20."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q27",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 6 ורוחבו 5?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 30."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 6 ורוחבו 5?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "30",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "36",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "35",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "11",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 30."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q28",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 7 ורוחבו 6?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 42."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 7 ורוחבו 6?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "42",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "49",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "48",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "13",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 42."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q29",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 8 ורוחבו 3?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 24."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 8 ורוחבו 3?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "24",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "32",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "27",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "11",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 24."
+      }
+    },
+    {
+      "id": "forest-numbers-001-q30",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה השטח של מלבן שאורכו 9 ורוחבו 4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 36."
+        }
+      ],
+      "content": {
+        "prompt": "מה השטח של מלבן שאורכו 9 ורוחבו 4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "36",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-2",
+            "label": "45",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-3",
+            "label": "40",
+            "emoji": "📐"
+          },
+          {
+            "id": "option-4",
+            "label": "13",
+            "emoji": "📐"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא 36."
+      }
+    }
+  ]
+}

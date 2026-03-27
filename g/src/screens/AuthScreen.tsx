@@ -28,7 +28,7 @@ export function AuthScreen() {
         navigate('/profiles')
       })
     } catch {
-      setMessage('החיבור לא הושלם. אפשר לנסות שוב או להמשיך עם דמו.')
+      setMessage('הַחִבּוּר לֹא הֻשְׁלַם. אֶפְשָׁר לְנַסּוֹת שׁוּב אוֹ לְהַמְשִׁיךְ עִם דֵּמוֹ.')
     } finally {
       setIsLoading(false)
     }
@@ -36,9 +36,9 @@ export function AuthScreen() {
 
   return (
     <ScreenLayout
-      eyebrow="התחברות"
-      subtitle="מסך כניסה פשוט. אפשר להתחבר עם חשבון או להמשיך מיד למצב דמו."
-      title="כניסה מהירה ובטוחה"
+      eyebrow="הִתְחַבְּרוּת"
+      subtitle="מָסָךְ כְּנִיסָה פָּשׁוּט. כָּרֶגַע אֶפְשָׁר לְהַמְשִׁיךְ עִם פְּרוֹפִילֵי דֵּמוֹ, וּבַהֶמְשֵׁךְ חֶשְׁבּוֹן Google יְנַהֵל פְּרוֹפִילֵי יְלָדִים אֲמִתִּיִּים."
+      title="כְּנִיסָה מְהִירָה וּבְטוּחָה"
       tone="sky"
     >
       <div className="space-y-6">
@@ -46,19 +46,19 @@ export function AuthScreen() {
           accent="#2563eb"
           items={[
             {
-              title: 'מתחברים',
-              description: 'אפשר עם חשבון Google או בלי חשבון.',
+              title: 'מִתְחַבְּרִים',
+              description: 'אֶפְשָׁר עִם חֶשְׁבּוֹן Google אוֹ בְּלִי חֶשְׁבּוֹן.',
             },
             {
-              title: 'ממשיכים לפרופילים',
-              description: 'אחרי ההתחברות בוחרים ילד.',
+              title: 'מַמְשִׁיכִים לַפְּרוֹפִילִים',
+              description: 'אחרי ההִתְחַבְּרוּת בּוֹחֲרִים יֶלֶד.',
             },
             {
-              title: 'מתחילים לשחק',
-              description: 'משם הדרך קצרה למפת העולמות.',
+              title: 'מַתְחִילִים לְשַׂחֵק',
+              description: 'מִשָּׁם הַדֶּרֶךְ קְצָרָה לְמַפַּת הָעוֹלָמוֹת.',
             },
           ]}
-          title="מה קורה אחרי ההתחברות?"
+          title="מה קורה אחרי ההִתְחַבְּרוּת?"
         />
 
         <div className="grid gap-6 lg:grid-cols-[1fr_0.95fr]">
@@ -69,12 +69,12 @@ export function AuthScreen() {
             <div className="space-y-2">
               <h2 className="font-display text-3xl text-slate-900">כניסה עם Google</h2>
               <p className="text-slate-600">
-                אם יהיו מפתחות Firebase ב-`.env`, ההתחברות תעבוד מול Firebase Auth. בלי מפתחות,
+                אם יהיו מפתחות Firebase ב-`.env`, ההִתְחַבְּרוּת תעבוד מול Firebase Auth. בלי מפתחות,
                 אפשר להמשיך עם משתמש דמו כדי לא לעצור את השימוש.
               </p>
             </div>
             <Button className="w-full" disabled={isLoading} onClick={handleSignIn}>
-              {isLoading ? 'מתחבר...' : 'כניסה עם חשבון Google'}
+              {isLoading ? 'מִתְחַבֵּר...' : 'כְּנִיסָה עִם חֶשְׁבּוֹן Google'}
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <Button onClick={() => navigate('/profiles')} variant="secondary">
@@ -95,13 +95,13 @@ export function AuthScreen() {
             <h2 className="font-display text-3xl text-slate-900">מצב תשתית</h2>
             <div className="space-y-3 text-sm text-slate-600">
               <p className="rounded-2xl bg-white px-4 py-3 shadow-sm">
-                Firebase: <strong>{isFirebaseConfigured ? 'מוגדר' : 'לא מוגדר, עובד בדמו'}</strong>
+                Firebase: <strong>{isFirebaseConfigured ? 'מוּגְדָּר' : 'לֹא מֻגְדָּר, עוֹבֵד בְּדֵמוֹ'}</strong>
               </p>
               <p className="rounded-2xl bg-white px-4 py-3 shadow-sm">
-                Firestore: מוכן לשמירת התקדמות, פרופילים, נקודות ומידע לאזור הורים.
+                Firestore: מוכן לשמירת הִתְקַדְּמוּת, פרופילים, נקודות ומידע לאֵזוֹר הוֹרִים.
               </p>
               <p className="rounded-2xl bg-white px-4 py-3 shadow-sm">
-                Capacitor: מוגדר בסיסית כך שהאפליקציה יכולה להתרחב ל-Android/iOS בהמשך.
+                Capacitor: מוּגְדָּר בסיסית כך שהאפליקציה יכולה להתרחב ל-Android/iOS בהמשך.
               </p>
             </div>
           </Card>

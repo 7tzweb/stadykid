@@ -1,0 +1,1523 @@
+{
+  "version": 1,
+  "id": "space-english-001",
+  "worldId": "space-english",
+  "missionId": "space-docking",
+  "title": "תחנת עגינה",
+  "subject": "english",
+  "instructions": "מקשיבים למילה או קוראים אותה, ובוחרים את המשמעות הנכונה.",
+  "difficulty": "hard",
+  "rewards": {
+    "xp": 102,
+    "coins": 39,
+    "starsPerQuestion": 3,
+    "badgeId": "space-reader"
+  },
+  "completionRules": {
+    "passingScore": 70,
+    "maxMistakes": 90
+  },
+  "assets": [],
+  "activities": [
+    {
+      "id": "space-english-001-q01",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"cat\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"cat\" פירושו חתול."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"cat\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "חתול",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-2",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כדור",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"cat\" פירושו חתול."
+      }
+    },
+    {
+      "id": "space-english-001-q02",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"dog\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"dog\" פירושו כלב."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"dog\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-2",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אדום",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"dog\" פירושו כלב."
+      }
+    },
+    {
+      "id": "space-english-001-q03",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"sun\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"sun\" פירושו שמש."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"sun\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-2",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כחול",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"sun\" פירושו שמש."
+      }
+    },
+    {
+      "id": "space-english-001-q04",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"ball\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"ball\" פירושו כדור."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"ball\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-2",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תפוח",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"ball\" פירושו כדור."
+      }
+    },
+    {
+      "id": "space-english-001-q05",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"red\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"red\" פירושו אדום."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"red\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-2",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-3",
+            "label": "תפוח",
+            "emoji": "🍎"
+          },
+          {
+            "id": "option-4",
+            "label": "מים",
+            "emoji": "💧"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"red\" פירושו אדום."
+      }
+    },
+    {
+      "id": "space-english-001-q06",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"blue\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"blue\" פירושו כחול."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"blue\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-2",
+            "label": "חתול",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שמש",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"blue\" פירושו כחול."
+      }
+    },
+    {
+      "id": "space-english-001-q07",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"apple\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"apple\" פירושו תפוח."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"apple\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "תפוח",
+            "emoji": "🍎"
+          },
+          {
+            "id": "option-2",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כדור",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"apple\" פירושו תפוח."
+      }
+    },
+    {
+      "id": "space-english-001-q08",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"water\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"water\" פירושו מים."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"water\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "מים",
+            "emoji": "💧"
+          },
+          {
+            "id": "option-2",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אדום",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"water\" פירושו מים."
+      }
+    },
+    {
+      "id": "space-english-001-q09",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"fish\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"fish\" פירושו דג."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"fish\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "דג",
+            "emoji": "🐟"
+          },
+          {
+            "id": "option-2",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כחול",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"fish\" פירושו דג."
+      }
+    },
+    {
+      "id": "space-english-001-q10",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"car\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"car\" פירושו מכונית."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"car\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "מכונית",
+            "emoji": "🚗"
+          },
+          {
+            "id": "option-2",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תפוח",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"car\" פירושו מכונית."
+      }
+    },
+    {
+      "id": "space-english-001-q11",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"green\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"green\" פירושו ירוק."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"green\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "ירוק",
+            "emoji": "🟩"
+          },
+          {
+            "id": "option-2",
+            "label": "חתול",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שמש",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"green\" פירושו ירוק."
+      }
+    },
+    {
+      "id": "space-english-001-q12",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"book\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"book\" פירושו ספר."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"book\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "ספר",
+            "emoji": "📘"
+          },
+          {
+            "id": "option-2",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כדור",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"book\" פירושו ספר."
+      }
+    },
+    {
+      "id": "space-english-001-q13",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"milk\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"milk\" פירושו חלב."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"milk\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "חלב",
+            "emoji": "🥛"
+          },
+          {
+            "id": "option-2",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אדום",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"milk\" פירושו חלב."
+      }
+    },
+    {
+      "id": "space-english-001-q14",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"tree\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"tree\" פירושו עץ."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"tree\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "עץ",
+            "emoji": "🌳"
+          },
+          {
+            "id": "option-2",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כחול",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"tree\" פירושו עץ."
+      }
+    },
+    {
+      "id": "space-english-001-q15",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"bird\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"bird\" פירושו ציפור."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"bird\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "ציפור",
+            "emoji": "🐦"
+          },
+          {
+            "id": "option-2",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תפוח",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"bird\" פירושו ציפור."
+      }
+    },
+    {
+      "id": "space-english-001-q16",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"flower\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"flower\" פירושו פרח."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"flower\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "פרח",
+            "emoji": "🌼"
+          },
+          {
+            "id": "option-2",
+            "label": "חתול",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שמש",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"flower\" פירושו פרח."
+      }
+    },
+    {
+      "id": "space-english-001-q17",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"duck\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"duck\" פירושו ברווז."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"duck\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "ברווז",
+            "emoji": "🦆"
+          },
+          {
+            "id": "option-2",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כדור",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"duck\" פירושו ברווז."
+      }
+    },
+    {
+      "id": "space-english-001-q18",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"star\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"star\" פירושו כוכב."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"star\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כוכב",
+            "emoji": "⭐"
+          },
+          {
+            "id": "option-2",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אדום",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"star\" פירושו כוכב."
+      }
+    },
+    {
+      "id": "space-english-001-q19",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"house\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"house\" פירושו בית."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"house\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "בית",
+            "emoji": "🏠"
+          },
+          {
+            "id": "option-2",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כחול",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"house\" פירושו בית."
+      }
+    },
+    {
+      "id": "space-english-001-q20",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"school\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"school\" פירושו בית ספר."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"school\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "בית ספר",
+            "emoji": "🏫"
+          },
+          {
+            "id": "option-2",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תפוח",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"school\" פירושו בית ספר."
+      }
+    },
+    {
+      "id": "space-english-001-q21",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"chair\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"chair\" פירושו כיסא."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"chair\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כיסא",
+            "emoji": "🪑"
+          },
+          {
+            "id": "option-2",
+            "label": "חתול",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שמש",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"chair\" פירושו כיסא."
+      }
+    },
+    {
+      "id": "space-english-001-q22",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"table\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"table\" פירושו שולחן."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"table\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "שולחן",
+            "emoji": "🪵"
+          },
+          {
+            "id": "option-2",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כדור",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"table\" פירושו שולחן."
+      }
+    },
+    {
+      "id": "space-english-001-q23",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"door\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"door\" פירושו דלת."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"door\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "דלת",
+            "emoji": "🚪"
+          },
+          {
+            "id": "option-2",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אדום",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"door\" פירושו דלת."
+      }
+    },
+    {
+      "id": "space-english-001-q24",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"pencil\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"pencil\" פירושו עיפרון."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"pencil\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "עיפרון",
+            "emoji": "✏️"
+          },
+          {
+            "id": "option-2",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כחול",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"pencil\" פירושו עיפרון."
+      }
+    },
+    {
+      "id": "space-english-001-q25",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"bag\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"bag\" פירושו תיק."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"bag\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "תיק",
+            "emoji": "🎒"
+          },
+          {
+            "id": "option-2",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תפוח",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"bag\" פירושו תיק."
+      }
+    },
+    {
+      "id": "space-english-001-q26",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"happy\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"happy\" פירושו שמח."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"happy\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "שמח",
+            "emoji": "😊"
+          },
+          {
+            "id": "option-2",
+            "label": "חתול",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שמש",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"happy\" פירושו שמח."
+      }
+    },
+    {
+      "id": "space-english-001-q27",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"family\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"family\" פירושו משפחה."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"family\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "משפחה",
+            "emoji": "👨‍👩‍👧"
+          },
+          {
+            "id": "option-2",
+            "label": "כלב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כדור",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"family\" פירושו משפחה."
+      }
+    },
+    {
+      "id": "space-english-001-q28",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"friend\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"friend\" פירושו חבר."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"friend\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "חבר",
+            "emoji": "🧡"
+          },
+          {
+            "id": "option-2",
+            "label": "שמש",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אדום",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"friend\" פירושו חבר."
+      }
+    },
+    {
+      "id": "space-english-001-q29",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"garden\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"garden\" פירושו גינה."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"garden\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "גינה",
+            "emoji": "🌷"
+          },
+          {
+            "id": "option-2",
+            "label": "כדור",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כחול",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"garden\" פירושו גינה."
+      }
+    },
+    {
+      "id": "space-english-001-q30",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "מה הפירוש של \"jump\"?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "\"jump\" פירושו לקפוץ."
+        }
+      ],
+      "content": {
+        "prompt": "מה הפירוש של \"jump\"?",
+        "question": "בחרו את המשמעות הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "לקפוץ",
+            "emoji": "🤸"
+          },
+          {
+            "id": "option-2",
+            "label": "אדום",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כחול",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תפוח",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"jump\" פירושו לקפוץ."
+      }
+    }
+  ]
+}

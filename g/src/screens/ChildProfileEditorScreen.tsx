@@ -18,8 +18,8 @@ export function ChildProfileEditorScreen() {
   const existingProfile = childProfiles.find((profile) => profile.id === childId)
   const [name, setName] = useState(existingProfile?.name ?? '')
   const [age, setAge] = useState(existingProfile?.age.toString() ?? '6')
-  const [favoriteSubject, setFavoriteSubject] = useState(existingProfile?.favoriteSubject ?? 'חשבון')
-  const [petName, setPetName] = useState(existingProfile?.petName ?? 'טופי')
+  const [favoriteSubject, setFavoriteSubject] = useState(existingProfile?.favoriteSubject ?? 'חֶשְׁבּוֹן')
+  const [petName, setPetName] = useState(existingProfile?.petName ?? 'טוֹפִי')
   const [bodyColor, setBodyColor] = useState(existingProfile?.avatarSeed.bodyColor ?? starterColors[0])
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function ChildProfileEditorScreen() {
 
     const nextProfile: ChildProfile = {
       id: existingProfile?.id ?? `child-${Date.now()}`,
-      name: name.trim() || 'חבר חדש',
+      name: name.trim() || 'חָבֵר חָדָשׁ',
       age: Number(age) || 6,
       level: existingProfile?.level ?? 1,
       favoriteSubject,
@@ -63,9 +63,9 @@ export function ChildProfileEditorScreen() {
 
   return (
     <ScreenLayout
-      eyebrow="עריכת פרופיל"
-      subtitle="יוצרים או עורכים פרופיל ילד לפני בחירת הדמות והתחלת המשחק."
-      title={existingProfile ? 'עריכת פרופיל ילד' : 'יצירת פרופיל חדש'}
+      eyebrow="עֲרִיכַת פְּרוֹפִיל"
+      subtitle="יוֹצְרִים אוֹ עוֹרְכִים פְּרוֹפִיל יֶלֶד לִפְנֵי בְּחִירַת הַדְּמוּת וְהַתְחָלַת הַמִּשְׂחָק."
+      title={existingProfile ? 'עֲרִיכַת פְּרוֹפִיל ילד' : 'יְצִירַת פְּרוֹפִיל חָדָשׁ'}
       tone="sand"
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
@@ -76,7 +76,7 @@ export function ChildProfileEditorScreen() {
               <input
                 className="w-full rounded-[22px] border border-slate-200 bg-white px-4 py-4 outline-none focus:border-[#f26a4b]"
                 onChange={(event) => setName(event.target.value)}
-                placeholder="למשל: מאיה"
+                placeholder="לְמָשָׁל: מָאיָה"
                 value={name}
               />
             </label>
@@ -99,7 +99,7 @@ export function ChildProfileEditorScreen() {
                 onChange={(event) => setFavoriteSubject(event.target.value)}
                 value={favoriteSubject}
               >
-                {['חשבון', 'קריאה', 'אנגלית', 'לוגיקה', 'זיכרון'].map((subject) => (
+                {['חֶשְׁבּוֹן', 'קְרִיאָה', 'אַנְגְּלִית', 'לוֹגִיקָה', 'זִיכָּרוֹן'].map((subject) => (
                   <option key={subject} value={subject}>
                     {subject}
                   </option>
@@ -154,7 +154,7 @@ export function ChildProfileEditorScreen() {
           </div>
           <h2 className="font-display text-3xl text-slate-900">מה יקרה בשלב הבא?</h2>
           <p className="text-slate-600">
-            אחרי שמירת הפרופיל עוברים למסך בניית דמות. שם בוחרים שיער, עיניים, בגדים וחיית
+            אחרי שמירת הפרופיל עוברים למסך בְּנִיַּת דְּמוּת. שם בוחרים שֵׂעָר, עֵינַיִם, בְּגָדִים וחיית
             מחמד, ואז ממשיכים ישר למפת העולם.
           </p>
           <div
@@ -163,7 +163,7 @@ export function ChildProfileEditorScreen() {
           >
             <div className="text-5xl">🧒</div>
             <p className="mt-4 rounded-full bg-white/75 px-4 py-2 text-sm font-semibold text-slate-700">
-              {name || 'חבר חדש'}
+              {name || 'חָבֵר חָדָשׁ'}
             </p>
           </div>
         </Card>

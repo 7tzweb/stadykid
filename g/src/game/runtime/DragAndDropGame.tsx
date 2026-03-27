@@ -2,21 +2,21 @@ import clsx from 'clsx'
 import { useState } from 'react'
 
 import { Card } from '@/components/ui/Card'
-import type { DragAndDropLevel } from '@/game/engine/level-schema'
+import type { DragAndDropActivity } from '@/game/engine/level-schema'
 import type { MiniGameRendererProps } from '@/game/runtime/renderer-types'
 
 export function DragAndDropGame({
-  level,
+  activity,
   onSuccess,
   onMistake,
   disabled,
-}: MiniGameRendererProps<DragAndDropLevel>) {
+}: MiniGameRendererProps<DragAndDropActivity>) {
   const [activeItemId, setActiveItemId] = useState<string | null>(null)
   const [placements, setPlacements] = useState<Record<string, string>>({})
   const [isCompleted, setIsCompleted] = useState(false)
 
   function assignItem(targetId: string, itemId: string) {
-    const target = level.content.targets.find((entry) => entry.id === targetId)
+    const target = activity.content.targets.find((entry) => entry.id === targetId)
 
     if (!target) {
       return
@@ -35,7 +35,7 @@ export function DragAndDropGame({
     setPlacements(nextPlacements)
     setActiveItemId(null)
 
-    const solved = level.content.targets.every((entry) => {
+    const solved = activity.content.targets.every((entry) => {
       const placedItemId = nextPlacements[entry.id]
       return Boolean(placedItemId) && entry.accepts.includes(placedItemId)
     })
@@ -47,7 +47,7 @@ export function DragAndDropGame({
     setIsCompleted(true)
     onSuccess({
       score: 100,
-      explanation: level.content.explanation,
+      explanation: activity.content.explanation,
     })
   }
 
@@ -57,13 +57,13 @@ export function DragAndDropGame({
     <Card className="space-y-4 p-4 lg:p-5">
       <div className="space-y-2 text-center">
         <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">גרירה והתאמה</p>
-        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{level.content.prompt}</h3>
+        <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{activity.content.prompt}</h3>
         <p className="text-sm text-slate-600">אפשר לגרור עם עכבר, או ללחוץ על פריט ואז על יעד במסך מגע.</p>
       </div>
 
       <div className="grid gap-3 rounded-[28px] bg-[#fff7f1] p-3">
         <div className="grid gap-3 sm:grid-cols-2">
-          {level.content.items.map((item) => {
+          {activity.content.items.map((item) => {
             const isPlaced = placedItemIds.has(item.id)
 
             return (
@@ -91,8 +91,8 @@ export function DragAndDropGame({
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          {level.content.targets.map((target) => {
-            const assignedItem = level.content.items.find((item) => item.id === placements[target.id])
+          {activity.content.targets.map((target) => {
+            const assignedItem = activity.content.items.find((item) => item.id === placements[target.id])
 
             return (
               <div

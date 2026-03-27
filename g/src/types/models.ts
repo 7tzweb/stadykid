@@ -130,17 +130,20 @@ export interface OwnedCreature {
   creatureId: string
   purchasedAt: string
   placedInHome: boolean
+  placedHomeWorldId: string | null
   lastFedAt: string | null
   lastPettedAt: string | null
   lastPlayedAt: string | null
   lastRestedAt: string | null
   lastSoundAt: string | null
+  specialRequestCount: number
   care: OwnedCreatureCareStats
   equippedItems: string[]
 }
 
 export type CreaturePurchaseResult = 'success' | 'owned' | 'insufficient-stars'
 export type CreatureCareAction = 'feed' | 'pet' | 'play' | 'rest'
+export type CreaturePlacementResult = 'placed' | 'removed' | 'room-full' | 'assigned-other-room'
 
 export interface SubjectProgress {
   completed: number
@@ -188,6 +191,7 @@ export interface GameState {
   currentUser: AppUser | null
   childProfiles: ChildProfile[]
   currentChildProfileId: string | null
+  currentHomeWorldId: string
   xp: number
   coins: number
   stars: number

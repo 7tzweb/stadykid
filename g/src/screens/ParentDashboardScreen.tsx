@@ -22,9 +22,9 @@ export function ParentDashboardScreen() {
           חזרה לאפליקציה
         </Button>
       }
-      eyebrow="אזור הורים"
-      subtitle="דשבורד להורה עם גרפים פשוטים, שליטה בזמן מסך והפעלת נושאים."
-      title="אזור הורים"
+      eyebrow="אֵזוֹר הוֹרִים"
+      subtitle="דַּשְׁבּוֹרְד לְהוֹרֶה עִם גְּרָפִים פְּשׁוּטִים, שְׁלִיטָה בִּזְמַן מָסָךְ וְהַפְעָלַת נוֹשְׂאִים."
+      title="אֵזוֹר הוֹרִים"
       tone="sky"
     >
       <div className="space-y-6">
@@ -48,7 +48,7 @@ export function ParentDashboardScreen() {
 
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <Card className="space-y-4">
-            <h2 className="font-display text-3xl text-slate-900">התקדמות לפי נושאים</h2>
+            <h2 className="font-display text-3xl text-slate-900">הִתְקַדְּמוּת לפי נושאים</h2>
             <div className="space-y-4">
               {Object.entries(progressBySubject).map(([subject, progress]) => (
                 <div className="space-y-2" key={subject}>
@@ -70,7 +70,7 @@ export function ParentDashboardScreen() {
           <Card className="space-y-5">
             <div className="space-y-2">
               <h2 className="font-display text-3xl text-slate-900">מרכז בקרה</h2>
-              <p className="text-sm text-slate-500">{currentUser?.email ?? 'דמו ללא אימות אמיתי'}</p>
+              <p className="text-sm text-slate-500">{currentUser?.email ?? 'דֵּמוֹ לְלֹא אִמּוּת אֲמִתִּי'}</p>
             </div>
 
             <div className="rounded-[24px] bg-[#f8fafc] px-4 py-4">
@@ -84,7 +84,7 @@ export function ParentDashboardScreen() {
                   size="md"
                   variant={dailyLimits.enabled ? 'primary' : 'secondary'}
                 >
-                  {dailyLimits.enabled ? 'פעיל' : 'כבוי'}
+                  {dailyLimits.enabled ? 'פָּעִיל' : 'כָּבוּי'}
                 </Button>
               </div>
             </div>
@@ -110,7 +110,7 @@ export function ParentDashboardScreen() {
                     type="button"
                   >
                     <span className="font-semibold">{subjectLabels[subject] ?? subject}</span>
-                    <span>{enabled ? 'פעיל' : 'כבוי'}</span>
+                    <span>{enabled ? 'פָּעִיל' : 'כָּבוּי'}</span>
                   </button>
                 )
               })}
@@ -135,7 +135,7 @@ export function ParentDashboardScreen() {
               }}
               variant="danger"
             >
-              יציאה מהחשבון
+              יציאה מהחֶשְׁבּוֹן
             </Button>
           </Card>
         </div>

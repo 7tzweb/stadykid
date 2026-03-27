@@ -1,0 +1,1523 @@
+{
+  "version": 1,
+  "id": "space-english-001",
+  "worldId": "space-english",
+  "missionId": "space-docking",
+  "title": "תַּחֲנַת עֲגִינָה",
+  "subject": "english",
+  "instructions": "מַקְשִׁיבִים לַמִּלָּה אוֹ קוֹרְאִים אוֹתָהּ, וּבוֹחֲרִים אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+  "difficulty": "easy",
+  "rewards": {
+    "xp": 102,
+    "coins": 39,
+    "starsPerQuestion": 3,
+    "badgeId": "space-reader"
+  },
+  "completionRules": {
+    "passingScore": 70,
+    "maxMistakes": 90
+  },
+  "assets": [],
+  "activities": [
+    {
+      "id": "space-english-001-q01",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"cat\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"cat\" פֵּרוּשׁוֹ חָתוּל."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"cat\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "חָתוּל",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-2",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"cat\" פֵּרוּשׁוֹ חָתוּל."
+      }
+    },
+    {
+      "id": "space-english-001-q02",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"dog\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"dog\" פֵּרוּשׁוֹ כֶּלֶב."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"dog\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-2",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"dog\" פֵּרוּשׁוֹ כֶּלֶב."
+      }
+    },
+    {
+      "id": "space-english-001-q03",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"sun\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"sun\" פֵּרוּשׁוֹ שֶׁמֶשׁ."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"sun\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-2",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"sun\" פֵּרוּשׁוֹ שֶׁמֶשׁ."
+      }
+    },
+    {
+      "id": "space-english-001-q04",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"ball\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"ball\" פֵּרוּשׁוֹ כַּדּוּר."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"ball\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-2",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"ball\" פֵּרוּשׁוֹ כַּדּוּר."
+      }
+    },
+    {
+      "id": "space-english-001-q05",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"red\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"red\" פֵּרוּשׁוֹ אָדֹם."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"red\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-2",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-3",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          },
+          {
+            "id": "option-4",
+            "label": "מַיִם",
+            "emoji": "💧"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"red\" פֵּרוּשׁוֹ אָדֹם."
+      }
+    },
+    {
+      "id": "space-english-001-q06",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"blue\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"blue\" פֵּרוּשׁוֹ כָּחֹל."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"blue\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-2",
+            "label": "חָתוּל",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"blue\" פֵּרוּשׁוֹ כָּחֹל."
+      }
+    },
+    {
+      "id": "space-english-001-q07",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"apple\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"apple\" פֵּרוּשׁוֹ תַּפּוּחַ."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"apple\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          },
+          {
+            "id": "option-2",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"apple\" פֵּרוּשׁוֹ תַּפּוּחַ."
+      }
+    },
+    {
+      "id": "space-english-001-q08",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"water\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"water\" פֵּרוּשׁוֹ מַיִם."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"water\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "מַיִם",
+            "emoji": "💧"
+          },
+          {
+            "id": "option-2",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"water\" פֵּרוּשׁוֹ מַיִם."
+      }
+    },
+    {
+      "id": "space-english-001-q09",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"fish\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"fish\" פֵּרוּשׁוֹ דָּג."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"fish\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "דָּג",
+            "emoji": "🐟"
+          },
+          {
+            "id": "option-2",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"fish\" פֵּרוּשׁוֹ דָּג."
+      }
+    },
+    {
+      "id": "space-english-001-q10",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"car\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"car\" פֵּרוּשׁוֹ מְכוֹנִית."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"car\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "מְכוֹנִית",
+            "emoji": "🚗"
+          },
+          {
+            "id": "option-2",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"car\" פֵּרוּשׁוֹ מְכוֹנִית."
+      }
+    },
+    {
+      "id": "space-english-001-q11",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"green\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"green\" פֵּרוּשׁוֹ יָרֹק."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"green\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "יָרֹק",
+            "emoji": "🟩"
+          },
+          {
+            "id": "option-2",
+            "label": "חָתוּל",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"green\" פֵּרוּשׁוֹ יָרֹק."
+      }
+    },
+    {
+      "id": "space-english-001-q12",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"book\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"book\" פֵּרוּשׁוֹ סֵפֶר."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"book\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "סֵפֶר",
+            "emoji": "📘"
+          },
+          {
+            "id": "option-2",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"book\" פֵּרוּשׁוֹ סֵפֶר."
+      }
+    },
+    {
+      "id": "space-english-001-q13",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"milk\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"milk\" פֵּרוּשׁוֹ חָלָב."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"milk\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "חָלָב",
+            "emoji": "🥛"
+          },
+          {
+            "id": "option-2",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"milk\" פֵּרוּשׁוֹ חָלָב."
+      }
+    },
+    {
+      "id": "space-english-001-q14",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"tree\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"tree\" פֵּרוּשׁוֹ עֵץ."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"tree\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "עֵץ",
+            "emoji": "🌳"
+          },
+          {
+            "id": "option-2",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"tree\" פֵּרוּשׁוֹ עֵץ."
+      }
+    },
+    {
+      "id": "space-english-001-q15",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"bird\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"bird\" פֵּרוּשׁוֹ צִפּוֹר."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"bird\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "צִפּוֹר",
+            "emoji": "🐦"
+          },
+          {
+            "id": "option-2",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"bird\" פֵּרוּשׁוֹ צִפּוֹר."
+      }
+    },
+    {
+      "id": "space-english-001-q16",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"flower\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"flower\" פֵּרוּשׁוֹ פֶּרַח."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"flower\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "פֶּרַח",
+            "emoji": "🌼"
+          },
+          {
+            "id": "option-2",
+            "label": "חָתוּל",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"flower\" פֵּרוּשׁוֹ פֶּרַח."
+      }
+    },
+    {
+      "id": "space-english-001-q17",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"duck\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"duck\" פֵּרוּשׁוֹ בַּרְוָז."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"duck\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "בַּרְוָז",
+            "emoji": "🦆"
+          },
+          {
+            "id": "option-2",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"duck\" פֵּרוּשׁוֹ בַּרְוָז."
+      }
+    },
+    {
+      "id": "space-english-001-q18",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"star\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"star\" פֵּרוּשׁוֹ כּוֹכָב."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"star\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כּוֹכָב",
+            "emoji": "⭐"
+          },
+          {
+            "id": "option-2",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"star\" פֵּרוּשׁוֹ כּוֹכָב."
+      }
+    },
+    {
+      "id": "space-english-001-q19",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"house\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"house\" פֵּרוּשׁוֹ בַּיִת."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"house\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "בַּיִת",
+            "emoji": "🏠"
+          },
+          {
+            "id": "option-2",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"house\" פֵּרוּשׁוֹ בַּיִת."
+      }
+    },
+    {
+      "id": "space-english-001-q20",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"cat\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"cat\" פֵּרוּשׁוֹ חָתוּל."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"cat\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "חָתוּל",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-2",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-3",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          },
+          {
+            "id": "option-4",
+            "label": "מַיִם",
+            "emoji": "💧"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"cat\" פֵּרוּשׁוֹ חָתוּל."
+      }
+    },
+    {
+      "id": "space-english-001-q21",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"dog\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"dog\" פֵּרוּשׁוֹ כֶּלֶב."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"dog\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-2",
+            "label": "חָתוּל",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"dog\" פֵּרוּשׁוֹ כֶּלֶב."
+      }
+    },
+    {
+      "id": "space-english-001-q22",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"sun\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"sun\" פֵּרוּשׁוֹ שֶׁמֶשׁ."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"sun\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-2",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"sun\" פֵּרוּשׁוֹ שֶׁמֶשׁ."
+      }
+    },
+    {
+      "id": "space-english-001-q23",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"ball\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"ball\" פֵּרוּשׁוֹ כַּדּוּר."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"ball\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-2",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"ball\" פֵּרוּשׁוֹ כַּדּוּר."
+      }
+    },
+    {
+      "id": "space-english-001-q24",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"red\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"red\" פֵּרוּשׁוֹ אָדֹם."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"red\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-2",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"red\" פֵּרוּשׁוֹ אָדֹם."
+      }
+    },
+    {
+      "id": "space-english-001-q25",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"blue\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"blue\" פֵּרוּשׁוֹ כָּחֹל."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"blue\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-2",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          },
+          {
+            "id": "option-4",
+            "label": "מַיִם",
+            "emoji": "💧"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"blue\" פֵּרוּשׁוֹ כָּחֹל."
+      }
+    },
+    {
+      "id": "space-english-001-q26",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"apple\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"apple\" פֵּרוּשׁוֹ תַּפּוּחַ."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"apple\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          },
+          {
+            "id": "option-2",
+            "label": "חָתוּל",
+            "emoji": "🐱"
+          },
+          {
+            "id": "option-3",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-4",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"apple\" פֵּרוּשׁוֹ תַּפּוּחַ."
+      }
+    },
+    {
+      "id": "space-english-001-q27",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"water\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"water\" פֵּרוּשׁוֹ מַיִם."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"water\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "מַיִם",
+            "emoji": "💧"
+          },
+          {
+            "id": "option-2",
+            "label": "כֶּלֶב",
+            "emoji": "🐶"
+          },
+          {
+            "id": "option-3",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-4",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"water\" פֵּרוּשׁוֹ מַיִם."
+      }
+    },
+    {
+      "id": "space-english-001-q28",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"fish\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"fish\" פֵּרוּשׁוֹ דָּג."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"fish\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "דָּג",
+            "emoji": "🐟"
+          },
+          {
+            "id": "option-2",
+            "label": "שֶׁמֶשׁ",
+            "emoji": "☀️"
+          },
+          {
+            "id": "option-3",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-4",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"fish\" פֵּרוּשׁוֹ דָּג."
+      }
+    },
+    {
+      "id": "space-english-001-q29",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"car\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"car\" פֵּרוּשׁוֹ מְכוֹנִית."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"car\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "מְכוֹנִית",
+            "emoji": "🚗"
+          },
+          {
+            "id": "option-2",
+            "label": "כַּדּוּר",
+            "emoji": "⚽"
+          },
+          {
+            "id": "option-3",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-4",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"car\" פֵּרוּשׁוֹ מְכוֹנִית."
+      }
+    },
+    {
+      "id": "space-english-001-q30",
+      "type": "multiple_choice",
+      "difficulty": "easy",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוֹרְאִים אֶת הַשְּׁאֵלָה",
+          "body": "מָה הַפֵּרוּשׁ שֶׁל \"green\"?"
+        },
+        {
+          "step": 2,
+          "title": "בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת",
+          "body": "מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה."
+        },
+        {
+          "step": 3,
+          "title": "פּוֹתְרִים צַעַד אַחַר צַעַד",
+          "body": "\"green\" פֵּרוּשׁוֹ יָרֹק."
+        }
+      ],
+      "content": {
+        "prompt": "מָה הַפֵּרוּשׁ שֶׁל \"green\"?",
+        "question": "בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "יָרֹק",
+            "emoji": "🟩"
+          },
+          {
+            "id": "option-2",
+            "label": "אָדֹם",
+            "emoji": "🟥"
+          },
+          {
+            "id": "option-3",
+            "label": "כָּחֹל",
+            "emoji": "🟦"
+          },
+          {
+            "id": "option-4",
+            "label": "תַּפּוּחַ",
+            "emoji": "🍎"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "\"green\" פֵּרוּשׁוֹ יָרֹק."
+      }
+    }
+  ]
+}

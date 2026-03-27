@@ -25,7 +25,7 @@ export function SplashScreen() {
         </div>
 
         <div className="rounded-full bg-white/75 px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm">
-          {currentUser ? `מחובר: ${currentUser.name}` : 'מוכן להתחלת משחק'}
+          {currentUser ? `מְחֻבָּר: ${currentUser.name}` : 'מוּכָן לְהַתְחָלַת מִשְׂחָק'}
         </div>
       </header>
 
@@ -42,20 +42,20 @@ export function SplashScreen() {
               למידה והרפתקה
             </h1>
             <p className="max-w-xl text-lg text-slate-600 sm:text-xl">
-              בוחרים ילד, נכנסים לעולם, לוחצים על משחק ומתחילים ללמוד דרך משימות קצרות וברורות.
+              בּוֹחֲרִים יֶלֶד, נכנסים לעולם, לוחצים על משחק ומתחילים ללמוד דרך משימות קצרות וברורות.
             </p>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Button className="min-w-[220px]" onClick={() => navigate('/profiles')}>
-              מתחילים לשחק
+              מַתְחִילִים לְשַׂחֵק
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <Button onClick={() => navigate('/auth')} variant="secondary">
-              כניסה עם חשבון
+              כניסה עם חֶשְׁבּוֹן
             </Button>
             <Button onClick={() => navigate('/parent-gate')} variant="secondary">
-              אזור הורים
+              אֵזוֹר הוֹרִים
               <Lock className="h-5 w-5" />
             </Button>
           </div>
@@ -64,26 +64,26 @@ export function SplashScreen() {
             accent="#f26a4b"
             items={[
               {
-                title: 'בוחרים ילד',
-                description: 'לוחצים על הכרטיס עם השם שלכם.',
+                title: 'בּוֹחֲרִים יֶלֶד',
+                description: 'לוֹחֲצִים עַל הַכַּרְטִיס עִם הַשֵּׁם שֶׁלָּכֶם.',
               },
               {
-                title: 'בוחרים עולם',
-                description: 'נכנסים לעולם פתוח עם ציור גדול וצבעוני.',
+                title: 'בּוֹחֲרִים עוֹלָם',
+                description: 'נכנסים לעולם פָּתוּחַ עם ציור גדול וצבעוני.',
               },
               {
-                title: 'מתחילים משחק',
-                description: 'לוחצים על המשימה שרוצים ומשחקים.',
+                title: 'מַתְחִילִים לְשַׂחֵק',
+                description: 'לוֹחֲצִים עַל הַמְּשִׂימָה שֶׁרוֹצִים וּמְשַׂחֲקִים.',
               },
             ]}
-            title="שלושה צעדים פשוטים להתחלה"
+            title="שְׁלוֹשָׁה צְעָדִים פְּשׁוּטִים לְהַתְחָלָה"
           />
 
           <div className="grid gap-3 sm:grid-cols-3">
             {[
-              { title: '5 עולמות', subtitle: 'מספרים, קריאה, אנגלית, לוגיקה וזיכרון' },
-              { title: '4 סוגי משחק', subtitle: 'בחירה, גרירה, התאמה וכרטיסי זיכרון' },
-              { title: 'שמירת התקדמות', subtitle: 'המשחק זוכר פרופילים, פרסים ושלבים' },
+              { title: '5 עוֹלָמוֹת', subtitle: 'מספרים, קְרִיאָה, אַנְגְּלִית, לוֹגִיקָה וזִיכָּרוֹן' },
+              { title: '4 סוּגֵי מִשְׂחָק', subtitle: 'בחירה, גרירה, התאמה וכרטיסי זִיכָּרוֹן' },
+              { title: 'שמירת הִתְקַדְּמוּת', subtitle: 'הַמִּשְׂחָק זוֹכֵר פְּרוֹפִילִים, פְּרָסִים וּשְׁלָבִים' },
             ].map((item) => (
               <Card className="rounded-[24px] p-4" key={item.title}>
                 <p className="font-display text-2xl text-slate-900">{item.title}</p>
@@ -95,9 +95,9 @@ export function SplashScreen() {
 
         <div className="relative mx-auto flex w-full max-w-xl items-end justify-center gap-4 py-6">
           {[
-            { name: 'מיני', color: '#FFD166', size: 'h-40 w-32', delay: '0s' },
-            { name: 'זום', color: '#7BDFF2', size: 'h-56 w-40', delay: '0.5s' },
-            { name: 'נובה', color: '#CDB4FF', size: 'h-44 w-36', delay: '1s' },
+            { name: 'מִינִי', color: '#FFD166', size: 'h-40 w-32', delay: '0s' },
+            { name: 'זוּם', color: '#7BDFF2', size: 'h-56 w-40', delay: '0.5s' },
+            { name: 'נוֹבָה', color: '#CDB4FF', size: 'h-44 w-36', delay: '1s' },
           ].map((friend) => (
             <div
               className="float-soft relative flex flex-col items-center gap-3 rounded-[36px] border border-white/60 bg-white/75 p-4 shadow-[0_22px_50px_rgba(15,23,42,0.08)]"

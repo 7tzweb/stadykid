@@ -9,10 +9,14 @@ import {
 import {
   BarChart3,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Coins,
   Droplets,
   Gamepad2,
   Heart,
+  House,
+  Lock,
   Map as MapIcon,
   Milk,
   MoonStar,
@@ -33,11 +37,21 @@ import {
   getOwnedCreatureById,
   isCreatureHatched,
 } from '@/game/content/creatures'
+import {
+  getCreatureSpecialRequestById,
+  getInitialSpecialRequestDelayMs,
+  getNextSpecialRequestDelayMs,
+  pickRandomCreatureSpecialRequest,
+  specialRequestRewardEvery,
+  type CreatureSpecialRequestInteraction,
+  type CreatureSpecialRequestMotion,
+} from '@/game/content/creature-special-requests'
 import { getShopItemById } from '@/game/content/catalog'
+import { getHomeWorldById, homeWorldCatalog } from '@/game/content/home-worlds'
 import { useGame } from '@/hooks/useGame'
 import type { CreatureCareAction } from '@/types/models'
 
-type HomePanel = 'creatures' | 'food' | 'style' | null
+type HomePanel = 'creatures' | 'food' | 'style' | 'rooms' | null
 type FoodMode = 'feed' | 'drink'
 
 interface SceneCreature {
@@ -51,6 +65,9 @@ interface SceneCreature {
   pauseTicks: number
   walkTicks: number
   phase: number
+  jumpTicksRemaining: number
+  jumpDurationTicks: number
+  jumpCooldownTicks: number
 }
 
 interface DragTrayItem {
@@ -60,14 +77,47 @@ interface DragTrayItem {
   y: number
 }
 
+type CreatureVisualAction = CreatureCareAction | CreatureSpecialRequestMotion
+
 interface CareBurstState {
   creatureId: string
-  action: CreatureCareAction
+  action: CreatureVisualAction
 }
 
 interface CreatureReactionState {
   creatureId: string
   emoji: string
+}
+
+interface ActiveSpecialRequestState {
+  requestId: string | null
+  progress: number
+  nextRequestAt: number
+  previousRequestId: string | null
+}
+
+interface CreatureInteractionOffset {
+  x: number
+  y: number
+}
+
+interface SpecialRequestGestureSession {
+  creatureId: string
+  requestId: string
+  interaction: Exclude<CreatureSpecialRequestInteraction, 'tap'>
+  startX: number
+  startY: number
+  lastX: number
+  lastY: number
+  maxLift: number
+  maxDrop: number
+  totalHorizontalTravel: number
+  directionChanges: number
+  lastHorizontalDirection: -1 | 0 | 1
+  accumulatedRotation: number
+  lastAngle: number | null
+  holdReady: boolean
+  holdTimerId: number | null
 }
 
 const foodItems = {
@@ -106,12 +156,161 @@ const equippedItemPositions = [
   { left: '-10px', top: '34px' },
 ] as const
 
+const maxCreaturesInRoom = 4
+
+function getCareBurstDurationMs(action: CreatureVisualAction) {
+  if (action === 'rest') {
+    return 1400
+  }
+
+  if (action === 'play') {
+    return 1050
+  }
+
+  if (action === 'pet') {
+    return 900
+  }
+
+  if (action === 'cheer') {
+    return 980
+  }
+
+  if (action === 'curious') {
+    return 920
+  }
+
+  if (action === 'stretch') {
+    return 1150
+  }
+
+  if (action === 'soar') {
+    return 1150
+  }
+
+  if (action === 'snuggle') {
+    return 1050
+  }
+
+  if (action === 'sway') {
+    return 1020
+  }
+
+  if (action === 'twirl') {
+    return 980
+  }
+
+  if (action === 'zoom') {
+    return 860
+  }
+
+  if (action === 'boing') {
+    return 980
+  }
+
+  return 850
+}
+
+function getCareReactionEmoji(action: CreatureCareAction) {
+  if (action === 'pet') {
+    return '💗'
+  }
+
+  if (action === 'feed') {
+    return '😋'
+  }
+
+  if (action === 'play') {
+    return '🎾'
+  }
+
+  return '💤'
+}
+
+function getCreatureAnimationClass(pulse: CreatureVisualAction | null, isJumping: boolean) {
+  if (pulse === 'pet') {
+    return 'puppy-animate puppy-animate-pet'
+  }
+
+  if (pulse === 'feed') {
+    return 'puppy-animate puppy-animate-feed'
+  }
+
+  if (pulse === 'play') {
+    return 'puppy-animate puppy-animate-play'
+  }
+
+  if (pulse === 'rest') {
+    return 'puppy-animate puppy-animate-rest'
+  }
+
+  if (pulse === 'cheer') {
+    return 'puppy-animate puppy-animate-cheer'
+  }
+
+  if (pulse === 'curious') {
+    return 'puppy-animate puppy-animate-curious'
+  }
+
+  if (pulse === 'stretch') {
+    return 'puppy-animate puppy-animate-stretch'
+  }
+
+  if (pulse === 'soar') {
+    return 'puppy-animate puppy-animate-soar'
+  }
+
+  if (pulse === 'snuggle') {
+    return 'puppy-animate puppy-animate-snuggle'
+  }
+
+  if (pulse === 'sway') {
+    return 'puppy-animate puppy-animate-sway'
+  }
+
+  if (pulse === 'twirl') {
+    return 'puppy-animate puppy-animate-twirl'
+  }
+
+  if (pulse === 'zoom') {
+    return 'puppy-animate puppy-animate-zoom'
+  }
+
+  if (pulse === 'boing') {
+    return 'puppy-animate puppy-animate-boing'
+  }
+
+  if (isJumping) {
+    return 'puppy-animate puppy-animate-hop'
+  }
+
+  return 'puppy-animate'
+}
+
 function hashCreatureId(input: string) {
   return input.split('').reduce((total, character) => total + character.charCodeAt(0), 0)
 }
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
+}
+
+function normalizeAngleDelta(delta: number) {
+  let normalizedDelta = delta
+
+  while (normalizedDelta > Math.PI) {
+    normalizedDelta -= Math.PI * 2
+  }
+
+  while (normalizedDelta < -Math.PI) {
+    normalizedDelta += Math.PI * 2
+  }
+
+  return normalizedDelta
+}
+
+function getSpecialRequestInteraction(requestId: string | null) {
+  const request = requestId ? getCreatureSpecialRequestById(requestId) : null
+  return request?.interaction ?? 'tap'
 }
 
 function getFillClipPath(progress: number) {
@@ -132,6 +331,9 @@ function createSceneCreature(creatureId: string): SceneCreature {
     pauseTicks: 0,
     walkTicks: 12 + (hash % 8),
     phase: hash % 24,
+    jumpTicksRemaining: 0,
+    jumpDurationTicks: 5,
+    jumpCooldownTicks: 10 + (hash % 8),
   }
 }
 
@@ -167,8 +369,12 @@ export function PetHomeScreen() {
   const navigate = useNavigate()
   const {
     coins,
+    completeSpecialRequest,
+    currentChildProfile,
+    currentHomeWorldId,
     inventory,
     ownedCreatures,
+    setCurrentHomeWorld,
     stars,
     toggleCreatureItem,
     toggleCreaturePlacement,
@@ -185,16 +391,38 @@ export function PetHomeScreen() {
   const [reactionBubble, setReactionBubble] = useState<CreatureReactionState | null>(null)
   const [heartProgressByCreatureId, setHeartProgressByCreatureId] = useState<Record<string, number>>({})
   const [feedProgressByCreatureId, setFeedProgressByCreatureId] = useState<Record<string, number>>({})
+  const [specialRequestByCreatureId, setSpecialRequestByCreatureId] = useState<Record<string, ActiveSpecialRequestState>>({})
+  const [interactionOffsetByCreatureId, setInteractionOffsetByCreatureId] = useState<Record<string, CreatureInteractionOffset>>({})
   const [starRewardCreatureId, setStarRewardCreatureId] = useState<string | null>(null)
+  const [placementMessage, setPlacementMessage] = useState<string | null>(null)
+  const [isHomeWorldTransitioning, setIsHomeWorldTransitioning] = useState(false)
   const announcedHatchRef = useRef(new Set<string>())
   const heartProgressRef = useRef<Record<string, number>>({})
   const feedProgressRef = useRef<Record<string, number>>({})
+  const specialRequestRef = useRef<Record<string, ActiveSpecialRequestState>>({})
+  const specialRequestGestureRef = useRef<SpecialRequestGestureSession | null>(null)
   const sceneRef = useRef<HTMLDivElement | null>(null)
 
-  const homeCreatures = ownedCreatures.filter((creature) => creature.placedInHome)
   const wearableItems = inventory
     .map((itemId) => getShopItemById(itemId))
     .filter((item): item is NonNullable<typeof item> => Boolean(item))
+  const completedLevelCount = currentChildProfile?.completedLevelIds.length ?? 0
+  const unlockedHomeWorlds = homeWorldCatalog.filter(
+    (homeWorld) => completedLevelCount >= homeWorld.requiredCompletedLevels,
+  )
+  const fallbackHomeWorldId =
+    unlockedHomeWorlds[unlockedHomeWorlds.length - 1]?.id ?? homeWorldCatalog[0]?.id ?? 'playroom-1'
+  const resolvedHomeWorldId = unlockedHomeWorlds.some((homeWorld) => homeWorld.id === currentHomeWorldId)
+    ? currentHomeWorldId
+    : fallbackHomeWorldId
+  const currentHomeWorld = getHomeWorldById(resolvedHomeWorldId) ?? homeWorldCatalog[0]
+  const currentHomeWorldIndex = unlockedHomeWorlds.findIndex((homeWorld) => homeWorld.id === resolvedHomeWorldId)
+  const previousHomeWorld = currentHomeWorldIndex > 0 ? unlockedHomeWorlds[currentHomeWorldIndex - 1] : null
+  const nextHomeWorld =
+    currentHomeWorldIndex >= 0 && currentHomeWorldIndex < unlockedHomeWorlds.length - 1
+      ? unlockedHomeWorlds[currentHomeWorldIndex + 1]
+      : null
+  const homeCreatures = ownedCreatures.filter((creature) => creature.placedHomeWorldId === resolvedHomeWorldId)
 
   const resolvedSelectedCreatureId = ownedCreatures.some((creature) => creature.creatureId === selectedCreatureId)
     ? selectedCreatureId
@@ -217,10 +445,28 @@ export function PetHomeScreen() {
       return
     }
 
-    const timer = window.setTimeout(() => setCareBurst(null), 820)
+    const timer = window.setTimeout(() => setCareBurst(null), getCareBurstDurationMs(careBurst.action))
 
     return () => window.clearTimeout(timer)
   }, [careBurst])
+
+  useEffect(() => {
+    if (!isHomeWorldTransitioning) {
+      return
+    }
+
+    const timer = window.setTimeout(() => setIsHomeWorldTransitioning(false), 340)
+
+    return () => window.clearTimeout(timer)
+  }, [isHomeWorldTransitioning])
+
+  useEffect(() => {
+    if (resolvedHomeWorldId === currentHomeWorldId) {
+      return
+    }
+
+    setCurrentHomeWorld(resolvedHomeWorldId)
+  }, [currentHomeWorldId, resolvedHomeWorldId, setCurrentHomeWorld])
 
   useEffect(() => {
     if (!starRewardCreatureId) {
@@ -233,6 +479,16 @@ export function PetHomeScreen() {
   }, [starRewardCreatureId])
 
   useEffect(() => {
+    if (!placementMessage) {
+      return
+    }
+
+    const timer = window.setTimeout(() => setPlacementMessage(null), 1800)
+
+    return () => window.clearTimeout(timer)
+  }, [placementMessage])
+
+  useEffect(() => {
     if (!reactionBubble) {
       return
     }
@@ -243,8 +499,12 @@ export function PetHomeScreen() {
   }, [reactionBubble])
 
   useEffect(() => {
+    specialRequestRef.current = specialRequestByCreatureId
+  }, [specialRequestByCreatureId])
+
+  useEffect(() => {
     const activeCreatureIds = ownedCreatures
-      .filter((creature) => creature.placedInHome)
+      .filter((creature) => creature.placedHomeWorldId === resolvedHomeWorldId)
       .map((creature) => creature.creatureId)
 
     const timer = window.setTimeout(() => {
@@ -256,7 +516,7 @@ export function PetHomeScreen() {
     }, 0)
 
     return () => window.clearTimeout(timer)
-  }, [ownedCreatures])
+  }, [ownedCreatures, resolvedHomeWorldId])
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -266,11 +526,15 @@ export function PetHomeScreen() {
           const creature = getCreatureById(entry.creatureId)
           const hatched = creature && ownedCreature ? isCreatureHatched(creature, ownedCreature, Date.now()) : false
           const nextPhase = (entry.phase + 1) % 24
+          const nextJumpTicksRemaining = Math.max(0, entry.jumpTicksRemaining - 1)
+          const nextJumpCooldownTicks = Math.max(0, entry.jumpCooldownTicks - 1)
 
           if (!hatched) {
             return {
               ...entry,
               phase: nextPhase,
+              jumpTicksRemaining: nextJumpTicksRemaining,
+              jumpCooldownTicks: nextJumpCooldownTicks,
             }
           }
 
@@ -278,6 +542,8 @@ export function PetHomeScreen() {
             return {
               ...entry,
               phase: nextPhase,
+              jumpTicksRemaining: nextJumpTicksRemaining,
+              jumpCooldownTicks: nextJumpCooldownTicks,
             }
           }
 
@@ -297,6 +563,8 @@ export function PetHomeScreen() {
                   ? ((entry.directionY * -1) as 1 | -1)
                   : entry.directionY,
               phase: nextPhase,
+              jumpTicksRemaining: nextJumpTicksRemaining,
+              jumpCooldownTicks: nextJumpCooldownTicks,
             }
           }
 
@@ -305,7 +573,16 @@ export function PetHomeScreen() {
           const hitEdgeX = nextX < 8 || nextX > 92
           const hitEdgeY = nextY < 18 || nextY > 78
           const nextWalkTicks = entry.walkTicks - 1
-          const shouldPause = nextWalkTicks <= 0 || Math.random() < 0.07
+          const jumpInProgress = nextJumpTicksRemaining > 0
+          const shouldPause = !jumpInProgress && (nextWalkTicks <= 0 || Math.random() < 0.07)
+          const shouldStartJump =
+            !jumpInProgress &&
+            nextJumpCooldownTicks === 0 &&
+            !hitEdgeX &&
+            !hitEdgeY &&
+            !shouldPause &&
+            Math.random() < 0.18
+          const jumpDurationTicks = shouldStartJump ? 5 + Math.floor(Math.random() * 2) : entry.jumpDurationTicks
 
           return {
             ...entry,
@@ -316,6 +593,9 @@ export function PetHomeScreen() {
             pauseTicks: hitEdgeX || hitEdgeY || shouldPause ? 5 + Math.floor(Math.random() * 7) : 0,
             walkTicks: hitEdgeX || hitEdgeY || shouldPause ? 12 + Math.floor(Math.random() * 8) : nextWalkTicks,
             phase: nextPhase,
+            jumpTicksRemaining: shouldStartJump ? jumpDurationTicks : nextJumpTicksRemaining,
+            jumpDurationTicks,
+            jumpCooldownTicks: shouldStartJump ? 12 + Math.floor(Math.random() * 10) : nextJumpCooldownTicks,
           }
         }),
       )
@@ -334,6 +614,80 @@ export function PetHomeScreen() {
 
       announcedHatchRef.current.add(ownedCreature.creatureId)
       setCareBurst({ creatureId: ownedCreature.creatureId, action: 'play' })
+    })
+  }, [now, ownedCreatures])
+
+  useEffect(() => {
+    setSpecialRequestByCreatureId((current) => {
+      const nextState: Record<string, ActiveSpecialRequestState> = {}
+      let changed = false
+
+      ownedCreatures
+        .filter((creature) => creature.placedInHome)
+        .forEach((ownedCreature) => {
+          const creature = getCreatureById(ownedCreature.creatureId)
+          const hatched = creature ? isCreatureHatched(creature, ownedCreature, now) : false
+          const currentRequestState = current[ownedCreature.creatureId]
+
+          if (!creature || !hatched) {
+            if (currentRequestState) {
+              nextState[ownedCreature.creatureId] = currentRequestState
+            }
+            return
+          }
+
+          const baseState =
+            currentRequestState ??
+            {
+              requestId: null,
+              progress: 0,
+              nextRequestAt: now + getInitialSpecialRequestDelayMs(),
+              previousRequestId: null,
+            }
+
+          let resolvedState = baseState
+
+          if (!currentRequestState) {
+            changed = true
+          }
+
+          if (!resolvedState.requestId && now >= resolvedState.nextRequestAt) {
+            const request = pickRandomCreatureSpecialRequest(resolvedState.previousRequestId)
+
+            resolvedState = {
+              ...resolvedState,
+              requestId: request.id,
+              progress: 0,
+            }
+            changed = true
+          }
+
+          nextState[ownedCreature.creatureId] = resolvedState
+        })
+
+      if (Object.keys(current).length !== Object.keys(nextState).length) {
+        changed = true
+      }
+
+      if (!changed) {
+        changed = Object.entries(nextState).some(([creatureId, requestState]) => {
+          const currentRequestState = current[creatureId]
+
+          return (
+            !currentRequestState ||
+            currentRequestState.requestId !== requestState.requestId ||
+            currentRequestState.progress !== requestState.progress ||
+            currentRequestState.nextRequestAt !== requestState.nextRequestAt ||
+            currentRequestState.previousRequestId !== requestState.previousRequestId
+          )
+        })
+      }
+
+      if (!changed) {
+        return current
+      }
+
+      return nextState
     })
   }, [now, ownedCreatures])
 
@@ -356,6 +710,11 @@ export function PetHomeScreen() {
 
     setSelectedCreatureId(creatureId)
     setCareBurst({ creatureId, action })
+    showReaction(creatureId, getCareReactionEmoji(action))
+
+    if (rewardStars > 0) {
+      setStarRewardCreatureId(creatureId)
+    }
 
     return true
   }
@@ -388,6 +747,146 @@ export function PetHomeScreen() {
     setReactionBubble({ creatureId, emoji })
   }
 
+  function updateSpecialRequest(creatureId: string, nextRequestState: ActiveSpecialRequestState) {
+    specialRequestRef.current = {
+      ...specialRequestRef.current,
+      [creatureId]: nextRequestState,
+    }
+
+    setSpecialRequestByCreatureId((current) => ({
+      ...current,
+      [creatureId]: nextRequestState,
+    }))
+  }
+
+  function scheduleNextSpecialRequest(creatureId: string, previousRequestId: string | null, from = Date.now()) {
+    updateSpecialRequest(creatureId, {
+      requestId: null,
+      progress: 0,
+      nextRequestAt: from + getNextSpecialRequestDelayMs(),
+      previousRequestId,
+    })
+  }
+
+  function updateCreatureInteractionOffset(creatureId: string, offset: CreatureInteractionOffset | null) {
+    setInteractionOffsetByCreatureId((current) => {
+      if (!offset) {
+        if (!(creatureId in current)) {
+          return current
+        }
+
+        const nextState = { ...current }
+        delete nextState[creatureId]
+        return nextState
+      }
+
+      return {
+        ...current,
+        [creatureId]: offset,
+      }
+    })
+  }
+
+  function resolveActiveSpecialRequest(creatureId: string) {
+    const specialRequestState = specialRequestRef.current[creatureId]
+    const request = specialRequestState?.requestId ? getCreatureSpecialRequestById(specialRequestState.requestId) : null
+    const ownedCreature = getOwnedCreatureById(creatureId, ownedCreatures)
+    const creature = getCreatureById(creatureId)
+
+    if (!specialRequestState || !request || !ownedCreature || !creature || !isCreatureHatched(creature, ownedCreature, now)) {
+      return false
+    }
+
+    const needs = getCreatureNeedState(creature, ownedCreature, now)
+
+    if (needs.primaryNeed) {
+      return null
+    }
+
+    return {
+      specialRequestState,
+      request,
+      ownedCreature,
+      creature,
+    }
+  }
+
+  function advanceSpecialRequest(
+    creatureId: string,
+    requestState: ActiveSpecialRequestState,
+    requestId: string,
+    animation: CreatureVisualAction,
+    ownedCreatureSpecialRequestCount: number,
+    progressEmojis: string[],
+    completionEmoji: string,
+    stepsRequired: number,
+  ) {
+    const nextProgress = Math.min(stepsRequired, requestState.progress + 1)
+
+    setSelectedCreatureId(creatureId)
+    setCareBurst({ creatureId, action: animation })
+
+    if (nextProgress < stepsRequired) {
+      showReaction(creatureId, progressEmojis[nextProgress - 1] ?? completionEmoji)
+      updateSpecialRequest(creatureId, {
+        ...requestState,
+        progress: nextProgress,
+      })
+      return true
+    }
+
+    const rewardStars = (ownedCreatureSpecialRequestCount + 1) % specialRequestRewardEvery === 0 ? 1 : 0
+    const didComplete = completeSpecialRequest(creatureId, rewardStars)
+
+    if (!didComplete) {
+      return false
+    }
+
+    showReaction(creatureId, completionEmoji)
+
+    if (rewardStars > 0) {
+      setStarRewardCreatureId(creatureId)
+    }
+
+    scheduleNextSpecialRequest(creatureId, requestId)
+    return true
+  }
+
+  function handleSpecialRequestTap(creatureId: string) {
+    const resolvedRequest = resolveActiveSpecialRequest(creatureId)
+
+    if (!resolvedRequest || getSpecialRequestInteraction(resolvedRequest.request.id) !== 'tap') {
+      return false
+    }
+
+    return advanceSpecialRequest(
+      creatureId,
+      resolvedRequest.specialRequestState,
+      resolvedRequest.request.id,
+      resolvedRequest.request.animation,
+      resolvedRequest.ownedCreature.specialRequestCount,
+      resolvedRequest.request.progressEmojis,
+      resolvedRequest.request.completionEmoji,
+      resolvedRequest.request.tapsRequired,
+    )
+  }
+
+  function handleCreatureTap(creatureId: string) {
+    if (handleSpecialRequestTap(creatureId)) {
+      return
+    }
+
+    const resolvedRequest = resolveActiveSpecialRequest(creatureId)
+
+    if (resolvedRequest && getSpecialRequestInteraction(resolvedRequest.request.id) !== 'tap') {
+      setSelectedCreatureId(creatureId)
+      showReaction(creatureId, resolvedRequest.request.hintEmoji ?? resolvedRequest.request.emoji)
+      return
+    }
+
+    setSelectedCreatureId(creatureId)
+  }
+
   function handlePetCreature(creatureId: string) {
     const ownedCreature = getOwnedCreatureById(creatureId, ownedCreatures)
     const creature = getCreatureById(creatureId)
@@ -404,6 +903,7 @@ export function PetHomeScreen() {
 
     setSelectedCreatureId(creatureId)
     setCareBurst({ creatureId, action: 'pet' })
+    showReaction(creatureId, getCareReactionEmoji('pet'))
 
     const currentProgress = heartProgressRef.current[creatureId] ?? 0
     const nextProgress = Math.min(1, currentProgress + 1 / Math.max(1, creature.needs.pettingRewardClicks))
@@ -414,7 +914,9 @@ export function PetHomeScreen() {
       return
     }
 
-    if (careForCreature(creatureId, 'pet', 1)) {
+    const rewardStars = creature.needs.rewardStars.pet
+
+    if (careForCreature(creatureId, 'pet', rewardStars) && rewardStars > 0) {
       setStarRewardCreatureId(creatureId)
     }
 
@@ -441,6 +943,7 @@ export function PetHomeScreen() {
 
     setSelectedCreatureId(creatureId)
     setCareBurst({ creatureId, action: 'feed' })
+    showReaction(creatureId, getCareReactionEmoji('feed'))
     const currentProgress = feedProgressRef.current[creatureId] ?? 0
     const nextProgress = Math.min(1, currentProgress + 1 / Math.max(1, creature.needs.feedingFillItems))
 
@@ -480,8 +983,50 @@ export function PetHomeScreen() {
   }
 
   function handleCreaturePlacement(creatureId: string) {
-    toggleCreaturePlacement(creatureId)
+    const placementResult = toggleCreaturePlacement(creatureId, resolvedHomeWorldId)
+
+    if (placementResult === 'room-full') {
+      setPlacementMessage(`אֶפְשָׁר לָשִׂים בַּחֶדֶר עַד ${maxCreaturesInRoom} בַּעֲלֵי חַיִּים בְּמַקְבִּיל`)
+      return
+    }
+
+    if (placementResult === 'assigned-other-room') {
+      const assignedHomeWorld = getHomeWorldById(
+        ownedCreatures.find((creature) => creature.creatureId === creatureId)?.placedHomeWorldId ?? '',
+      )
+      setPlacementMessage(`הַגּוּר כְּבָר נִמְצָא בְּ-${assignedHomeWorld?.name ?? 'חדר אחר'}`)
+      return
+    }
+
+    setPlacementMessage(placementResult === 'removed' ? 'הַגּוּר יָצָא מֵהַחֶדֶר הַזֶּה' : null)
     setSelectedCreatureId(creatureId)
+  }
+
+  function handleSelectHomeWorld(homeWorldId: string) {
+    const homeWorld = getHomeWorldById(homeWorldId)
+
+    if (!homeWorld || completedLevelCount < homeWorld.requiredCompletedLevels) {
+      return
+    }
+
+    if (homeWorldId === resolvedHomeWorldId) {
+      setOpenPanel(null)
+      return
+    }
+
+    setIsHomeWorldTransitioning(true)
+    setCurrentHomeWorld(homeWorldId)
+    setOpenPanel(null)
+  }
+
+  function handleStepHomeWorld(direction: 'previous' | 'next') {
+    const targetHomeWorld = direction === 'previous' ? previousHomeWorld : nextHomeWorld
+
+    if (!targetHomeWorld) {
+      return
+    }
+
+    handleSelectHomeWorld(targetHomeWorld.id)
   }
 
   function handleWearableItem(itemId: string) {
@@ -515,6 +1060,221 @@ export function PetHomeScreen() {
     handleFeedCreature(creatureId)
   })
 
+  function getGestureOffset(
+    interaction: Exclude<CreatureSpecialRequestInteraction, 'tap'>,
+    deltaX: number,
+    deltaY: number,
+  ) {
+    if (interaction === 'lift') {
+      return {
+        x: clamp(deltaX * 0.14, -12, 12),
+        y: clamp(deltaY * 0.42, -42, 20),
+      }
+    }
+
+    if (interaction === 'hold') {
+      return {
+        x: clamp(deltaX * 0.08, -6, 6),
+        y: clamp(deltaY * 0.08, -8, 8),
+      }
+    }
+
+    if (interaction === 'sway') {
+      return {
+        x: clamp(deltaX * 0.36, -30, 30),
+        y: clamp(deltaY * 0.08, -6, 6),
+      }
+    }
+
+    if (interaction === 'spin') {
+      return {
+        x: clamp(deltaX * 0.22, -18, 18),
+        y: clamp(deltaY * 0.22, -18, 18),
+      }
+    }
+
+    if (interaction === 'dash') {
+      return {
+        x: clamp(deltaX * 0.3, -34, 34),
+        y: clamp(deltaY * 0.05, -4, 4),
+      }
+    }
+
+    return {
+      x: clamp(deltaX * 0.12, -10, 10),
+      y: clamp(deltaY * 0.35, -8, 30),
+    }
+  }
+
+  function didSpecialGestureSucceed(session: SpecialRequestGestureSession) {
+    if (session.interaction === 'lift') {
+      return session.maxLift >= 76
+    }
+
+    if (session.interaction === 'hold') {
+      return session.holdReady
+    }
+
+    if (session.interaction === 'sway') {
+      return session.directionChanges >= 2 && session.totalHorizontalTravel >= 150
+    }
+
+    if (session.interaction === 'spin') {
+      return Math.abs(session.accumulatedRotation) >= Math.PI * 1.3
+    }
+
+    if (session.interaction === 'dash') {
+      return session.totalHorizontalTravel >= 160
+    }
+
+    return session.maxDrop >= 72
+  }
+
+  function handleStartSpecialRequestGesture(
+    event: ReactPointerEvent<HTMLButtonElement>,
+    creatureId: string,
+    interaction: Exclude<CreatureSpecialRequestInteraction, 'tap'>,
+    requestId: string,
+  ) {
+    event.preventDefault()
+    event.stopPropagation()
+    setSelectedCreatureId(creatureId)
+    setDraggedCreatureId(creatureId)
+
+    const holdTimerId =
+      interaction === 'hold'
+        ? window.setTimeout(() => {
+            const activeSession = specialRequestGestureRef.current
+
+            if (!activeSession || activeSession.creatureId !== creatureId || activeSession.requestId !== requestId) {
+              return
+            }
+
+            specialRequestGestureRef.current = {
+              ...activeSession,
+              holdReady: true,
+              holdTimerId: null,
+            }
+            showReaction(creatureId, '💞')
+          }, 700)
+        : null
+
+    specialRequestGestureRef.current = {
+      creatureId,
+      requestId,
+      interaction,
+      startX: event.clientX,
+      startY: event.clientY,
+      lastX: event.clientX,
+      lastY: event.clientY,
+      maxLift: 0,
+      maxDrop: 0,
+      totalHorizontalTravel: 0,
+      directionChanges: 0,
+      lastHorizontalDirection: 0,
+      accumulatedRotation: 0,
+      lastAngle: null,
+      holdReady: false,
+      holdTimerId,
+    }
+
+    function clearGestureSession() {
+      const activeSession = specialRequestGestureRef.current
+
+      if (activeSession?.holdTimerId) {
+        window.clearTimeout(activeSession.holdTimerId)
+      }
+
+      specialRequestGestureRef.current = null
+      updateCreatureInteractionOffset(creatureId, null)
+      setDraggedCreatureId(null)
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerEnd)
+      window.removeEventListener('pointercancel', handlePointerEnd)
+    }
+
+    function handlePointerMove(moveEvent: PointerEvent) {
+      const activeSession = specialRequestGestureRef.current
+
+      if (!activeSession || activeSession.creatureId !== creatureId || activeSession.requestId !== requestId) {
+        return
+      }
+
+      const deltaX = moveEvent.clientX - activeSession.startX
+      const deltaY = moveEvent.clientY - activeSession.startY
+      const horizontalStep = moveEvent.clientX - activeSession.lastX
+      const nextHorizontalDirection = horizontalStep > 3 ? 1 : horizontalStep < -3 ? -1 : 0
+      const radius = Math.hypot(deltaX, deltaY)
+      const nextAngle = radius > 18 ? Math.atan2(deltaY, deltaX) : activeSession.lastAngle
+      const angleDelta =
+        activeSession.lastAngle !== null && nextAngle !== null
+          ? normalizeAngleDelta(nextAngle - activeSession.lastAngle)
+          : 0
+
+      if (activeSession.holdTimerId && Math.hypot(deltaX, deltaY) > 18) {
+        window.clearTimeout(activeSession.holdTimerId)
+        activeSession.holdTimerId = null
+      }
+
+      specialRequestGestureRef.current = {
+        ...activeSession,
+        lastX: moveEvent.clientX,
+        lastY: moveEvent.clientY,
+        maxLift: Math.max(activeSession.maxLift, activeSession.startY - moveEvent.clientY),
+        maxDrop: Math.max(activeSession.maxDrop, moveEvent.clientY - activeSession.startY),
+        totalHorizontalTravel: activeSession.totalHorizontalTravel + Math.abs(horizontalStep),
+        directionChanges:
+          nextHorizontalDirection !== 0 &&
+          activeSession.lastHorizontalDirection !== 0 &&
+          nextHorizontalDirection !== activeSession.lastHorizontalDirection
+            ? activeSession.directionChanges + 1
+            : activeSession.directionChanges,
+        lastHorizontalDirection:
+          nextHorizontalDirection !== 0 ? nextHorizontalDirection : activeSession.lastHorizontalDirection,
+        accumulatedRotation: activeSession.accumulatedRotation + angleDelta,
+        lastAngle: nextAngle,
+      }
+
+      updateCreatureInteractionOffset(creatureId, getGestureOffset(interaction, deltaX, deltaY))
+    }
+
+    function handlePointerEnd() {
+      const activeSession = specialRequestGestureRef.current
+
+      clearGestureSession()
+
+      if (!activeSession || activeSession.creatureId !== creatureId || activeSession.requestId !== requestId) {
+        return
+      }
+
+      const resolvedRequest = resolveActiveSpecialRequest(creatureId)
+
+      if (!resolvedRequest || resolvedRequest.request.id !== requestId) {
+        return
+      }
+
+      if (didSpecialGestureSucceed(activeSession)) {
+        advanceSpecialRequest(
+          creatureId,
+          resolvedRequest.specialRequestState,
+          resolvedRequest.request.id,
+          resolvedRequest.request.animation,
+          resolvedRequest.ownedCreature.specialRequestCount,
+          resolvedRequest.request.progressEmojis,
+          resolvedRequest.request.completionEmoji,
+          resolvedRequest.request.tapsRequired,
+        )
+        return
+      }
+
+      showReaction(creatureId, resolvedRequest.request.hintEmoji ?? resolvedRequest.request.emoji)
+    }
+
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerEnd)
+    window.addEventListener('pointercancel', handlePointerEnd)
+  }
+
   function moveCreatureToPointer(creatureId: string, clientX: number, clientY: number) {
     const sceneBounds = sceneRef.current?.getBoundingClientRect()
 
@@ -539,6 +1299,19 @@ export function PetHomeScreen() {
   }
 
   function handleStartDraggingCreature(event: ReactPointerEvent<HTMLButtonElement>, creatureId: string) {
+    const resolvedRequest = resolveActiveSpecialRequest(creatureId)
+    const requestInteraction = resolvedRequest ? getSpecialRequestInteraction(resolvedRequest.request.id) : 'tap'
+
+    if (resolvedRequest && requestInteraction !== 'tap') {
+      handleStartSpecialRequestGesture(
+        event,
+        creatureId,
+        requestInteraction,
+        resolvedRequest.request.id,
+      )
+      return
+    }
+
     event.preventDefault()
     event.stopPropagation()
     setSelectedCreatureId(creatureId)
@@ -563,6 +1336,10 @@ export function PetHomeScreen() {
       window.removeEventListener('pointerup', handlePointerEnd)
       window.removeEventListener('pointercancel', handlePointerEnd)
       setDraggedCreatureId(null)
+
+      if (!moved) {
+        handleCreatureTap(creatureId)
+      }
     }
 
     window.addEventListener('pointermove', handlePointerMove)
@@ -611,14 +1388,40 @@ export function PetHomeScreen() {
       ref={sceneRef}
       style={{
         backgroundImage:
-          'linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04)), url(/assets/world/playroom-bg1.png)',
+          `linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04)), url(${currentHomeWorld?.backgroundImage ?? '/assets/world/playroom-bg1.png'})`,
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
       }}
     >
+      <div
+        className={`pointer-events-none absolute inset-0 z-10 bg-white/35 transition-opacity duration-300 ${
+          isHomeWorldTransitioning ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.18),_transparent_55%)]" />
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,_rgba(255,255,255,0.22)_0%,_rgba(255,255,255,0)_28%,_rgba(255,244,228,0.12)_100%)]" />
+
+      {unlockedHomeWorlds.length > 1 && (
+        <>
+          <button
+            className="absolute left-4 top-1/2 z-40 flex h-16 w-16 -translate-y-1/2 items-center justify-center rounded-full border border-white/90 bg-white/86 text-slate-700 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur transition hover:scale-[1.04] disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!previousHomeWorld}
+            onClick={() => handleStepHomeWorld('previous')}
+            type="button"
+          >
+            <ChevronLeft className="h-8 w-8" />
+          </button>
+          <button
+            className="absolute right-4 top-1/2 z-40 flex h-16 w-16 -translate-y-1/2 items-center justify-center rounded-full border border-white/90 bg-white/86 text-slate-700 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur transition hover:scale-[1.04] disabled:cursor-not-allowed disabled:opacity-40"
+            disabled={!nextHomeWorld}
+            onClick={() => handleStepHomeWorld('next')}
+            type="button"
+          >
+            <ChevronRight className="h-8 w-8" />
+          </button>
+        </>
+      )}
 
       <div className="absolute inset-x-0 top-4 z-40 flex justify-center px-4">
         <button
@@ -632,8 +1435,9 @@ export function PetHomeScreen() {
           <div className="text-right">
             <p className="text-sm font-black text-slate-900">משחקים</p>
             <div className="mt-1 flex items-center justify-end gap-2 text-[12px] font-bold text-slate-600">
-              <span>⭐</span>
-              <span>🐾</span>
+              <span>{currentHomeWorld?.name ?? 'חֶדֶר הַגּוּרִים'}</span>
+              <span>•</span>
+              <span>{unlockedHomeWorlds.length}/{homeWorldCatalog.length}</span>
             </div>
           </div>
         </button>
@@ -651,28 +1455,31 @@ export function PetHomeScreen() {
       </div>
 
       <div className="absolute right-4 top-4 z-40 flex items-center gap-2 rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(243,238,255,0.88))] p-2 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur-xl">
-        <WorldIconButton onClick={() => navigate('/worlds')} title="עולם השאלות">
+        <WorldIconButton onClick={() => navigate('/worlds')} title="עוֹלַם הַשְּׁאֵלוֹת">
           <MapIcon className="h-6 w-6 text-[#f26a4b]" />
         </WorldIconButton>
-        <WorldIconButton onClick={() => navigate('/shop')} title="חנות">
+        <WorldIconButton onClick={() => navigate('/shop')} title="חֲנוּת">
           <ShoppingBag className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
-        <WorldIconButton onClick={() => navigate('/progress')} title="התקדמות">
+        <WorldIconButton onClick={() => navigate('/progress')} title="הִתְקַדְּמוּת">
           <BarChart3 className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
-        <WorldIconButton onClick={() => navigate('/settings')} title="הגדרות">
+        <WorldIconButton onClick={() => navigate('/settings')} title="הַגְדָּרוֹת">
           <Settings className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
       </div>
 
       <div className="absolute bottom-4 left-4 z-40 flex items-center gap-3 rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(243,238,255,0.88))] p-2 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur-xl">
-        <WorldIconButton active={openPanel === 'creatures'} onClick={() => setOpenPanel((current) => (current === 'creatures' ? null : 'creatures'))} title="הגורים שלי">
+        <WorldIconButton active={openPanel === 'rooms'} onClick={() => setOpenPanel((current) => (current === 'rooms' ? null : 'rooms'))} title="חֲדָרִים">
+          <House className="h-6 w-6 text-slate-700" />
+        </WorldIconButton>
+        <WorldIconButton active={openPanel === 'creatures'} onClick={() => setOpenPanel((current) => (current === 'creatures' ? null : 'creatures'))} title="הַגּוּרִים שֶׁלִּי">
           <PawPrint className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
-        <WorldIconButton active={openPanel === 'food'} onClick={() => setOpenPanel((current) => (current === 'food' ? null : 'food'))} title="אוכל ושתייה">
+        <WorldIconButton active={openPanel === 'food'} onClick={() => setOpenPanel((current) => (current === 'food' ? null : 'food'))} title="אוֹכֶל וּשְׁתִיָּה">
           <Milk className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
-        <WorldIconButton active={openPanel === 'style'} onClick={() => setOpenPanel((current) => (current === 'style' ? null : 'style'))} title="בגדים">
+        <WorldIconButton active={openPanel === 'style'} onClick={() => setOpenPanel((current) => (current === 'style' ? null : 'style'))} title="בְּגָדִים">
           <Shirt className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
       </div>
@@ -714,6 +1521,87 @@ export function PetHomeScreen() {
           >
             <X className="h-5 w-5 text-slate-700" />
           </button>
+        </div>
+      )}
+
+      {openPanel === 'rooms' && (
+        <div className="absolute bottom-24 left-1/2 z-50 flex w-[min(94vw,980px)] -translate-x-1/2 flex-col gap-4 rounded-[34px] border border-white/85 bg-white/88 px-4 py-4 shadow-[0_24px_70px_rgba(84,60,126,0.16)] backdrop-blur-xl">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-lg font-black text-slate-900">חֲדָרִים ועולמות בבית</p>
+              <p className="text-sm font-semibold text-slate-500">
+                נפתחו
+                {' '}
+                {unlockedHomeWorlds.length}
+                {' '}
+                מתוך
+                {' '}
+                {homeWorldCatalog.length}
+                {' '}
+                חֲדָרִים לפי השלבים שהושלמו.
+              </p>
+            </div>
+            <button
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100"
+              onClick={() => setOpenPanel(null)}
+              type="button"
+            >
+              <X className="h-5 w-5 text-slate-700" />
+            </button>
+          </div>
+
+          <div className="soft-scroll flex gap-3 overflow-x-auto pb-1">
+            {homeWorldCatalog.map((homeWorld) => {
+              const isUnlocked = completedLevelCount >= homeWorld.requiredCompletedLevels
+              const isActive = homeWorld.id === resolvedHomeWorldId
+
+              return (
+                <button
+                  className={`min-w-[220px] overflow-hidden rounded-[28px] border text-right shadow-sm transition ${
+                    isUnlocked ? 'border-white/80 bg-white hover:scale-[1.02]' : 'border-white/70 bg-slate-100/90 opacity-75'
+                  } ${isActive ? 'ring-2 ring-[#f472b6]' : ''}`}
+                  disabled={!isUnlocked}
+                  key={homeWorld.id}
+                  onClick={() => handleSelectHomeWorld(homeWorld.id)}
+                  type="button"
+                >
+                  <div
+                    className="h-28 w-full bg-cover bg-center"
+                    style={{ backgroundImage: `url(${homeWorld.backgroundImage})` }}
+                  />
+                  <div className="space-y-2 px-4 py-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="font-display text-xl text-slate-900">{homeWorld.name}</p>
+                      <span
+                        className="rounded-full px-3 py-1 text-xs font-bold text-white"
+                        style={{ backgroundColor: homeWorld.accent }}
+                      >
+                        {isActive ? 'כָּאן עַכְשָׁיו' : isUnlocked ? 'פָּתוּחַ' : 'נָעוּל'}
+                      </span>
+                    </div>
+                    <p className="text-sm text-slate-600">{homeWorld.description}</p>
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-500">
+                      {isUnlocked ? (
+                        <>
+                          <Check className="h-4 w-4 text-emerald-600" />
+                          מעבר מיידי לחדר
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="h-4 w-4 text-slate-400" />
+                          נפתח אחרי
+                          {' '}
+                          {homeWorld.requiredCompletedLevels}
+                          {' '}
+                          שלבים שהושלמו
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
         </div>
       )}
 
@@ -765,6 +1653,10 @@ export function PetHomeScreen() {
           </button>
 
           <div className="flex-1 space-y-3 overflow-y-auto">
+            <div className="rounded-[20px] bg-[#fff7ed] px-2 py-2 text-center text-[11px] font-bold text-[#c2410c]">
+              {homeCreatures.length}/{maxCreaturesInRoom} בחדר
+            </div>
+
             {ownedCreatures.map((ownedCreature) => {
               const creature = getCreatureById(ownedCreature.creatureId)
 
@@ -775,6 +1667,13 @@ export function PetHomeScreen() {
               const hatched = isCreatureHatched(creature, ownedCreature, now)
               const stage = hatched ? getCurrentCreatureStage(creature, ownedCreature, now) : null
               const selected = resolvedSelectedCreatureId === ownedCreature.creatureId
+              const assignedHomeWorld = ownedCreature.placedHomeWorldId
+                ? getHomeWorldById(ownedCreature.placedHomeWorldId)
+                : null
+              const isPlacedInCurrentHome = ownedCreature.placedHomeWorldId === resolvedHomeWorldId
+              const isPlacedInAnotherHome =
+                typeof ownedCreature.placedHomeWorldId === 'string' && ownedCreature.placedHomeWorldId !== resolvedHomeWorldId
+              const placementLimitReached = homeCreatures.length >= maxCreaturesInRoom && !isPlacedInCurrentHome && !isPlacedInAnotherHome
 
               return (
                 <div
@@ -793,21 +1692,43 @@ export function PetHomeScreen() {
                     />
                     <span
                       className={`absolute left-1 top-1 flex h-6 w-6 items-center justify-center rounded-full ${
-                        ownedCreature.placedInHome ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'
+                        isPlacedInCurrentHome
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : isPlacedInAnotherHome
+                            ? 'bg-sky-100 text-sky-700'
+                            : 'bg-slate-100 text-slate-500'
                       }`}
                     >
-                      {ownedCreature.placedInHome ? <Check className="h-3.5 w-3.5" /> : <PawPrint className="h-3.5 w-3.5" />}
+                      {isPlacedInCurrentHome ? (
+                        <Check className="h-3.5 w-3.5" />
+                      ) : isPlacedInAnotherHome ? (
+                        <House className="h-3.5 w-3.5" />
+                      ) : (
+                        <PawPrint className="h-3.5 w-3.5" />
+                      )}
                     </span>
                   </button>
 
                   <button
                     className={`mt-2 flex h-10 w-full items-center justify-center rounded-full ${
-                      ownedCreature.placedInHome ? 'bg-slate-100 text-slate-500' : 'bg-[#fff1fb] text-[#d946ef]'
+                      isPlacedInCurrentHome
+                        ? 'bg-slate-100 text-slate-500'
+                        : isPlacedInAnotherHome
+                          ? 'bg-sky-50 text-sky-600'
+                        : placementLimitReached
+                          ? 'bg-slate-100 text-slate-400'
+                          : 'bg-[#fff1fb] text-[#d946ef]'
                     }`}
                     onClick={() => handleCreaturePlacement(ownedCreature.creatureId)}
                     type="button"
                   >
-                    {ownedCreature.placedInHome ? <Check className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
+                    {isPlacedInCurrentHome ? (
+                      <Check className="h-4 w-4" />
+                    ) : isPlacedInAnotherHome ? (
+                      <House className="h-4 w-4" />
+                    ) : (
+                      <Sparkles className="h-4 w-4" />
+                    )}
                   </button>
 
                   {!hatched && (
@@ -820,9 +1741,29 @@ export function PetHomeScreen() {
                       )}
                     </div>
                   )}
+
+                  {placementLimitReached && (
+                    <div className="mt-2 rounded-full bg-rose-50 px-2 py-1 text-center text-[10px] font-bold text-rose-500">
+                      החדר מלא
+                    </div>
+                  )}
+
+                  {isPlacedInAnotherHome && (
+                    <div className="mt-2 rounded-full bg-sky-50 px-2 py-1 text-center text-[10px] font-bold text-sky-600">
+                      {assignedHomeWorld?.name ?? 'בְּחֶדֶר אַחֵר'}
+                    </div>
+                  )}
                 </div>
               )
             })}
+          </div>
+        </div>
+      )}
+
+      {placementMessage && (
+        <div className="absolute inset-x-0 top-20 z-[60] flex justify-center px-4">
+          <div className="rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(255,239,247,0.93))] px-5 py-3 text-sm font-bold text-[#be185d] shadow-[0_18px_40px_rgba(56,37,87,0.18)] backdrop-blur">
+            {placementMessage}
           </div>
         </div>
       )}
@@ -845,13 +1786,32 @@ export function PetHomeScreen() {
           const reaction = reactionBubble?.creatureId === ownedCreature.creatureId ? reactionBubble.emoji : null
           const heartProgress = heartProgressByCreatureId[ownedCreature.creatureId] ?? 0
           const feedProgress = feedProgressByCreatureId[ownedCreature.creatureId] ?? 0
+          const specialRequestState = specialRequestByCreatureId[ownedCreature.creatureId] ?? null
+          const specialRequest = specialRequestState?.requestId
+            ? getCreatureSpecialRequestById(specialRequestState.requestId)
+            : null
           const isSelected = resolvedSelectedCreatureId === ownedCreature.creatureId
           const bob = Math.sin((sceneCreature.phase / 24) * Math.PI * 2) * (sceneCreature.pauseTicks ? 2 : 5)
+          const jumpStepCount = Math.max(1, sceneCreature.jumpDurationTicks - 1)
+          const jumpProgress =
+            sceneCreature.jumpTicksRemaining > 0
+              ? Math.sin(((sceneCreature.jumpDurationTicks - sceneCreature.jumpTicksRemaining) / jumpStepCount) * Math.PI)
+              : 0
+          const jumpLift = jumpProgress * 18
+          const creatureScale = (pulse ? 1.08 : isSelected ? 1.04 : 1) * (1 + jumpProgress * 0.02)
+          const creatureAnimationClass = getCreatureAnimationClass(pulse, sceneCreature.jumpTicksRemaining > 0)
           const NeedIcon = needs?.primaryNeed ? careIcons[needs.primaryNeed] : null
           const showHeartMeter = hatched && (needs?.primaryNeed === 'pet' || heartProgress > 0)
           const showFeedMeter = hatched && (needs?.primaryNeed === 'feed' || feedProgress > 0)
           const showNeedBubble = hatched && needs?.primaryNeed && needs.primaryNeed !== 'pet' && needs.primaryNeed !== 'feed' && NeedIcon
+          const showSpecialRequestBubble =
+            hatched &&
+            specialRequest &&
+            !needs?.primaryNeed &&
+            heartProgress < 0.01 &&
+            feedProgress < 0.01
           const showStarReward = starRewardCreatureId === ownedCreature.creatureId
+          const interactionOffset = interactionOffsetByCreatureId[ownedCreature.creatureId] ?? { x: 0, y: 0 }
 
           return (
             <div
@@ -931,74 +1891,121 @@ export function PetHomeScreen() {
                   </button>
                 )}
 
-              {showNeedBubble && (
-                <>
-                  <button
-                    className={`absolute right-3 top-6 z-30 flex h-12 w-12 items-center justify-center rounded-full shadow-[0_18px_40px_rgba(56,37,87,0.14)] transition ${
-                      careBubbleClasses[needs.primaryNeed]
-                    }`}
-                    onClick={(event) => {
-                      event.stopPropagation()
-                      handleNeedBubble(ownedCreature.creatureId, needs.primaryNeed!)
-                    }}
-                    onPointerDown={(event) => event.stopPropagation()}
-                    type="button"
-                  >
-                    <NeedIcon className="h-5 w-5" />
-                  </button>
-                </>
-              )}
+	                {showSpecialRequestBubble && (
+	                  <button
+	                    className={`absolute left-3 top-6 z-30 flex h-12 w-12 items-center justify-center rounded-full shadow-[0_18px_40px_rgba(56,37,87,0.16)] ring-2 transition hover:scale-[1.02] ${
+	                      specialRequest!.bubbleClass
+	                    }`}
+	                    onClick={(event) => {
+	                      event.stopPropagation()
+	                      if (getSpecialRequestInteraction(specialRequest!.id) === 'tap') {
+	                        handleSpecialRequestTap(ownedCreature.creatureId)
+	                        return
+	                      }
 
-              <div
-                className="pointer-events-none absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center justify-center transition"
-                style={{
-                  transform: `translateY(${bob}px) scale(${pulse ? 1.08 : isSelected ? 1.04 : 1})`,
-                }}
-              >
-                <div
-                  className={`absolute inset-x-4 bottom-2 h-6 rounded-full blur-md ${
-                    pulse === 'pet'
-                      ? 'bg-[#fecdd3]'
-                      : pulse === 'feed'
-                        ? 'bg-[#bfdbfe]'
-                        : pulse === 'play'
-                          ? 'bg-[#ddd6fe]'
-                          : pulse === 'rest'
-                            ? 'bg-[#a7f3d0]'
-                            : isSelected
-                              ? 'bg-[#ffb6dc]/65'
-                              : 'bg-[#c9edff]/65'
-                  }`}
-                />
-                {reaction && (
-                  <div className="pointer-events-none absolute -top-14 left-1/2 -translate-x-1/2 text-3xl">
-                    {reaction}
-                  </div>
-                )}
-                {showStarReward && (
-                  <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 text-3xl animate-bounce">
-                    ⭐
-                  </div>
-                )}
-                <img
-                  alt={creature.name}
-                  className={hatched ? 'h-32 w-32 object-contain' : 'h-[104px] w-[104px] object-contain'}
-                  src={hatched ? stage?.image ?? creature.cardImage : creature.eggImage}
-                />
-                {hatched &&
-                  ownedCreature.equippedItems.slice(0, 4).map((itemId, index) => (
-                    <span
-                      className="absolute rounded-full bg-white/92 px-2 py-1 text-xs font-bold text-slate-700 shadow-sm"
-                      key={itemId}
-                      style={{
-                        ...equippedItemPositions[index],
-                        transform: 'scaleX(-1)',
-                      }}
-                    >
-                      {getShopItemById(itemId)?.icon ?? '✨'}
-                    </span>
-                  ))}
-              </div>
+	                      setSelectedCreatureId(ownedCreature.creatureId)
+	                      showReaction(ownedCreature.creatureId, specialRequest!.hintEmoji ?? specialRequest!.emoji)
+	                    }}
+	                    onPointerDown={(event) => event.stopPropagation()}
+	                    style={{
+	                      transform: `scaleX(${hatched ? sceneCreature.directionX : 1})`,
+	                    }}
+	                    type="button"
+	                  >
+	                    <span className="text-xl leading-none">{specialRequest!.emoji}</span>
+	                  </button>
+	                )}
+
+	                {showNeedBubble && (
+	                  <button
+	                    className={`absolute right-3 top-6 z-30 flex h-12 w-12 items-center justify-center rounded-full shadow-[0_18px_40px_rgba(56,37,87,0.14)] transition ${
+	                      careBubbleClasses[needs.primaryNeed]
+	                    }`}
+	                    onClick={(event) => {
+	                      event.stopPropagation()
+	                      handleNeedBubble(ownedCreature.creatureId, needs.primaryNeed!)
+	                    }}
+	                    onPointerDown={(event) => event.stopPropagation()}
+	                    type="button"
+	                  >
+	                    <NeedIcon className="h-5 w-5" />
+	                  </button>
+	                )}
+
+	                <div
+	                  className="pointer-events-none absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 items-center justify-center transition"
+	                  style={{
+	                    transform: `translate(${interactionOffset.x}px, ${bob - jumpLift + interactionOffset.y}px) scale(${creatureScale})`,
+	                  }}
+	                >
+	                  <div
+	                    className={`absolute inset-x-4 bottom-2 h-6 rounded-full blur-md ${
+	                      pulse === 'pet'
+	                        ? 'bg-[#fecdd3]'
+	                        : pulse === 'feed'
+	                          ? 'bg-[#bfdbfe]'
+	                          : pulse === 'play'
+	                            ? 'bg-[#ddd6fe]'
+	                            : pulse === 'rest'
+	                              ? 'bg-[#a7f3d0]'
+	                              : pulse === 'cheer'
+	                                ? 'bg-[#fbcfe8]'
+	                                : pulse === 'curious'
+	                                  ? 'bg-[#bae6fd]'
+	                                  : pulse === 'stretch'
+	                                    ? 'bg-[#bbf7d0]'
+	                                    : pulse === 'soar'
+	                                      ? 'bg-[#bfdbfe]'
+	                                      : pulse === 'snuggle'
+	                                        ? 'bg-[#fecdd3]'
+	                                        : pulse === 'sway'
+	                                          ? 'bg-[#fde68a]'
+	                                          : pulse === 'twirl'
+	                                            ? 'bg-[#ddd6fe]'
+	                                            : pulse === 'zoom'
+	                                              ? 'bg-[#bbf7d0]'
+	                                              : pulse === 'boing'
+	                                                ? 'bg-[#fdba74]'
+	                                    : isSelected
+	                                      ? 'bg-[#ffb6dc]/65'
+	                                      : 'bg-[#c9edff]/65'
+	                    }`}
+	                    style={{
+	                      opacity: 0.72 - jumpProgress * 0.18,
+	                      transform: `scale(${1 - jumpProgress * 0.14})`,
+	                    }}
+	                  />
+	                  {reaction && (
+	                    <div className="pointer-events-none absolute -top-14 left-1/2 -translate-x-1/2 text-3xl puppy-reaction">
+	                      {reaction}
+	                    </div>
+	                  )}
+	                  {showStarReward && (
+	                    <div className="pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 text-3xl animate-bounce">
+	                      ⭐
+	                    </div>
+	                  )}
+	                  <div className={`relative flex items-center justify-center ${creatureAnimationClass}`}>
+	                    <img
+	                      alt={creature.name}
+	                      className={hatched ? 'h-32 w-32 object-contain' : 'h-[104px] w-[104px] object-contain'}
+	                      src={hatched ? stage?.image ?? creature.cardImage : creature.eggImage}
+	                    />
+	                    {hatched &&
+	                      ownedCreature.equippedItems.slice(0, 4).map((itemId, index) => (
+	                        <span
+	                          className="absolute rounded-full bg-white/92 px-2 py-1 text-xs font-bold text-slate-700 shadow-sm"
+	                          key={itemId}
+	                          style={{
+	                            ...equippedItemPositions[index],
+	                            transform: 'scaleX(-1)',
+	                          }}
+	                        >
+	                          {getShopItemById(itemId)?.icon ?? '✨'}
+	                        </span>
+	                      ))}
+	                  </div>
+	                </div>
               </div>
             </div>
           )

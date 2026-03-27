@@ -20,28 +20,28 @@ export function SettingsScreen() {
           חזרה למפה
         </Button>
       }
-      eyebrow="הגדרות"
-      subtitle="מסך הגדרות עם כפתורים גדולים, בחירת שפה ואיפוס התקדמות עם אישור."
-      title="הגדרות"
+      eyebrow="הַגְדָּרוֹת"
+      subtitle="מסך הַגְדָּרוֹת עם כפתורים גדולים, בחירת שפה ואיפוס הִתְקַדְּמוּת עם אישור."
+      title="הַגְדָּרוֹת"
       tone="lilac"
     >
       <div className="grid gap-4">
         {[
           {
-            label: 'צלילים',
-            description: 'צלילי משחק ואפקטים קצרים',
+            label: 'צְלִילִים',
+            description: 'צְלִילֵי מִשְׂחָק וְאֶפֶקְטִים קְצָרִים',
             active: settings.soundEnabled,
             onToggle: () => updateSettings({ soundEnabled: !settings.soundEnabled }),
           },
           {
-            label: 'מוזיקה',
-            description: 'מוזיקת רקע נעימה בזמן משחק',
+            label: 'מוּזִיקָה',
+            description: 'מוּזִיקַת רֶקַע נְעִימָה בִּזְמַן מִשְׂחָק',
             active: settings.musicEnabled,
             onToggle: () => updateSettings({ musicEnabled: !settings.musicEnabled }),
           },
           {
-            label: 'תגובה למגע',
-            description: 'הדגשה קלה של לחיצות למגע',
+            label: 'תְּגוּבָה לְמַגָּע',
+            description: 'הַדְגָּשָׁה קַלָּה שֶׁל לְחִיצוֹת לְמַגָּע',
             active: settings.touchFeedback,
             onToggle: () => updateSettings({ touchFeedback: !settings.touchFeedback }),
           },
@@ -52,7 +52,7 @@ export function SettingsScreen() {
               <p className="text-slate-500">{toggle.description}</p>
             </div>
             <Button onClick={toggle.onToggle} variant={toggle.active ? 'primary' : 'secondary'}>
-              {toggle.active ? 'פועל' : 'כבוי'}
+              {toggle.active ? 'פּוֹעַל' : 'כָּבוּי'}
             </Button>
           </Card>
         ))}
@@ -67,14 +67,14 @@ export function SettingsScreen() {
               עברית
             </Button>
             <Button disabled variant="secondary">
-              אנגלית בהמשך
+              אַנְגְּלִית בהמשך
             </Button>
           </div>
         </Card>
 
         <Card className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="font-display text-2xl text-slate-900">איפוס התקדמות</h2>
+            <h2 className="font-display text-2xl text-slate-900">איפוס הִתְקַדְּמוּת</h2>
             <p className="text-slate-500">מאפס נקודות, מטבעות והשלמות שלבים. פרופילי הילדים נשארים.</p>
           </div>
           <Button onClick={() => setIsResetOpen(true)} variant="danger">
@@ -84,13 +84,13 @@ export function SettingsScreen() {
         </Card>
 
         <Button onClick={() => navigate('/system/status')} variant="secondary">
-          למסך סטטוס מערכת
+          למסך סְטָטוּס מערכת
         </Button>
       </div>
 
-      <Modal onClose={() => setIsResetOpen(false)} open={isResetOpen} title="איפוס התקדמות">
+      <Modal onClose={() => setIsResetOpen(false)} open={isResetOpen} title="איפוס הִתְקַדְּמוּת">
         <div className="space-y-4">
-          <p className="text-slate-600">לאחר האישור כל ההתקדמות תתאפס ותישמר גם באחסון המקומי של המכשיר.</p>
+          <p className="text-slate-600">לאחר האישור כל ההִתְקַדְּמוּת תתאפס ותישמר גם באחסון המקומי של המכשיר.</p>
           <div className="flex gap-3">
             <Button
               onClick={() => {

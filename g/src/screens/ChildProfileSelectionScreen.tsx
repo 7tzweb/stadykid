@@ -14,13 +14,13 @@ export function ChildProfileSelectionScreen() {
 
   return (
     <ScreenLayout
-      eyebrow="בחירת ילדים"
-      subtitle="לוחצים על הכרטיס עם השם שלכם ואז ממשיכים ישר לבית הראשי של הגורים."
-      title="מי יוצא להרפתקה עכשיו?"
+      eyebrow="בְּחִירַת יְלָדִים"
+      subtitle="כָּרֶגַע זֶה מַצָּב דֵּמוֹ עִם פְּרוֹפִילִים לְפִי גִּיל. בַּהֶמְשֵׁךְ פְּרוֹפִילֵי הַיְלָדִים יִשָּׁמְרוּ תַּחַת חֶשְׁבּוֹן Google."
+      title="מִי יוֹצֵא לַהַרְפַּתְקָה עַכְשָׁיו?"
       tone="mint"
       actions={
         <div className="rounded-full bg-white/75 px-4 py-3 text-sm font-semibold text-slate-600 shadow-sm">
-          {currentUser ? `מחובר: ${currentUser.name}` : 'מצב דמו'}
+          {currentUser ? `מְחֻבָּר: ${currentUser.name}` : 'מַצָּב דֵּמוֹ'}
         </div>
       }
     >
@@ -29,19 +29,19 @@ export function ChildProfileSelectionScreen() {
           accent="#14b8a6"
           items={[
             {
-              title: 'מחפשים את השם',
-              description: 'כל ילד בוחר את הכרטיס שלו.',
+              title: 'מְחַפְּשִׂים אֶת הַשֵּׁם',
+              description: 'כָּל יֶלֶד בּוֹחֵר אֶת הַכַּרְטִיס שֶׁלּוֹ.',
             },
             {
-              title: 'לוחצים על הכפתור הגדול',
-              description: 'הכפתור הכתום מתחיל את המשחק.',
+              title: 'לוֹחֲצִים עַל הַכַּפְתּוֹר הַגָּדוֹל',
+              description: 'הַכַּפְתּוֹר הַכָּתוֹם מַתְחִיל אֶת הַמִּשְׂחָק.',
             },
             {
-              title: 'מגיעים לבית הראשי',
-              description: 'משם עוברים לחדרים, לחנות או לעולם השאלות.',
+              title: 'מַגִּיעִים לַבַּיִת הָרָאשִׁי',
+              description: 'משם עוברים לחֲדָרִים, לחֲנוּת או לעוֹלַם הַשְּׁאֵלוֹת.',
             },
           ]}
-          title="כך מתחילים מכאן"
+          title="כָּךְ מַתְחִילִים מִכָּאן"
         />
 
         <div className="grid gap-4 lg:grid-cols-3">
@@ -70,7 +70,7 @@ export function ChildProfileSelectionScreen() {
               </div>
 
               <div className="rounded-[24px] bg-[#f8fafc] p-4 text-sm text-slate-600">
-                חיית מחמד: <strong>{profile.petName}</strong>
+                חַיַּת מַחְמָד: <strong>{profile.petName}</strong>
                 <br />
                 שלבים שהושלמו: <strong>{profile.completedLevelIds.length}</strong>
               </div>

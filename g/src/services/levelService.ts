@@ -1,33 +1,12 @@
+import { getMissionByLevelId, missionCatalog } from '@/game/content/catalog'
 import { LevelValidationError, parseGameLevel } from '@/game/engine/level-parser'
 
-export const levelManifest = [
-  'forest-numbers-001',
-  'forest-numbers-002',
-  'castle-reading-001',
-  'castle-reading-002',
-  'space-english-001',
-  'space-english-002',
-  'logic-cave-001',
-  'logic-cave-002',
-  'memory-island-001',
-  'memory-island-002',
-] as const
+export const supportedLevelAges = [4, 5, 6, 7, 8, 9, 10, 11, 12] as const
 
-export async function loadLevelDefinition(levelId: string) {
-  const response = await fetch(`/levels/${levelId}.json`)
-  const responseText = await response.text()
-  const contentType = response.headers.get('content-type') ?? ''
+const defaultLevelAge = 6
+const baseLevelManifest = missionCatalog.map((mission) => mission.levelId)
 
-  if (!response.ok) {
-    throw new Error(`קובץ השלב ${levelId} לא נמצא.`)
-  }
-
-  if (!contentType.includes('application/json')) {
-    throw new Error(
-      `קובץ השלב ${levelId} לא חזר בפורמט JSON. בדקו אם הקובץ קיים בתיקיית levels.`,
-    )
-  }
-
+function parseLevelResponse(levelId: string, responseText: string) {
   try {
     const rawValue = JSON.parse(responseText) as unknown
     return parseGameLevel(rawValue)
@@ -44,4 +23,72 @@ export async function loadLevelDefinition(levelId: string) {
 
     throw error
   }
+}
+
+export function resolveLevelAgeBucket(age: number | undefined) {
+  if (!Number.isFinite(age)) {
+    return defaultLevelAge
+  }
+
+  const exactMatch = supportedLevelAges.find((supportedAge) => supportedAge === age)
+
+  if (exactMatch) {
+    return exactMatch
+  }
+
+  const lowerAge = [...supportedLevelAges].reverse().find((supportedAge) => supportedAge < Number(age))
+  const upperAge = supportedLevelAges.find((supportedAge) => supportedAge > Number(age))
+
+  if (!lowerAge) {
+    return supportedLevelAges[0]
+  }
+
+  if (!upperAge) {
+    return supportedLevelAges[supportedLevelAges.length - 1]
+  }
+
+  return Number(age) - lowerAge <= upperAge - Number(age) ? lowerAge : upperAge
+}
+
+function buildAgeLevelPath(levelId: string, age: number) {
+  const mission = getMissionByLevelId(levelId)
+
+  if (!mission) {
+    return `/levels/${levelId}.json`
+  }
+
+  return `/levels/ages/${age}/${mission.worldId}/${levelId}.json`
+}
+
+export const levelManifest = [
+  ...baseLevelManifest.map((levelId) => `/levels/${levelId}.json`),
+  ...supportedLevelAges.flatMap((age) =>
+    missionCatalog.map((mission) => buildAgeLevelPath(mission.levelId, age)),
+  ),
+]
+
+export async function loadLevelDefinition(levelId: string, age?: number) {
+  const resolvedAge = resolveLevelAgeBucket(age)
+  const candidatePaths = [...new Set([buildAgeLevelPath(levelId, resolvedAge), `/levels/${levelId}.json`])]
+
+  for (const path of candidatePaths) {
+    const response = await fetch(path)
+
+    if (!response.ok) {
+      continue
+    }
+
+    const responseText = await response.text()
+    const contentType = response.headers.get('content-type') ?? ''
+
+    if (!contentType.includes('application/json')) {
+      throw new Error(
+        `קובץ השלב ${levelId} לא חזר בפורמט JSON. בדקו אם הקובץ קיים בתיקיית levels.`,
+      )
+    }
+
+    return parseLevelResponse(levelId, responseText)
+  }
+
+  throw new Error(`קובץ השלב ${levelId} לא נמצא.`)
 }

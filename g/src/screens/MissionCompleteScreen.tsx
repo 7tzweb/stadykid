@@ -20,7 +20,7 @@ export function MissionCompleteScreen() {
   const navigate = useNavigate()
   const location = useLocation()
   const { levelId } = useParams()
-  const { lastMissionOutcome } = useGame()
+  const { currentChildProfile, lastMissionOutcome } = useGame()
   const routeState = location.state as CompletionState | null
   const [level, setLevel] = useState<GameLevel | null>(routeState?.level ?? null)
   const [showExplanation, setShowExplanation] = useState(false)
@@ -30,14 +30,15 @@ export function MissionCompleteScreen() {
       return
     }
 
-    void loadLevelDefinition(levelId).then(setLevel).catch(() => undefined)
-  }, [level, levelId])
+    void loadLevelDefinition(levelId, currentChildProfile?.age).then(setLevel).catch(() => undefined)
+  }, [currentChildProfile?.age, level, levelId])
 
   const outcome = routeState?.outcome ?? lastMissionOutcome
+  const summaryHints = level?.activities.flatMap((activity) => activity.hints.slice(0, 1)).slice(0, 5) ?? []
 
   if (!level || !outcome) {
     return (
-      <ScreenLayout subtitle="אין כרגע תוצאה שמורה להצגה." title="אין נתוני סיום" tone="sand">
+      <ScreenLayout subtitle="אֵין כָּרֶגַע תּוֹצָאָה שְׁמוּרָה לְהַצָּגָה." title="אֵין נְתוּנֵי סִיּוּם" tone="sand">
         <Card className="mx-auto mt-12 max-w-2xl">
           <Button onClick={() => navigate('/worlds')}>חזרה למפה</Button>
         </Card>
@@ -47,9 +48,9 @@ export function MissionCompleteScreen() {
 
   return (
     <ScreenLayout
-      eyebrow="סיום משימה"
-      subtitle="מסך סיום שמציג פרסים, נקודות, מטבעות, כוכבים והסבר מלא."
-      title={outcome.success ? 'המשימה הושלמה בהצלחה!' : 'ננסה שוב יחד'}
+      eyebrow="סִיּוּם מְשִׂימָה"
+      subtitle="מָסַךְ סִיּוּם שֶׁמַּצִּיג פְּרָסִים, נְקֻדּוֹת, מַטְבְּעוֹת, כּוֹכָבִים וְהֶסְבֵּר מָלֵא."
+      title={outcome.success ? 'הַמְּשִׂימָה הֻשְׁלְמָה בְּהַצְלָחָה!' : 'נְנַסֶּה שׁוּב יַחַד'}
       tone="mint"
     >
       <div className="mx-auto grid max-w-4xl gap-6">
@@ -61,11 +62,10 @@ export function MissionCompleteScreen() {
               <PartyPopper className="h-10 w-10" />
             </div>
             <h2 className="font-display text-4xl text-slate-900">{level.title}</h2>
-            <p className="text-slate-600">{outcome.success ? 'עבודה מצוינת. אפשר להמשיך למשימה הבאה.' : 'הסבר מלא זמין בלחיצה.'}</p>
-            <div className="text-3xl">
-              {Array.from({ length: outcome.starsEarned }, (_, index) =>
-                index < outcome.starsEarned ? '⭐' : '☆',
-              ).join(' ')}
+            <p className="text-slate-600">{outcome.success ? 'עֲבוֹדָה מְצֻיֶּנֶת. אֶפְשָׁר לְהַמְשִׁיךְ לַמְּשִׂימָה הַבָּאָה.' : 'הֶסְבֵּר מָלֵא זָמִין בִּלְחִיצָה.'}</p>
+            <div className="inline-flex items-center justify-center gap-3 rounded-full bg-[#fff4e8] px-5 py-3 text-2xl font-black text-[#d97706]">
+              <span>⭐</span>
+              <span>x{outcome.starsEarned}</span>
             </div>
           </div>
         </Card>
@@ -93,12 +93,12 @@ export function MissionCompleteScreen() {
         </div>
 
         <div className="flex flex-wrap gap-3">
-          <Button onClick={() => navigate(`/worlds/${level.worldId}/missions`)}>
-            ממשיכים למשימות
+          <Button onClick={() => navigate('/worlds')}>
+            חוזרים למפה
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <Button onClick={() => setShowExplanation(true)} variant="secondary">
-            רואים הסבר מלא
+            רואים הֶסְבֵּר מָלֵא
           </Button>
           <Button onClick={() => navigate(`/game/${level.id}`)} variant="secondary">
             <RotateCcw className="h-5 w-5" />
@@ -111,12 +111,12 @@ export function MissionCompleteScreen() {
         </div>
       </div>
 
-      <Modal onClose={() => setShowExplanation(false)} open={showExplanation} title="הסבר מלא">
+      <Modal onClose={() => setShowExplanation(false)} open={showExplanation} title="הֶסְבֵּר מָלֵא">
         <div className="space-y-4">
           <p className="rounded-[24px] bg-[#f8fafc] px-4 py-4 text-slate-700">{outcome.explanation}</p>
           <div className="space-y-3">
-            {level.hints.map((hint) => (
-              <div className="rounded-[22px] bg-white px-4 py-4 shadow-sm" key={hint.step}>
+            {summaryHints.map((hint, index) => (
+              <div className="rounded-[22px] bg-white px-4 py-4 shadow-sm" key={`${hint.step}-${index + 1}`}>
                 <p className="text-sm font-semibold tracking-[0.18em] text-slate-500">שלב {hint.step}</p>
                 <p className="mt-2 font-bold text-slate-900">{hint.title}</p>
                 <p className="mt-1 text-sm text-slate-600">{hint.body}</p>

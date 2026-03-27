@@ -5,7 +5,8 @@ import {
   type ReactNode,
 } from 'react'
 
-import { createOwnedCreature } from '@/game/content/creatures'
+import { createOwnedCreature, creatureCatalog } from '@/game/content/creatures'
+import { homeWorldCatalog } from '@/game/content/home-worlds'
 import { missionCatalog, seedChildProfiles, worldCatalog } from '@/game/content/catalog'
 import { GameContext, type CompleteMissionInput, type GameContextValue } from '@/store/game-context'
 import type {
@@ -19,14 +20,44 @@ import type {
 } from '@/types/models'
 import { loadStoredSnapshot, persistSnapshot, syncSnapshot } from '@/services/progressService'
 
+const maxCreaturesInHome = 4
+const demoUnlockedWorldIds = worldCatalog.map((world) => world.id)
+
+function mergeSeedProfiles(childProfiles: ChildProfile[] | undefined) {
+  const mergedProfiles = new Map(seedChildProfiles.map((profile) => [profile.id, profile]))
+
+  childProfiles?.forEach((profile) => {
+    mergedProfiles.set(profile.id, profile)
+  })
+
+  return [...mergedProfiles.values()].sort((left, right) => left.age - right.age)
+}
+
+function normalizeOwnedCreaturePlacement(creature: GameState['ownedCreatures'][number], fallbackHomeWorldId: string) {
+  const placedHomeWorldId =
+    typeof creature.placedHomeWorldId === 'string'
+      ? creature.placedHomeWorldId
+      : creature.placedInHome
+        ? fallbackHomeWorldId
+        : null
+
+  return {
+    ...creature,
+    placedInHome: Boolean(placedHomeWorldId),
+    placedHomeWorldId,
+    specialRequestCount: typeof creature.specialRequestCount === 'number' ? creature.specialRequestCount : 0,
+  }
+}
+
 const defaultState: GameState = {
   currentUser: null,
   childProfiles: seedChildProfiles,
   currentChildProfileId: seedChildProfiles[0]?.id ?? null,
+  currentHomeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
   xp: 420,
   coins: 135,
   stars: 28,
-  unlockedWorlds: ['forest-of-numbers', 'castle-of-reading', 'space-english'],
+  unlockedWorlds: demoUnlockedWorldIds,
   progressBySubject: {
     math: { completed: 3, total: 8, accuracy: 92 },
     reading: { completed: 2, total: 8, accuracy: 84 },
@@ -45,6 +76,7 @@ const defaultState: GameState = {
     {
       ...createOwnedCreature('sun-corgi', '2026-03-12T08:00:00.000Z'),
       placedInHome: true,
+      placedHomeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
       lastFedAt: '2026-03-13T08:00:00.000Z',
       lastPettedAt: '2026-03-13T09:00:00.000Z',
       lastPlayedAt: '2026-03-13T10:00:00.000Z',
@@ -70,6 +102,7 @@ const defaultState: GameState = {
 type GameAction =
   | { type: 'SET_USER'; payload: AppUser | null }
   | { type: 'SET_CURRENT_CHILD'; payload: string }
+  | { type: 'SET_CURRENT_HOME_WORLD'; payload: string }
   | { type: 'UPSERT_CHILD'; payload: ChildProfile }
   | { type: 'UPDATE_AVATAR'; payload: { childId: string; avatarSeed: AvatarSelection } }
   | { type: 'START_MISSION'; payload: string }
@@ -82,8 +115,9 @@ type GameAction =
   | { type: 'ADD_STARS'; payload: number }
   | { type: 'BUY_ITEM'; payload: { itemId: string; price: number } }
   | { type: 'BUY_CREATURE'; payload: { creatureId: string; priceStars: number; purchasedAt: string } }
-  | { type: 'TOGGLE_CREATURE_PLACEMENT'; payload: string }
+  | { type: 'TOGGLE_CREATURE_PLACEMENT'; payload: { creatureId: string; homeWorldId: string } }
   | { type: 'CARE_FOR_CREATURE'; payload: { creatureId: string; action: CreatureCareAction; at: string; rewardStars: number } }
+  | { type: 'COMPLETE_SPECIAL_REQUEST'; payload: { creatureId: string; rewardStars: number } }
   | { type: 'TOGGLE_CREATURE_ITEM'; payload: { creatureId: string; itemId: string } }
   | { type: 'UPDATE_SETTINGS'; payload: Partial<GameSettings> }
   | { type: 'UPDATE_DAILY_LIMITS'; payload: Partial<DailyLimits> }
@@ -96,11 +130,10 @@ function migrateLegacyPetEggs(
     return []
   }
 
-  const creatureIdByEggId: Record<string, string> = {
-    'moon-fox-egg': 'moon-fox',
-    'bubble-dragon-egg': 'bubble-dragon',
-    'sun-corgi-egg': 'sun-corgi',
-  }
+  const creatureIdByEggId = creatureCatalog.reduce<Record<string, string>>((mapping, creature) => {
+    mapping[`${creature.id}-egg`] = creature.id
+    return mapping
+  }, {})
 
   return petEggs.flatMap((egg) => {
     const creatureId = creatureIdByEggId[egg.eggId]
@@ -124,7 +157,9 @@ function getInitialState() {
 
   const migratedOwnedCreatures =
     storedSnapshot.ownedCreatures?.length
-      ? storedSnapshot.ownedCreatures
+      ? storedSnapshot.ownedCreatures.map((creature) =>
+          normalizeOwnedCreaturePlacement(creature, storedSnapshot.currentHomeWorldId ?? defaultState.currentHomeWorldId),
+        )
       : migrateLegacyPetEggs(storedSnapshot.petEggs)
 
   const migratedOutcome = storedSnapshot.lastMissionOutcome
@@ -140,18 +175,20 @@ function getInitialState() {
       }
     : null
 
+  const mergedChildProfiles = mergeSeedProfiles(storedSnapshot.childProfiles)
+  const currentChildProfileId = mergedChildProfiles.some((profile) => profile.id === storedSnapshot.currentChildProfileId)
+    ? storedSnapshot.currentChildProfileId ?? defaultState.currentChildProfileId
+    : mergedChildProfiles[0]?.id ?? defaultState.currentChildProfileId
+
   return {
     ...defaultState,
     ...storedSnapshot,
     stars: storedSnapshot.stars ?? defaultState.stars,
-    childProfiles: storedSnapshot.childProfiles?.length
-      ? storedSnapshot.childProfiles
-      : defaultState.childProfiles,
+    childProfiles: mergedChildProfiles,
+    currentHomeWorldId: storedSnapshot.currentHomeWorldId ?? defaultState.currentHomeWorldId,
+    unlockedWorlds: Array.from(new Set([...(storedSnapshot.unlockedWorlds ?? []), ...defaultState.unlockedWorlds])),
     ownedCreatures: migratedOwnedCreatures.length ? migratedOwnedCreatures : defaultState.ownedCreatures,
-    currentChildProfileId:
-      storedSnapshot.currentChildProfileId ??
-      storedSnapshot.childProfiles?.[0]?.id ??
-      defaultState.currentChildProfileId,
+    currentChildProfileId,
     lastMissionOutcome: migratedOutcome,
   }
 }
@@ -202,6 +239,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         currentChildProfileId: action.payload,
       }
 
+    case 'SET_CURRENT_HOME_WORLD':
+      return {
+        ...state,
+        currentHomeWorldId: action.payload,
+      }
+
     case 'UPSERT_CHILD': {
       const exists = state.childProfiles.some((profile) => profile.id === action.payload.id)
 
@@ -243,7 +286,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         accuracy: 0,
       }
       const starsEarned =
-        action.payload.score >= 95 ? 3 : action.payload.score >= 80 ? 2 : 1
+        action.payload.starsEarned ??
+        (action.payload.score >= 95 ? 3 : action.payload.score >= 80 ? 2 : 1)
       const alreadyCompleted = state.childProfiles
         .find((profile) => profile.id === state.currentChildProfileId)
         ?.completedLevelIds.includes(action.payload.levelId)
@@ -327,13 +371,38 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       }
 
     case 'TOGGLE_CREATURE_PLACEMENT':
+      if (
+        !state.ownedCreatures.find((creature) => creature.creatureId === action.payload.creatureId)
+      ) {
+        return state
+      }
+
+      if (
+        state.ownedCreatures.find((creature) => creature.creatureId === action.payload.creatureId)?.placedHomeWorldId !==
+          action.payload.homeWorldId &&
+        state.ownedCreatures.find((creature) => creature.creatureId === action.payload.creatureId)?.placedHomeWorldId
+      ) {
+        return state
+      }
+
+      if (
+        state.ownedCreatures.find((creature) => creature.creatureId === action.payload.creatureId)?.placedHomeWorldId !==
+          action.payload.homeWorldId &&
+        state.ownedCreatures.filter((creature) => creature.placedHomeWorldId === action.payload.homeWorldId).length >=
+          maxCreaturesInHome
+      ) {
+        return state
+      }
+
       return {
         ...state,
         ownedCreatures: state.ownedCreatures.map((creature) =>
-          creature.creatureId === action.payload
+          creature.creatureId === action.payload.creatureId
             ? {
                 ...creature,
-                placedInHome: !creature.placedInHome,
+                placedInHome: creature.placedHomeWorldId !== action.payload.homeWorldId,
+                placedHomeWorldId:
+                  creature.placedHomeWorldId === action.payload.homeWorldId ? null : action.payload.homeWorldId,
               }
             : creature,
         ),
@@ -374,6 +443,20 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         ),
       }
     }
+
+    case 'COMPLETE_SPECIAL_REQUEST':
+      return {
+        ...state,
+        stars: state.stars + action.payload.rewardStars,
+        ownedCreatures: state.ownedCreatures.map((creature) =>
+          creature.creatureId === action.payload.creatureId
+            ? {
+                ...creature,
+                specialRequestCount: creature.specialRequestCount + 1,
+              }
+            : creature,
+        ),
+      }
 
     case 'TOGGLE_CREATURE_ITEM':
       return {
@@ -424,6 +507,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
           level: 1,
         })),
         currentChildProfileId: state.currentChildProfileId,
+        currentHomeWorldId: defaultState.currentHomeWorldId,
       }
 
     default:
@@ -455,6 +539,13 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setCurrentChildProfile(childId) {
       dispatch({ type: 'SET_CURRENT_CHILD', payload: childId })
     },
+    setCurrentHomeWorld(homeWorldId) {
+      if (!homeWorldCatalog.some((homeWorld) => homeWorld.id === homeWorldId)) {
+        return
+      }
+
+      dispatch({ type: 'SET_CURRENT_HOME_WORLD', payload: homeWorldId })
+    },
     addChildProfile(profile) {
       dispatch({ type: 'UPSERT_CHILD', payload: profile })
     },
@@ -468,15 +559,21 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatch({ type: 'START_MISSION', payload: levelId })
     },
     completeMission(input) {
+      const alreadyCompleted = state.childProfiles
+        .find((profile) => profile.id === state.currentChildProfileId)
+        ?.completedLevelIds.includes(input.levelId)
+      const starsEarned =
+        input.starsEarned ?? (input.score >= 95 ? 3 : input.score >= 80 ? 2 : 1)
+
       dispatch({ type: 'COMPLETE_MISSION', payload: input })
 
       return {
         success: true,
         levelId: input.levelId,
         score: input.score,
-        xpEarned: input.xpEarned,
-        coinsEarned: input.coinsEarned,
-        starsEarned: input.score >= 95 ? 3 : input.score >= 80 ? 2 : 1,
+        xpEarned: alreadyCompleted ? 0 : input.xpEarned,
+        coinsEarned: alreadyCompleted ? 0 : input.coinsEarned,
+        starsEarned: alreadyCompleted ? 0 : starsEarned,
         explanation: input.explanation,
       }
     },
@@ -512,8 +609,28 @@ export function GameProvider({ children }: { children: ReactNode }) {
       })
       return 'success'
     },
-    toggleCreaturePlacement(creatureId) {
-      dispatch({ type: 'TOGGLE_CREATURE_PLACEMENT', payload: creatureId })
+    toggleCreaturePlacement(creatureId, homeWorldId) {
+      const ownedCreature = state.ownedCreatures.find((creature) => creature.creatureId === creatureId)
+
+      if (!ownedCreature) {
+        return 'room-full'
+      }
+
+      if (ownedCreature.placedHomeWorldId === homeWorldId) {
+        dispatch({ type: 'TOGGLE_CREATURE_PLACEMENT', payload: { creatureId, homeWorldId } })
+        return 'removed'
+      }
+
+      if (ownedCreature.placedHomeWorldId && ownedCreature.placedHomeWorldId !== homeWorldId) {
+        return 'assigned-other-room'
+      }
+
+      if (state.ownedCreatures.filter((creature) => creature.placedHomeWorldId === homeWorldId).length >= maxCreaturesInHome) {
+        return 'room-full'
+      }
+
+      dispatch({ type: 'TOGGLE_CREATURE_PLACEMENT', payload: { creatureId, homeWorldId } })
+      return 'placed'
     },
     careForCreature(creatureId, action, rewardStars) {
       if (!state.ownedCreatures.some((creature) => creature.creatureId === creatureId)) {
@@ -523,6 +640,17 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatch({
         type: 'CARE_FOR_CREATURE',
         payload: { creatureId, action, at: new Date().toISOString(), rewardStars },
+      })
+      return true
+    },
+    completeSpecialRequest(creatureId, rewardStars) {
+      if (!state.ownedCreatures.some((creature) => creature.creatureId === creatureId)) {
+        return false
+      }
+
+      dispatch({
+        type: 'COMPLETE_SPECIAL_REQUEST',
+        payload: { creatureId, rewardStars },
       })
       return true
     },

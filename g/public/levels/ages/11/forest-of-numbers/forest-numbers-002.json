@@ -1,0 +1,1523 @@
+{
+  "version": 1,
+  "id": "forest-numbers-002",
+  "worldId": "forest-of-numbers",
+  "missionId": "forest-echo",
+  "title": "צלילי הספירה",
+  "subject": "math",
+  "instructions": "מגלים את החוק, פותרים בעיה קצרה ובוחרים תשובה אחת נכונה.",
+  "difficulty": "hard",
+  "rewards": {
+    "xp": 114,
+    "coins": 45,
+    "starsPerQuestion": 3,
+    "badgeId": "math-sprout"
+  },
+  "completionRules": {
+    "passingScore": 70,
+    "maxMistakes": 90
+  },
+  "assets": [],
+  "activities": [
+    {
+      "id": "forest-numbers-002-q01",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/4 מתאים ל-25%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "25%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/4 מתאים ל-25%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q02",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/2?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/2 מתאים ל-50%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/2?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "50%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/2 מתאים ל-50%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q03",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-3/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "3/4 מתאים ל-75%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-3/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "75%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "3/4 מתאים ל-75%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q04",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/10?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/10 מתאים ל-10%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/10?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "10%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/10 מתאים ל-10%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q05",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/4 מתאים ל-25%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "25%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/4 מתאים ל-25%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q06",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/2?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/2 מתאים ל-50%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/2?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "50%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/2 מתאים ל-50%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q07",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-3/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "3/4 מתאים ל-75%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-3/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "75%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "3/4 מתאים ל-75%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q08",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/10?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/10 מתאים ל-10%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/10?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "10%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/10 מתאים ל-10%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q09",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/4?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/4 מתאים ל-25%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/4?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "25%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/4 מתאים ל-25%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q10",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "איזה אחוז שווה ל-1/2?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "1/2 מתאים ל-50%."
+        }
+      ],
+      "content": {
+        "prompt": "איזה אחוז שווה ל-1/2?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "50%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-2",
+            "label": "20%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-3",
+            "label": "40%",
+            "emoji": "📊"
+          },
+          {
+            "id": "option-4",
+            "label": "80%",
+            "emoji": "📊"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "1/2 מתאים ל-50%."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q11",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 8 ורוחב 6. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (8 + 6), ולכן התשובה היא 28."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 8 ורוחב 6. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "48",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "32",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "26",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (8 + 6), ולכן התשובה היא 28."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q12",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 9 ורוחב 7. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (9 + 7), ולכן התשובה היא 32."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 9 ורוחב 7. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "32",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "63",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "36",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "30",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (9 + 7), ולכן התשובה היא 32."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q13",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 6 ורוחב 5. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (6 + 5), ולכן התשובה היא 22."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 6 ורוחב 5. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "22",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "26",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "20",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (6 + 5), ולכן התשובה היא 22."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q14",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 7 ורוחב 6. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (7 + 6), ולכן התשובה היא 26."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 7 ורוחב 6. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "26",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "42",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "24",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (7 + 6), ולכן התשובה היא 26."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q15",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 8 ורוחב 7. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (8 + 7), ולכן התשובה היא 30."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 8 ורוחב 7. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "56",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "34",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "28",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (8 + 7), ולכן התשובה היא 30."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q16",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 9 ורוחב 5. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (9 + 5), ולכן התשובה היא 28."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 9 ורוחב 5. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "45",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "32",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "26",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (9 + 5), ולכן התשובה היא 28."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q17",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 6 ורוחב 6. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (6 + 6), ולכן התשובה היא 24."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 6 ורוחב 6. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "24",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "36",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "22",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (6 + 6), ולכן התשובה היא 24."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q18",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 7 ורוחב 7. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (7 + 7), ולכן התשובה היא 28."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 7 ורוחב 7. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "28",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "49",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "32",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "26",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (7 + 7), ולכן התשובה היא 28."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q19",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 8 ורוחב 5. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (8 + 5), ולכן התשובה היא 26."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 8 ורוחב 5. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "26",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "40",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "24",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (8 + 5), ולכן התשובה היא 26."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q20",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "לגן מלבני יש אורך 9 ורוחב 6. מה ההיקף שלו?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "ההיקף הוא 2 כפול (9 + 6), ולכן התשובה היא 30."
+        }
+      ],
+      "content": {
+        "prompt": "לגן מלבני יש אורך 9 ורוחב 6. מה ההיקף שלו?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "30",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-2",
+            "label": "54",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-3",
+            "label": "34",
+            "emoji": "📏"
+          },
+          {
+            "id": "option-4",
+            "label": "28",
+            "emoji": "📏"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "ההיקף הוא 2 כפול (9 + 6), ולכן התשובה היא 30."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q21",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 80 שקלים ויש עליה הנחה של 10%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 10% מ-80, ולכן המחיר החדש הוא 72."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 80 שקלים ויש עליה הנחה של 10%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "72",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "77",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "67",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "80",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 10% מ-80, ולכן המחיר החדש הוא 72."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q22",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 90 שקלים ויש עליה הנחה של 15%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 15% מ-90, ולכן המחיר החדש הוא 76.5."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 90 שקלים ויש עליה הנחה של 15%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "76.5",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "81.5",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "71.5",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "90",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 15% מ-90, ולכן המחיר החדש הוא 76.5."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q23",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 100 שקלים ויש עליה הנחה של 20%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 20% מ-100, ולכן המחיר החדש הוא 80."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 100 שקלים ויש עליה הנחה של 20%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "80",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "85",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "75",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "100",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 20% מ-100, ולכן המחיר החדש הוא 80."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q24",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 110 שקלים ויש עליה הנחה של 25%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 25% מ-110, ולכן המחיר החדש הוא 82.5."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 110 שקלים ויש עליה הנחה של 25%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "82.5",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "87.5",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "77.5",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "110",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 25% מ-110, ולכן המחיר החדש הוא 82.5."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q25",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 120 שקלים ויש עליה הנחה של 10%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 10% מ-120, ולכן המחיר החדש הוא 108."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 120 שקלים ויש עליה הנחה של 10%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "108",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "113",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "103",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "120",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 10% מ-120, ולכן המחיר החדש הוא 108."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q26",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 80 שקלים ויש עליה הנחה של 15%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 15% מ-80, ולכן המחיר החדש הוא 68."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 80 שקלים ויש עליה הנחה של 15%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "68",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "73",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "63",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "80",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 15% מ-80, ולכן המחיר החדש הוא 68."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q27",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 90 שקלים ויש עליה הנחה של 20%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 20% מ-90, ולכן המחיר החדש הוא 72."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 90 שקלים ויש עליה הנחה של 20%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "72",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "77",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "67",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "90",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 20% מ-90, ולכן המחיר החדש הוא 72."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q28",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 100 שקלים ויש עליה הנחה של 25%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 25% מ-100, ולכן המחיר החדש הוא 75."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 100 שקלים ויש עליה הנחה של 25%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "75",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "80",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "70",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "100",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 25% מ-100, ולכן המחיר החדש הוא 75."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q29",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 110 שקלים ויש עליה הנחה של 10%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 10% מ-110, ולכן המחיר החדש הוא 99."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 110 שקלים ויש עליה הנחה של 10%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "99",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "104",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "94",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "110",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 10% מ-110, ולכן המחיר החדש הוא 99."
+      }
+    },
+    {
+      "id": "forest-numbers-002-q30",
+      "type": "multiple_choice",
+      "difficulty": "hard",
+      "hints": [
+        {
+          "step": 1,
+          "title": "קוראים את השאלה",
+          "body": "חולצה עולה 120 שקלים ויש עליה הנחה של 15%. מה המחיר אחרי ההנחה?"
+        },
+        {
+          "step": 2,
+          "title": "בודקים את כל האפשרויות",
+          "body": "מחפשים את התשובה שבאמת מתאימה לשאלה."
+        },
+        {
+          "step": 3,
+          "title": "פותרים צעד אחר צעד",
+          "body": "מורידים 15% מ-120, ולכן המחיר החדש הוא 102."
+        }
+      ],
+      "content": {
+        "prompt": "חולצה עולה 120 שקלים ויש עליה הנחה של 15%. מה המחיר אחרי ההנחה?",
+        "question": "בחרו את התשובה הנכונה.",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "102",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-2",
+            "label": "107",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-3",
+            "label": "97",
+            "emoji": "🏷️"
+          },
+          {
+            "id": "option-4",
+            "label": "120",
+            "emoji": "🏷️"
+          }
+        ],
+        "correctOptionId": "option-1",
+        "explanation": "מורידים 15% מ-120, ולכן המחיר החדש הוא 102."
+      }
+    }
+  ]
+}
