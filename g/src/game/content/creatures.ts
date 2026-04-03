@@ -6,6 +6,7 @@ import type {
   CreatureCareAction,
   CreatureCareRequirements,
   CreatureDefinition,
+  CreaturePurchasePrice,
   CreatureStageDefinition,
   OwnedCreature,
 } from '@/types/models'
@@ -17,6 +18,13 @@ function applyCreaturePriceOverride(creature: CreatureDefinition): CreatureDefin
 
   if (typeof overriddenPrice !== 'number') {
     return creature
+  }
+
+  if (typeof creature.priceCoins === 'number') {
+    return {
+      ...creature,
+      priceCoins: overriddenPrice,
+    }
   }
 
   return {
@@ -239,4 +247,18 @@ export function getCreatureMoodLabel(action: CreatureCareAction | null) {
   }
 
   return 'שָׂמֵחַ וּמְטַיֵּל'
+}
+
+export function getCreaturePurchasePrice(creature: CreatureDefinition): CreaturePurchasePrice {
+  if (typeof creature.priceCoins === 'number') {
+    return {
+      currency: 'coins',
+      amount: creature.priceCoins,
+    }
+  }
+
+  return {
+    currency: 'stars',
+    amount: creature.priceStars ?? 0,
+  }
 }

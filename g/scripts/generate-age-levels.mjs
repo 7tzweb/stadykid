@@ -15,8 +15,11 @@ const supportedAges = [4, 5, 6, 7, 8, 9, 10, 11, 12]
 const activitiesPerStage = 30
 const defaultAge = 6
 const starsPerQuestion = 3
+const minimumContentAge = 3
+const maximumContentAge = 13
 
 const primaryDifficultyByAge = {
+  3: 'easy',
   4: 'easy',
   5: 'easy',
   6: 'easy',
@@ -26,9 +29,11 @@ const primaryDifficultyByAge = {
   10: 'medium',
   11: 'hard',
   12: 'hard',
+  13: 'hard',
 }
 
 const secondaryDifficultyByAge = {
+  3: 'easy',
   4: 'easy',
   5: 'easy',
   6: 'medium',
@@ -38,9 +43,16 @@ const secondaryDifficultyByAge = {
   10: 'hard',
   11: 'hard',
   12: 'hard',
+  13: 'hard',
 }
 
 const ageProfiles = {
+  3: {
+    mathPrimaryMax: 8,
+    mathSecondaryMax: 8,
+    memoryPrimaryPairs: 3,
+    memorySecondaryPairs: 3,
+  },
   4: {
     mathPrimaryMax: 10,
     mathSecondaryMax: 12,
@@ -93,6 +105,12 @@ const ageProfiles = {
     mathPrimaryMax: 1000,
     mathSecondaryMax: 1000,
     memoryPrimaryPairs: 7,
+    memorySecondaryPairs: 8,
+  },
+  13: {
+    mathPrimaryMax: 1000,
+    mathSecondaryMax: 1000,
+    memoryPrimaryPairs: 8,
     memorySecondaryPairs: 8,
   },
 }
@@ -294,6 +312,9 @@ const englishVocabulary = [
   { word: 'journey', meaning: 'מַסָּע', emoji: '🧭', minAge: 12 },
   { word: 'discover', meaning: 'לְגַלּוֹת', emoji: '🔎', minAge: 12 },
   { word: 'protect', meaning: 'לְהַגֵּן', emoji: '🛡️', minAge: 12 },
+  { word: 'solution', meaning: 'פִּתְרוֹן', emoji: '💡', minAge: 13 },
+  { word: 'pattern', meaning: 'תַּבְנִית', emoji: '🧩', minAge: 13 },
+  { word: 'measure', meaning: 'לִמְדֹּד', emoji: '📏', minAge: 13 },
 ]
 
 const englishSentenceFrames = [
@@ -316,6 +337,9 @@ const englishSentenceFrames = [
   { sentence: 'Our class went on a long ___.', options: ['journey', 'window', 'green', 'plate'], answer: 'journey', minAge: 12 },
   { sentence: 'We must ___ the small animals.', options: ['protect', 'window', 'yellow', 'chair'], answer: 'protect', minAge: 12 },
   { sentence: 'The team will ___ a hidden cave.', options: ['discover', 'orange', 'pencil', 'cloud'], answer: 'discover', minAge: 12 },
+  { sentence: 'Look for the number ___.', options: ['pattern', 'banana', 'milk', 'duck'], answer: 'pattern', minAge: 13 },
+  { sentence: 'We need a good ___ for the problem.', options: ['solution', 'window', 'garden', 'chair'], answer: 'solution', minAge: 13 },
+  { sentence: 'Use the ruler to ___ the line.', options: ['measure', 'flower', 'purple', 'sleep'], answer: 'measure', minAge: 13 },
 ]
 
 const youngLogicThemes = [
@@ -654,6 +678,7 @@ const stageSpecs = [
 const scriptDir = path.dirname(fileURLToPath(import.meta.url))
 const levelsRoot = path.resolve(scriptDir, '../public/levels')
 const ageLevelsRoot = path.join(levelsRoot, 'ages')
+const advancedLevelsRoot = path.join(levelsRoot, 'advanced')
 
 function stripNikud(value) {
   return value.normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC')
@@ -721,8 +746,54 @@ function textForAge(age, value) {
   return age < 10 ? value : toPlainText(value)
 }
 
+function transformTextTreeForDisplayAge(value, displayAge) {
+  if (typeof value === 'string') {
+    return textForAge(displayAge, value)
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry) => transformTextTreeForDisplayAge(entry, displayAge))
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, entry]) => [key, transformTextTreeForDisplayAge(entry, displayAge)]),
+    )
+  }
+
+  return value
+}
+
+function formatCountNoun(age, count, item) {
+  return textForAge(age, count === 1 ? item.singular : item.plural)
+}
+
 function formatCountLabel(age, count, item) {
-  return `${count} ${textForAge(age, item.plural)}`
+  return `${count} ${formatCountNoun(age, count, item)}`
+}
+
+function makeUniqueNumberOptions(seedValues, correct, minimum = 1) {
+  const uniqueOptions = []
+  const seen = new Set()
+
+  const pushIfValid = (value) => {
+    if (!Number.isFinite(value) || value < minimum || seen.has(value)) {
+      return
+    }
+
+    seen.add(value)
+    uniqueOptions.push(value)
+  }
+
+  seedValues.forEach(pushIfValid)
+
+  let fallback = Math.max(minimum, correct + 1)
+  while (uniqueOptions.length < 4) {
+    pushIfValid(fallback)
+    fallback += 1
+  }
+
+  return uniqueOptions.slice(0, 4)
 }
 
 function cyclePick(list, index) {
@@ -737,21 +808,210 @@ function makeOption(id, label, emoji) {
   }
 }
 
+function resolveStandardContentAge(displayAge) {
+  return Math.max(minimumContentAge, displayAge - 1)
+}
+
+function resolveAdvancedContentAge(displayAge) {
+  return Math.min(maximumContentAge, displayAge + 1)
+}
+
+function joinTeachingSentences(age, sentences) {
+  return textForAge(
+    age,
+    sentences
+      .filter(Boolean)
+      .map((sentence) => sentence.trim())
+      .join(' '),
+  )
+}
+
+function explainCounting(age, count, item) {
+  return joinTeachingSentences(age, [
+    `סוֹפְרִים לְאַט אֶחָד אֶחָד אֶת הַ-${item.plural}.`,
+    `כְּשֶׁמַּגִּיעִים לְ-${count}, עוֹצְרִים וּבוֹדְקִים שֶׁלֹּא פָּסַחְנוּ עַל שׁוּם פְּרִיט.`,
+    `לָכֵן הַקְּבוּצָה הַנְּכוֹנָה הִיא זוֹ שֶׁיֵּשׁ בָּהּ בְּדִיּוּק ${formatCountLabel(age, count, item)}.`,
+  ])
+}
+
+function explainComparison(age, left, right, correct, mode) {
+  const smaller = Math.min(left, right)
+  const larger = Math.max(left, right)
+  return joinTeachingSentences(age, [
+    `מַשְׁוִים בֵּין ${left} לְ-${right}.`,
+    mode === 'larger'
+      ? `${larger} גָּדוֹל יוֹתֵר כִּי הוּא בָּא אַחֲרֵי ${smaller} בַּסְּפִירָה.`
+      : `${smaller} קָטָן יוֹתֵר כִּי הוּא בָּא לִפְנֵי ${larger} בַּסְּפִירָה.`,
+    `לָכֵן הַתְּשׁוּבָה הַנְּכוֹנָה הִיא ${correct}.`,
+  ])
+}
+
+function explainAddition(age, left, right, correct) {
+  return joinTeachingSentences(age, [
+    `מְחַבְּרִים אֶת ${left} וְאֶת ${right}.`,
+    `אֶפְשָׁר לִסְפֹּר ${left} וְעוֹד ${right}, אוֹ לְהַמְשִׁיךְ מִ-${left} עוֹד ${right} צְעָדִים.`,
+    `${left} + ${right} = ${correct}, וְלָכֵן זוֹ הַתְּשׁוּבָה הַנְּכוֹנָה.`,
+  ])
+}
+
+function explainSubtraction(age, left, right, correct) {
+  return joinTeachingSentences(age, [
+    `מַתְחִילִים מִ-${left} וּמַחְסִירִים ${right}.`,
+    `אֶפְשָׁר לִסְפֹּר אָחוֹרָה ${right} צְעָדִים אוֹ לְהוֹרִיד ${right} פְּרִיטִים.`,
+    `${left} - ${right} = ${correct}, וְלָכֵן זוֹ הַתְּשׁוּבָה הַנְּכוֹנָה.`,
+  ])
+}
+
+function explainPlaceValue(age, tens, ones, correct) {
+  return joinTeachingSentences(age, [
+    `${tens} עֲשָׂרוֹת הֵן ${tens * 10}.`,
+    `מוֹסִיפִים עוֹד ${ones} אַחָדוֹת.`,
+    `${tens * 10} + ${ones} = ${correct}, וְלָכֵן הַמִּסְפָּר הַנָּכוֹן הוּא ${correct}.`,
+  ])
+}
+
+function explainGroupsTotal(age, groups, each, correct) {
+  return joinTeachingSentences(age, [
+    `יֵשׁ ${groups} קְבוּצוֹת, וּבְכָל קְבוּצָה יֵשׁ ${each}.`,
+    `מְחַבְּרִים ${each} עוֹד ${each} ${groups} פְּעָמִים, אוֹ כּוֹתְבִים ${groups} × ${each}.`,
+    `${groups} × ${each} = ${correct}, וְלָכֵן בַּסַּךְ הַכֹּל יֵשׁ ${correct}.`,
+  ])
+}
+
+function explainMultiplication(age, left, right, correct) {
+  return joinTeachingSentences(age, [
+    `כֶּפֶל הוּא חִבּוּר חוֹזֵר.`,
+    `${left} × ${right} פֵּרוּשׁוֹ ${left} קְבוּצוֹת שֶׁל ${right} אוֹ ${right} קְבוּצוֹת שֶׁל ${left}.`,
+    `כְּשֶׁמְּחַבְּרִים אוֹ כּוֹפְלִים מְקַבְּלִים ${correct}, וְזוֹ הַתְּשׁוּבָה הַנְּכוֹנָה.`,
+  ])
+}
+
+function explainDivision(age, total, groups, correct) {
+  const remainder = total % groups
+  const wholePart = total - remainder
+  const wholeQuotient = wholePart / groups
+  const remainderQuotient = remainder === 0 ? 0 : remainder / groups
+
+  if (remainder === 0) {
+    return joinTeachingSentences(age, [
+      `מְחַלְּקִים אֶת ${total} לְ-${groups} קְבוּצוֹת שָׁווֹת.`,
+      `אֶפְשָׁר לִבְדֹּק בְּעֶזְרַת כֶּפֶל הָפוּךְ: אִם בְּכָל קְבוּצָה יֵשׁ ${correct}, אָז ${correct} × ${groups} = ${total}.`,
+      `לָכֵן ${total} ÷ ${groups} = ${correct}, וּבְכָל קְבוּצָה יֵשׁ ${correct}.`,
+    ])
+  }
+
+  return joinTeachingSentences(age, [
+    `מְחַלְּקִים אֶת ${total} לְ-${groups} קְבוּצוֹת שָׁווֹת.`,
+    `קוֹדֶם מְחַלְּקִים אֶת ${wholePart} לְ-${groups}, וּמְקַבְּלִים ${wholeQuotient}.`,
+    `אַחַר כָּךְ מְחַלְּקִים גַּם אֶת הַשְּׁאֵרִית ${remainder} לְ-${groups}, וּמְקַבְּלִים ${remainderQuotient}.`,
+    `מְחַבְּרִים ${wholeQuotient} וְ-${remainderQuotient}, וּמְקַבְּלִים ${correct}. לָכֵן בְּכָל קְבוּצָה יֵשׁ ${correct}.`,
+  ])
+}
+
+function explainFractionName(age, label, numerator, denominator) {
+  return joinTeachingSentences(age, [
+    `מִסְתַּכְּלִים עַל הַמּוֹנֶה וְעַל הַמְּכַנֶּה.`,
+    `הַמּוֹנֶה ${numerator} אוֹמֵר כַּמָּה חֲלָקִים לָקַחְנוּ, וְהַמְּכַנֶּה ${denominator} אוֹמֵר לְכַמָּה חֲלָקִים חִלַּקְנוּ אֶת הַשָּׁלֵם.`,
+    `לָכֵן הַכְּתִיבָה הַנְּכוֹנָה הִיא ${label}.`,
+  ])
+}
+
+function explainSequence(age, values, step, correct) {
+  return joinTeachingSentences(age, [
+    `בּוֹדְקִים מָה קוֹרֶה בֵּין הַמִּסְפָּרִים ${values.join(', ')}.`,
+    `כָּאן מוֹסִיפִים כָּל פַּעַם ${step}.`,
+    `לָכֵן לַמִּסְפָּר הָאַחֲרוֹן מוֹסִיפִים ${step} וּמְקַבְּלִים ${correct}.`,
+  ])
+}
+
+function explainPartOfWhole(age, total, denominator, correct) {
+  return joinTeachingSentences(age, [
+    `כְּדֵי לִמְצֹא חֵלֶק מִתּוֹךְ כָּל הַכַּמּוּת, מְחַלְּקִים אֶת ${total} לְ-${denominator} חֲלָקִים שָׁוִים.`,
+    `${total} ÷ ${denominator} = ${correct}.`,
+    `לָכֵן זֶהוּ הַחֵלֶק הַנָּכוֹן.`,
+  ])
+}
+
+function explainDecimalConversion(age, fraction, decimal) {
+  return joinTeachingSentences(age, [
+    `מְחַפְּשִׂים אֵיזֶה מִסְפָּר עֶשְׂרוֹנִי מַתְאִים לַשֶּׁבֶר ${fraction}.`,
+    `כְּשֶׁמְּמִירִים אֶת הַשֶּׁבֶר לְמִסְפָּר עֶשְׂרוֹנִי, מְקַבְּלִים ${decimal}.`,
+    `לָכֵן זוֹ הַתְּשׁוּבָה הַנְּכוֹנָה.`,
+  ])
+}
+
+function explainPerimeter(age, width, height, correct) {
+  return joinTeachingSentences(age, [
+    `הֶקֵּף הוּא סְכוּם כָּל הַצְּלָעוֹת שֶׁל הַמַּלְבֵּן.`,
+    `מְחַבְּרִים אֹרֶךְ וְרוֹחַב, וְאַחַר כָּךְ כּוֹפְלִים בְּ-2: (${width} + ${height}) × 2.`,
+    `הַתּוֹצָאָה הִיא ${correct}, וְלָכֵן זֶהוּ הַהֶקֵּף.`,
+  ])
+}
+
+function explainArea(age, width, height, correct) {
+  return joinTeachingSentences(age, [
+    `שֶׁטַח שֶׁל מַלְבֵּן מוֹצְאִים עַל יְדֵי כֶּפֶל.`,
+    `כּוֹפְלִים אֹרֶךְ בְּרוֹחַב: ${width} × ${height}.`,
+    `מְקַבְּלִים ${correct}, וְלָכֵן זֶהוּ הַשֶּׁטַח.`,
+  ])
+}
+
+function explainPercent(age, percent, base, correct) {
+  return joinTeachingSentences(age, [
+    `אָחוּז פֵּרוּשׁוֹ חֵלֶק מִתּוֹךְ 100.`,
+    `הוֹפְכִים אֶת ${percent}% לְ-${percent}/100 וּמְכַפְּלִים בְּ-${base}.`,
+    `מְקַבְּלִים ${correct}, וְלָכֵן זוֹ הַתְּשׁוּבָה הַנְּכוֹנָה.`,
+  ])
+}
+
+function explainDiscount(age, price, discount, correct) {
+  const discountValue = (price * discount) / 100
+  return joinTeachingSentences(age, [
+    `קוֹדֶם מוֹצְאִים כַּמָּה שָׁוָה הַהֲנָחָה שֶׁל ${discount}%.`,
+    `${discount}% מִתּוֹךְ ${price} הוּא ${discountValue}.`,
+    `עוֹד מוֹרִידִים ${discountValue} מִ-${price} וּמְקַבְּלִים ${correct}.`,
+  ])
+}
+
+function explainEquation(age, addend, target, solution) {
+  return joinTeachingSentences(age, [
+    `כְּדֵי לִמְצֹא אֶת x, צָרִיךְ לְהַשְׁאִיר אֶת x לְבַדּוֹ.`,
+    `מְחַסְּרִים ${addend} מִשְּׁנֵי הַצְּדָדִים: ${target} - ${addend} = ${solution}.`,
+    `לָכֵן x = ${solution}.`,
+  ])
+}
+
+function explainDoubleEquation(age, right, target, solution) {
+  return joinTeachingSentences(age, [
+    `קוֹדֶם מְחַסְּרִים ${right} כְּדֵי לְהַשְׁאִיר רַק 2x.`,
+    `${target} - ${right} מַשְׁאִיר 2x, וְאַחַר כָּךְ מְחַלְּקִים בְּ-2.`,
+    `מְקַבְּלִים x = ${solution}, וְלָכֵן זוֹ הַתְּשׁוּבָה הַנְּכוֹנָה.`,
+  ])
+}
+
+function explainRatio(age, ratioLeft, ratioRight, target, correct) {
+  return joinTeachingSentences(age, [
+    `בּוֹדְקִים פִּי כַּמָּה גָּדַל הַחֵלֶק הַיְּמָנִי: מִ-${ratioRight} לְ-${target}.`,
+    `אוֹתוֹ הַכֶּפֶל צָרִיךְ לַעֲשׂוֹת גַּם בַּחֵלֶק הַשְּׂמָאלִי.`,
+    `לָכֵן מִ-${ratioLeft} מַגִּיעִים לְ-${correct}, וְזוֹ הַתְּשׁוּבָה.`,
+  ])
+}
+
 function createMultipleChoiceHints(age, prompt, explanation) {
   return [
     {
       step: 1,
-      title: textForAge(age, 'קוֹרְאִים אֶת הַשְּׁאֵלָה'),
-      body: prompt,
+      title: textForAge(age, 'קוֹדֶם מְבִינִים מַה מְחַפְּשִׂים'),
+      body: joinTeachingSentences(age, [prompt, 'מַדְגִּישִׁים בְּרֹאשׁ אִם צָרִיךְ לִסְפֹּר, לְחַבֵּר, לְחַסֵּר, לְהַשְׁווֹת אוֹ לְהַתְאִים.']),
     },
     {
       step: 2,
-      title: textForAge(age, 'בּוֹדְקִים אֶת כָּל הָאֶפְשָׁרוּיוֹת'),
-      body: textForAge(age, 'מְחַפְּשִׂים אֶת הַתְּשׁוּבָה שֶׁבֶּאֱמֶת מַתְאִימָה לַשְּׁאֵלָה.'),
+      title: textForAge(age, 'פּוֹתְרִים לְאַט וּפוֹסְלִים תְּשׁוּבוֹת לֹא מַתְאִימוֹת'),
+      body: textForAge(age, 'מְחַשְּׁבִים אוֹ בּוֹדְקִים צַעַד אַחַר צַעַד, וּמַסִּירִים אֶפְשָׁרוּיוֹת שֶׁלֹּא מַתְאִימוֹת לַשְּׁאֵלָה.'),
     },
     {
       step: 3,
-      title: textForAge(age, 'פּוֹתְרִים צַעַד אַחַר צַעַד'),
+      title: textForAge(age, 'כָּכָה מַגִּיעִים לַתְּשׁוּבָה'),
       body: explanation,
     },
   ]
@@ -761,17 +1021,17 @@ function createDragAndDropHints(age, prompt, explanation) {
   return [
     {
       step: 1,
-      title: textForAge(age, 'מִסְתַּכְּלִים עַל כָּל הַפְּרִיטִים'),
-      body: prompt,
+      title: textForAge(age, 'קוֹרְאִים אֶת כָּל הַמִּלִּים אוֹ הַפְּרִיטִים'),
+      body: joinTeachingSentences(age, [prompt, 'כְּדַאי לְהַתְחִיל מִפְּרִיט אֶחָד שֶׁאֲנַחְנוּ מְבִינִים בְּוַדָּאוּת.']),
     },
     {
       step: 2,
-      title: textForAge(age, 'מְחַפְּשִׂים חִבּוּר בָּרוּר'),
-      body: textForAge(age, 'מַתְחִילִים בַּזּוּג אוֹ בַּקְּבוּצָה שֶׁהֲכִי קַל לָזֶהוֹת.'),
+      title: textForAge(age, 'בוֹדְקִים מַה מְחַבֵּר בֵּין הַפְּרִיט לַקְּבוּצָה'),
+      body: textForAge(age, 'שׁוֹאֲלִים אֶת עַצְמֵנוּ: בְּאֵיזוֹ אוֹת הַמִּלָּה מַתְחִילָה, לְאֵיזֶה סִיּוּם הִיא שַׁיֶּכֶת, אוֹ מָה הַתַּפְקִיד שֶׁלָּהּ.'),
     },
     {
       step: 3,
-      title: textForAge(age, 'בּוֹדְקִים שׁוּב'),
+      title: textForAge(age, 'אַחַר כָּךְ מְאַמְּתִים'),
       body: explanation,
     },
   ]
@@ -782,16 +1042,16 @@ function createMatchPairsHints(age, prompt, explanation) {
     {
       step: 1,
       title: textForAge(age, 'קוֹרְאִים אֶת שְׁנֵי הַצְּדָדִים'),
-      body: prompt,
+      body: joinTeachingSentences(age, [prompt, 'מִתְחִילִים מִזּוּג אֶחָד שֶׁהַקֶּשֶׁר בּוֹ הֲכִי בָּרוּר.']),
     },
     {
       step: 2,
-      title: textForAge(age, 'מְחַפְּשִׂים יַחַס דּוֹמֶה'),
-      body: textForAge(age, 'מִי קָשׁוּר לְמִי? חוֹשְׁבִים עַל הַמַּשְׁמָעוּת שֶׁל כָּל פְּרִיט.'),
+      title: textForAge(age, 'שׁוֹאֲלִים מַה הַקֶּשֶׁר'),
+      body: textForAge(age, 'הַאִם זֶה הֶפֶךְ? הַאִם זֹאת הַגְדָּרָה? הַאִם זֶה חֵלֶק וְתַפְקִיד? כְּשֶׁמְּבִינִים אֶת הַקֶּשֶׁר, הַזּוּג נַעֲשֶׂה בָּרוּר.'),
     },
     {
       step: 3,
-      title: textForAge(age, 'מַאֲמְתִים אֶת הַתְּשׁוּבָה'),
+      title: textForAge(age, 'בּוֹדְקִים שֶׁכָּל זֶה מִתְאִים'),
       body: explanation,
     },
   ]
@@ -802,16 +1062,16 @@ function createMemoryHints(age, prompt, explanation) {
     {
       step: 1,
       title: textForAge(age, 'מִסְתַּכְּלִים טוֹב טוֹב'),
-      body: prompt,
+      body: joinTeachingSentences(age, [prompt, 'כְּשֶׁפּוֹתְחִים קֶלֶף, שָׂמִים לֵב גַּם לַמָּקוֹם וְגַם לַנּוֹשֵׂא.']),
     },
     {
       step: 2,
       title: textForAge(age, 'זוֹכְרִים מָקוֹם וְנוֹשֵׂא'),
-      body: textForAge(age, 'שׁוֹמְרִים בָּרֹאשׁ אֵיפֹה הוֹפִיעַ כָּל קֶלֶף.'),
+      body: textForAge(age, 'מְנַסִּים לִזְכֹּר לְיַד אֵיזֶה צֶבַע, בְּאֵיזֶה צַד אוֹ בְּאֵיזֶה אֵזוֹר רָאִינוּ אֶת הַקֶּלֶף.'),
     },
     {
       step: 3,
-      title: textForAge(age, 'מַשְׁלִימִים זוּגוֹת'),
+      title: textForAge(age, 'מְחַזְּרִים לַמָּקוֹם הַנָּכוֹן'),
       body: explanation,
     },
   ]
@@ -906,15 +1166,92 @@ function makeNumericDistractors(correct, spread = 2) {
   })
 }
 
-function generateMathPrimaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
-  const profile = ageProfiles[age]
+function generateMathPrimaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
+  const profile = ageProfiles[contentAge]
   const activities = []
 
   for (let index = 0; index < activitiesPerStage; index += 1) {
     const item = cyclePick(commonObjects, index)
 
-    if (age <= 5) {
+    if (contentAge === 3) {
+      if (index < 10) {
+        const correct = 1 + (index % 4)
+        const options = makeUniqueNumberOptions(
+          [correct, Math.min(5, correct + 1), Math.max(1, correct - 1), Math.min(6, correct + 2)],
+          correct,
+        )
+        const correctIndex = options.indexOf(correct)
+        activities.push(
+          createMultipleChoiceActivity(
+            age,
+            stageSpec.id,
+            index,
+            difficulty,
+            textForAge(age, `אֵיזוֹ קְבוּצָה יֵשׁ בָּהּ ${correct}?`),
+            textForAge(age, 'בַּחֲרוּ אֶת הַקְּבוּצָה הַמְּדֻיֶּקֶת.'),
+            options.map((count) => ({ label: formatCountLabel(age, count, item), emoji: item.emoji })),
+            correctIndex,
+            explainCounting(age, correct, item),
+          ),
+        )
+        continue
+      }
+
+      if (index < 20) {
+        const left = 1 + (index % 4)
+        const right = left + 1
+        const askLarger = index % 2 === 0
+        const correct = askLarger ? right : left
+        const options = makeUniqueNumberOptions([left, right, Math.min(6, right + 1), 1], correct)
+        const correctIndex = options.indexOf(correct)
+        activities.push(
+          createMultipleChoiceActivity(
+            age,
+            stageSpec.id,
+            index,
+            difficulty,
+            textForAge(age, askLarger ? 'אֵיזֶה מִסְפָּר גָּדוֹל יוֹתֵר?' : 'אֵיזֶה מִסְפָּר קָטָן יוֹתֵר?'),
+            textForAge(age, `${left} אוֹ ${right}?`),
+            options.map((value) => ({ label: String(value), emoji: '🔢' })),
+            correctIndex,
+            explainComparison(age, left, right, correct, askLarger ? 'larger' : 'smaller'),
+          ),
+        )
+        continue
+      }
+
+      const promptByShapeIndex = [
+        textForAge(age, 'אֵיזוֹ צוּרָה מְתַגְלְגֶּלֶת?'),
+        textForAge(age, 'אֵיזוֹ צוּרָה יֵשׁ לָהּ 3 צְלָעוֹת?'),
+        textForAge(age, 'אֵיזוֹ צוּרָה יֵשׁ לָהּ 4 צְלָעוֹת שָׁווֹת?'),
+        textForAge(age, 'אֵיזוֹ צוּרָה נִרְאֵית כְּמוֹ דֶּלֶת?'),
+      ]
+      const explanationByShapeIndex = [
+        textForAge(age, 'מַחְפְּשִׂים צוּרָה בְּלִי פִּנּוֹת. רַק עִגּוּל מִתְגַּלְגֵּל כִּי אֵין לוֹ צְלָעוֹת.'),
+        textForAge(age, 'סוֹפְרִים צְלָעוֹת. לִמְשֻׁלָּשׁ יֵשׁ בְּדִיּוּק 3 צְלָעוֹת.'),
+        textForAge(age, 'סוֹפְרִים 4 צְלָעוֹת וּבוֹדְקִים שֶׁכֻּלָּן שָׁווֹת. כָּךְ יוֹדְעִים שֶׁזֶּה מְרֻבָּע.'),
+        textForAge(age, 'מַלְבֵּן נִרְאֶה כְּמוֹ דֶּלֶת כִּי יֵשׁ לוֹ צוּרָה אָרֻכָּה וְאַרְבַּע צְלָעוֹת.'),
+      ]
+      const correctIndex = index % shapeOptions.length
+      activities.push(
+        createMultipleChoiceActivity(
+          age,
+          stageSpec.id,
+          index,
+          difficulty,
+          promptByShapeIndex[correctIndex],
+          textForAge(age, 'בַּחֲרוּ אֶת הַצּוּרָה הַנְּכוֹנָה.'),
+          shapeOptions,
+          correctIndex,
+          explanationByShapeIndex[correctIndex],
+        ),
+      )
+      continue
+    }
+
+    if (contentAge <= 5) {
       if (index < 10) {
         const correct = 3 + (index % Math.max(4, profile.mathPrimaryMax - 2))
         const numericOptions = makeNumericDistractors(correct, 1)
@@ -929,7 +1266,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַקְּבוּצָה הַמְּדֻיֶּקֶת.'),
             numericOptions.map((count) => ({ label: formatCountLabel(age, count, item), emoji: item.emoji })),
             correctIndex,
-            textForAge(age, `${correct} הוּא הַמִּסְפָּר הַנָּכוֹן כִּי יֵשׁ כָּאן בְּדִיּוּק ${correct} ${item.plural}.`),
+            explainCounting(age, correct, item),
           ),
         )
         continue
@@ -940,7 +1277,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
         const right = left + 1 + (index % 3)
         const askLarger = index % 2 === 0
         const correct = askLarger ? right : left
-        const options = [left, right, right + 2, Math.max(1, left - 1)]
+        const options = makeUniqueNumberOptions([left, right, right + 2, Math.max(1, left - 1)], correct)
         const correctIndex = options.indexOf(correct)
         activities.push(
           createMultipleChoiceActivity(
@@ -952,7 +1289,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, `${left} אוֹ ${right}?`),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             correctIndex,
-            textForAge(age, `${correct} הוּא הַתְּשׁוּבָה הַנְּכוֹנָה לְפִי הַהַשְׁוָאָה.`),
+            explainComparison(age, left, right, correct, askLarger ? 'larger' : 'smaller'),
           ),
         )
         continue
@@ -988,7 +1325,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
       continue
     }
 
-    if (age === 6) {
+    if (contentAge === 6) {
       if (index < 10) {
         const left = 4 + (index % 7)
         const right = 3 + ((index + 2) % 6)
@@ -1004,7 +1341,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַמִּסְפָּר הַנָּכוֹן.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             options.indexOf(correct),
-            textForAge(age, `${left} וְעוֹד ${right} שָׁוֶה ${correct}.`),
+            explainAddition(age, left, right, correct),
           ),
         )
       } else if (index < 20) {
@@ -1022,7 +1359,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַמִּסְפָּר הַנָּכוֹן.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             options.indexOf(correct),
-            textForAge(age, `${left} פָּחוֹת ${right} שָׁוֶה ${correct}.`),
+            explainSubtraction(age, left, right, correct),
           ),
         )
       } else {
@@ -1040,14 +1377,14 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַמִּסְפָּר הַנָּכוֹן.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             0,
-            textForAge(age, `${correct} נִבְנֶה מִ-${tens} עֲשָׂרוֹת וְ-${ones} אַחָדוֹת.`),
+            explainPlaceValue(age, tens, ones, correct),
           ),
         )
       }
       continue
     }
 
-    if (age === 7) {
+    if (contentAge === 7) {
       if (index < 10) {
         const left = 24 + index * 3
         const right = 11 + (index % 8)
@@ -1063,7 +1400,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַתְּשׁוּבָה הַנְּכוֹנָה.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             1,
-            textForAge(age, `${left} וְעוֹד ${right} שָׁוֶה ${correct}.`),
+            explainAddition(age, left, right, correct),
           ),
         )
       } else if (index < 20) {
@@ -1081,7 +1418,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַתְּשׁוּבָה הַנְּכוֹנָה.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             1,
-            textForAge(age, `${left} פָּחוֹת ${right} שָׁוֶה ${correct}.`),
+            explainSubtraction(age, left, right, correct),
           ),
         )
       } else {
@@ -1099,14 +1436,14 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַתְּשׁוּבָה הַנְּכוֹנָה.'),
             options.map((value) => ({ label: String(value), emoji: '🧮' })),
             0,
-            textForAge(age, `${groups} קְבוּצוֹת שֶׁל ${each} הֵן ${correct}.`),
+            explainGroupsTotal(age, groups, each, correct),
           ),
         )
       }
       continue
     }
 
-    if (age === 8 || age === 9) {
+    if (contentAge === 8 || contentAge === 9) {
       if (index < 10) {
         const left = 2 + (index % 5)
         const right = 3 + ((index + 1) % 4)
@@ -1122,7 +1459,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַתְּשׁוּבָה הַנְּכוֹנָה.'),
             options.map((value) => ({ label: String(value), emoji: '🧮' })),
             1,
-            textForAge(age, `${left} כָּפוּל ${right} שָׁוֶה ${correct}.`),
+            explainMultiplication(age, left, right, correct),
           ),
         )
       } else if (index < 20) {
@@ -1140,7 +1477,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַתְּשׁוּבָה הַנְּכוֹנָה.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             0,
-            textForAge(age, `${total} חֵלֶק ${groups} שָׁוֶה ${correct}.`),
+            explainDivision(age, total, groups, correct),
           ),
         )
       } else {
@@ -1163,14 +1500,14 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַשֶּׁבֶר הַנָּכוֹן.'),
             options,
             0,
-            textForAge(age, `${correct} הוּא הַשֶּׁבֶר הַנָּכוֹן.`),
+            explainFractionName(age, correct, numerator, denominator),
           ),
         )
       }
       continue
     }
 
-    if (age === 10) {
+    if (contentAge === 10) {
       if (index < 10) {
         const fractions = [
           ['1/2', '0.5'],
@@ -1190,7 +1527,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: value, emoji: '🧮' })),
             0,
-            textForAge(age, `${pair[0]} שווה ל-${pair[1]}.`),
+            explainDecimalConversion(age, pair[0], pair[1]),
           ),
         )
       } else if (index < 20) {
@@ -1208,7 +1545,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             0,
-            textForAge(age, `${left} כפול ${right} שווה ${correct}.`),
+            explainMultiplication(age, left, right, correct),
           ),
         )
       } else {
@@ -1226,14 +1563,14 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '📏' })),
             0,
-            textForAge(age, `היקף מלבן הוא 2 כפול סכום האורך והרוחב, ולכן התשובה היא ${correct}.`),
+            explainPerimeter(age, width, height, correct),
           ),
         )
       }
       continue
     }
 
-    if (age === 11) {
+    if (contentAge === 11) {
       if (index < 10) {
         const denominator = 4 + (index % 3) * 2
         const left = 1 + (index % 2)
@@ -1250,7 +1587,11 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: value, emoji: '🧮' })),
             0,
-            textForAge(age, `כאשר המכנים שווים, מחברים את המונים. לכן התשובה היא ${correct}.`),
+            joinTeachingSentences(age, [
+              'כְּשֶׁהַמְּכַנִּים שָׁוִים, מְחַבְּרִים רַק אֶת הַמּוֹנִים.',
+              `${left} + ${right} = ${left + right}, וְהַמְּכַנֶּה נִשְׁאָר ${denominator}.`,
+              `לָכֵן הַתְּשׁוּבָה הִיא ${correct}.`,
+            ]),
           ),
         )
       } else if (index < 20) {
@@ -1268,7 +1609,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '📊' })),
             0,
-            textForAge(age, `${percent}% מתוך ${base} הם ${correct}.`),
+            explainPercent(age, percent, base, correct),
           ),
         )
       } else {
@@ -1286,7 +1627,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '📐' })),
             0,
-            textForAge(age, `שטח מלבן הוא אורך כפול רוחב, ולכן התשובה היא ${correct}.`),
+            explainArea(age, width, height, correct),
           ),
         )
       }
@@ -1308,7 +1649,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
           textForAge(age, 'בחרו את התשובה הנכונה.'),
           options.map((value) => ({ label: String(value), emoji: '🔢' })),
           0,
-          textForAge(age, `${left} ועוד ${right} שווה ${correct}.`),
+          explainAddition(age, left, right, correct),
         ),
       )
     } else if (index < 20) {
@@ -1326,7 +1667,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
           textForAge(age, 'בחרו את התשובה הנכונה.'),
           options.map((value) => ({ label: String(value), emoji: '🧮' })),
           0,
-          textForAge(age, `כדי למצוא את x מחסרים ${addend} מ-${target}, ולכן x = ${solution}.`),
+          explainEquation(age, addend, target, solution),
         ),
       )
     } else {
@@ -1346,7 +1687,7 @@ function generateMathPrimaryActivities(age, stageSpec) {
           textForAge(age, 'בחרו את התשובה הנכונה.'),
           options.map((value) => ({ label: String(value), emoji: '📏' })),
           0,
-          textForAge(age, `כופלים את שני חלקי היחס באותו מספר, ולכן התשובה היא ${correct}.`),
+          explainRatio(age, ratioLeft, ratioRight, target, correct),
         ),
       )
     }
@@ -1355,12 +1696,53 @@ function generateMathPrimaryActivities(age, stageSpec) {
   return activities
 }
 
-function generateMathSecondaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
+function generateMathSecondaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
   const activities = []
 
   for (let index = 0; index < activitiesPerStage; index += 1) {
-    if (age <= 5) {
+    if (contentAge === 3) {
+      if (index < 15) {
+        const start = 1 + (index % 3)
+        const step = 1
+        const values = [start, start + step, start + step * 2]
+        const correct = start + step * 3
+        const options = [correct, correct + 1, Math.max(1, correct - 1), correct + 2]
+        activities.push(
+          createMultipleChoiceActivity(
+            age,
+            stageSpec.id,
+            index,
+            difficulty,
+            textForAge(age, `אֵיזֶה מִסְפָּר מַמְשִׁיךְ אֶת הַסִּדְרָה ${values.join(', ')}, ?`),
+            textForAge(age, 'בַּחֲרוּ אֶת הַמִּסְפָּר הַבָּא.'),
+            options.map((value) => ({ label: String(value), emoji: '🔢' })),
+            0,
+            explainSequence(age, values, step, correct),
+          ),
+        )
+      } else {
+        const pattern = ['אָדֹם', 'כָּחֹל', 'אָדֹם']
+        const options = ['כָּחֹל', 'יָרֹק', 'אָדֹם', 'צָהֹב']
+        activities.push(
+          createMultipleChoiceActivity(
+            age,
+            stageSpec.id,
+            index,
+            difficulty,
+            textForAge(age, `מָה בָּא אַחֲרֵי הַדֶּגֶם ${pattern.join(', ')}?`),
+            textForAge(age, 'בַּחֲרוּ אֶת הַהֶמְשֵׁךְ הַנָּכוֹן.'),
+            options.map((value) => ({ label: textForAge(age, value), emoji: '🎨' })),
+            0,
+            textForAge(age, 'מִסְתַּכְּלִים עַל הַסֵּדֶר: אָדֹם, כָּחֹל, אָדֹם. הַצֶּבַע הַבָּא צָרִיךְ לִהְיוֹת כָּחֹל כְּדֵי שֶׁהַדֶּגֶם יִמָּשֵׁךְ.'),
+          ),
+        )
+      }
+      continue
+    }
+
+    if (contentAge <= 5) {
       if (index < 15) {
         const start = 1 + (index % 4)
         const step = 1 + (index % 2)
@@ -1377,7 +1759,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַמִּסְפָּר הַבָּא.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             0,
-            textForAge(age, `הַסִּדְרָה גְּדֵלָה בְּכָל פַּעַם בְּ-${step}, לָכֵן הַתְּשׁוּבָה הִיא ${correct}.`),
+            explainSequence(age, values, step, correct),
           ),
         )
       } else {
@@ -1393,17 +1775,17 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַהֶמְשֵׁךְ הַנָּכוֹן.'),
             options.map((value) => ({ label: textForAge(age, value), emoji: '🎨' })),
             1,
-            textForAge(age, 'הַדֶּגֶם הוּא אָדֹם, כָּחֹל, אָדֹם, כָּחֹל.'),
+            textForAge(age, 'מִסְתַּכְּלִים עַל הַדֶּגֶם: אָדֹם, כָּחֹל, אָדֹם. הוּא חוֹזֵר אָדֹם, כָּחֹל, וְלָכֵן הַהֶמְשֵׁךְ הוּא כָּחֹל.'),
           ),
         )
       }
       continue
     }
 
-    if (age <= 9) {
+    if (contentAge <= 9) {
       if (index < 10) {
         const start = 2 + (index % 4)
-        const step = age === 6 ? 5 : age === 7 ? 2 : 3
+        const step = contentAge === 6 ? 5 : contentAge === 7 ? 2 : 3
         const values = [start, start + step, start + step * 2]
         const correct = start + step * 3
         const options = [correct, correct + step, correct - 1, correct + 2]
@@ -1417,7 +1799,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַמִּסְפָּר הַבָּא.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             0,
-            textForAge(age, `הַסִּדְרָה גְּדֵלָה בְּכָל פַּעַם בְּ-${step}.`),
+            explainSequence(age, values, step, correct),
           ),
         )
       } else if (index < 20) {
@@ -1435,13 +1817,13 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַתְּשׁוּבָה הַנְּכוֹנָה.'),
             options.map((value) => ({ label: String(value), emoji: '🍎' })),
             0,
-            textForAge(age, `${apples} פָּחוֹת ${eaten} שָׁוֶה ${correct}.`),
+            explainSubtraction(age, apples, eaten, correct),
           ),
         )
       } else {
-        const total = age === 8 ? 24 + (index % 6) * 4 : 12 + (index % 5) * 2
-        const numerator = age === 8 ? 1 : 1
-        const denominator = age === 8 ? 4 : 2
+        const total = contentAge === 8 ? 24 + (index % 6) * 4 : 12 + (index % 5) * 2
+        const numerator = 1
+        const denominator = contentAge === 8 ? 4 : 2
         const correct = total / denominator * numerator
         const options = [correct, correct + denominator, correct - 1, correct + 2]
         activities.push(
@@ -1454,14 +1836,14 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בַּחֲרוּ אֶת הַתְּשׁוּבָה הַנְּכוֹנָה.'),
             options.map((value) => ({ label: String(value), emoji: '🧮' })),
             0,
-            textForAge(age, `מְחַלְּקִים אֶת ${total} בְּ-${denominator}, וּמְקַבְּלִים ${correct}.`),
+            explainPartOfWhole(age, total, denominator, correct),
           ),
         )
       }
       continue
     }
 
-    if (age === 10) {
+    if (contentAge === 10) {
       if (index < 10) {
         const sequenceStart = 12 + index
         const values = [sequenceStart, sequenceStart + 4, sequenceStart + 8]
@@ -1477,7 +1859,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '🔢' })),
             0,
-            textForAge(age, 'הסדרה עולה בכל פעם ב-4.'),
+            explainSequence(age, values, 4, correct),
           ),
         )
       } else if (index < 20) {
@@ -1495,7 +1877,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: value, emoji: '🧮' })),
             0,
-            textForAge(age, `${decimal} ועוד ${whole} שווה ${correct}.`),
+            explainAddition(age, Number(decimal), whole, Number(correct)),
           ),
         )
       } else {
@@ -1513,14 +1895,14 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '💰' })),
             0,
-            textForAge(age, `כופלים ${price} ב-${count}, ולכן מקבלים ${correct}.`),
+            explainMultiplication(age, price, count, correct),
           ),
         )
       }
       continue
     }
 
-    if (age === 11) {
+    if (contentAge === 11) {
       if (index < 10) {
         const correct = ['25%', '50%', '75%', '10%'][index % 4]
         const whole = ['1/4', '1/2', '3/4', '1/10'][index % 4]
@@ -1535,7 +1917,11 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: value, emoji: '📊' })),
             0,
-            textForAge(age, `${whole} מתאים ל-${correct}.`),
+            joinTeachingSentences(age, [
+              `מְמִירִים אֶת ${whole} לְאָחוּזִים.`,
+              'חוֹשְׁבִים כַּמָּה חֲלָקִים מִתּוֹךְ 100 הֵם אוֹתוֹ חֵלֶק.',
+              `לָכֵן ${whole} שָׁוֶה לְ-${correct}.`,
+            ]),
           ),
         )
       } else if (index < 20) {
@@ -1553,7 +1939,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '📏' })),
             0,
-            textForAge(age, `ההיקף הוא 2 כפול (${width} + ${height}), ולכן התשובה היא ${correct}.`),
+            explainPerimeter(age, width, height, correct),
           ),
         )
       } else {
@@ -1571,7 +1957,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
             textForAge(age, 'בחרו את התשובה הנכונה.'),
             options.map((value) => ({ label: String(value), emoji: '🏷️' })),
             0,
-            textForAge(age, `מורידים ${discount}% מ-${price}, ולכן המחיר החדש הוא ${correct}.`),
+            explainDiscount(age, price, discount, correct),
           ),
         )
       }
@@ -1593,7 +1979,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
           textForAge(age, 'בחרו את התשובה הנכונה.'),
           options.map((value) => ({ label: String(value), emoji: '🔢' })),
           0,
-          textForAge(age, 'הסדרה עולה בכל פעם ב-2.'),
+          explainSequence(age, values, 2, correct),
         ),
       )
     } else if (index < 20) {
@@ -1611,7 +1997,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
           textForAge(age, 'בחרו את התשובה הנכונה.'),
           options.map((value) => ({ label: String(value), emoji: '📏' })),
           0,
-          textForAge(age, `כופלים את ${base} ב-${multiplier}, ולכן מקבלים ${correct}.`),
+          explainMultiplication(age, base, multiplier, correct),
         ),
       )
     } else {
@@ -1630,7 +2016,7 @@ function generateMathSecondaryActivities(age, stageSpec) {
           textForAge(age, 'בחרו את התשובה הנכונה.'),
           options.map((value) => ({ label: String(value), emoji: '🧮' })),
           0,
-          textForAge(age, `מחסרים ${right} ואז מחלקים ב-2, ולכן x = ${correct}.`),
+          explainDoubleEquation(age, right, target, correct),
         ),
       )
     }
@@ -1639,12 +2025,37 @@ function generateMathSecondaryActivities(age, stageSpec) {
   return activities
 }
 
-function generateReadingPrimaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
+function generateReadingPrimaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
   const activities = []
 
   for (let index = 0; index < activitiesPerStage; index += 1) {
-    if (age <= 6) {
+    if (contentAge === 3) {
+      const groups = [cyclePick(earlyLetterGroups, index), cyclePick(earlyLetterGroups, index + 4)]
+      const items = groups.map((group, itemIndex) => ({
+        label: textForAge(age, group.words[itemIndex % group.words.length]),
+      }))
+      const targets = groups.map((group, targetIndex) => ({
+        label: textForAge(age, `הָאוֹת ${group.letter}`),
+        matchIndex: targetIndex,
+      }))
+      activities.push(
+        createDragAndDropActivity(
+          age,
+          stageSpec.id,
+          index,
+          difficulty,
+          textForAge(age, 'קוֹרְאִים אֶת הַמִּלָּה וּמְחַפְּשִׂים אֵיזוֹ אוֹת שׁוֹמְעִים בַּהַתְחָלָה.'),
+          items,
+          targets,
+          textForAge(age, 'אוֹמְרִים אֶת הַמִּלָּה בְּקוֹל. הָאוֹת הָרִאשׁוֹנָה שֶׁשּׁוֹמְעִים מְסַיַּעַת לָנוּ לִשְׁיֵּךְ אֶת הַמִּלָּה לַשַּׁעַר הַנָּכוֹן.'),
+        ),
+      )
+      continue
+    }
+
+    if (contentAge <= 6) {
       const groups = [cyclePick(earlyLetterGroups, index), cyclePick(earlyLetterGroups, index + 3), cyclePick(earlyLetterGroups, index + 6)]
       const items = groups.map((group, itemIndex) => ({
         label: textForAge(age, group.words[itemIndex % group.words.length]),
@@ -1662,13 +2073,13 @@ function generateReadingPrimaryActivities(age, stageSpec) {
           textForAge(age, 'הַתְאִימוּ כָּל מִלָּה לָאוֹת הָרִאשׁוֹנָה שֶׁלָּהּ.'),
           items,
           targets,
-          textForAge(age, 'כָּל מִלָּה הוֹלֶכֶת לָאוֹת שֶׁבָּהּ הִיא מַתְחִילָה.'),
+          textForAge(age, 'קוֹרְאִים אוֹ אוֹמְרִים אֶת הַמִּלָּה, מַקְשִׁיבִים לַצְּלִיל הָרִאשׁוֹן, וְלִפִי הוּא מַתְאִימִים לָאוֹת הַנְּכוֹנָה.'),
         ),
       )
       continue
     }
 
-    if (age <= 9) {
+    if (contentAge <= 9) {
       const theme = cyclePick(readingCategoryThemes, index)
       const items = theme.items.map((item) => ({ label: textForAge(age, item) }))
       const targets = theme.targets.map((target, targetIndex) => ({
@@ -1684,7 +2095,7 @@ function generateReadingPrimaryActivities(age, stageSpec) {
           textForAge(age, 'הַתְאִימוּ כָּל פְּרִיט לַקְּבוּצָה הַנְּכוֹנָה.'),
           items,
           targets,
-          textForAge(age, 'קָרָאנוּ אֶת הַמִּלִּים וּשְׁיַּכְנוּ אוֹתָן לַתַּפְקִיד אוֹ לַקְּבוּצָה הַמַּתְאִימָה.'),
+          textForAge(age, 'קוֹדֶם קוֹרְאִים כָּל מִלָּה. אַחַר כָּךְ חוֹשְׁבִים אִם הִיא שֵׁם, פֹּעַל, מָקוֹם אוֹ חֵלֶק שֶׁל סִפּוּר, וְלָכֵן יוֹדְעִים לְאָן לְגָרֵר אוֹתָהּ.'),
         ),
       )
       continue
@@ -1705,7 +2116,7 @@ function generateReadingPrimaryActivities(age, stageSpec) {
         textForAge(age, 'התאימו כל פריט למשמעות או לתפקיד המתאים לו.'),
         items,
         targets,
-        textForAge(age, 'בדקנו מה תפקידו של כל פריט בטקסט או מה משמעותו, ואז שייכנו אותו למקום הנכון.'),
+        textForAge(age, 'קוֹרְאִים אֶת הַמּוּשָּׂג אוֹ הַמִּשְׁפָּט, חוֹשְׁבִים מַה הַתַּפְקִיד שֶׁלּוֹ בַּטֶּקְסְט אוֹ מַה הַמַּשְׁמָעוּת שֶׁלּוֹ, וְאָז מַתְאִימִים לַמָּקוֹם הַנָּכוֹן.'),
       ),
     )
   }
@@ -1713,12 +2124,35 @@ function generateReadingPrimaryActivities(age, stageSpec) {
   return activities
 }
 
-function generateReadingSecondaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
+function generateReadingSecondaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
   const activities = []
 
   for (let index = 0; index < activitiesPerStage; index += 1) {
-    if (age <= 6) {
+    if (contentAge === 3) {
+      const groups = [cyclePick(youngEndingGroups, index), cyclePick(youngEndingGroups, index + 4)]
+      const items = groups.map((group) => ({ label: textForAge(age, group.word) }))
+      const targets = groups.map((group, targetIndex) => ({
+        label: textForAge(age, group.target),
+        matchIndex: targetIndex,
+      }))
+      activities.push(
+        createDragAndDropActivity(
+          age,
+          stageSpec.id,
+          index,
+          difficulty,
+          textForAge(age, 'מִסְתַּכְּלִים עַל סוֹף הַמִּלָּה וּבוֹחֲרִים לְאָן הִיא מַתְאִימָה.'),
+          items,
+          targets,
+          textForAge(age, 'קוֹרְאִים אֶת סוֹף הַמִּלָּה בְּקוֹל. כְּשֶׁשּׁוֹמְעִים אֵיךְ הִיא נִגְמֶרֶת, יוֹדְעִים לְאָן לְגָרֵר אוֹתָהּ.'),
+        ),
+      )
+      continue
+    }
+
+    if (contentAge <= 6) {
       const groups = [cyclePick(youngEndingGroups, index), cyclePick(youngEndingGroups, index + 3), cyclePick(youngEndingGroups, index + 6)]
       const items = groups.map((group) => ({ label: textForAge(age, group.word) }))
       const targets = groups.map((group, targetIndex) => ({
@@ -1734,13 +2168,13 @@ function generateReadingSecondaryActivities(age, stageSpec) {
           textForAge(age, 'הַתְאִימוּ כָּל מִלָּה לַסִּיּוּם הַמַּתְאִים לָהּ.'),
           items,
           targets,
-          textForAge(age, 'הִסְתַּכַּלְנוּ עַל סוֹף הַמִּלָּה וְשִׁיַּכְנוּ אוֹתָהּ לַקְּבוּצָה הַנְּכוֹנָה.'),
+          textForAge(age, 'מִסְתַּכְּלִים עַל הָאוֹתִיּוֹת שֶׁבְּסוֹף הַמִּלָּה, קוֹרְאִים אוֹתָן, וּלְפִי הַסִּיּוּם יוֹדְעִים לְאָן לְשַׁיֵּךְ אֶת הַמִּלָּה.'),
         ),
       )
       continue
     }
 
-    if (age <= 9) {
+    if (contentAge <= 9) {
       const theme = cyclePick(readingCategoryThemes.slice(3), index)
       const items = theme.items.map((item) => ({ label: textForAge(age, item) }))
       const targets = theme.targets.map((target, targetIndex) => ({
@@ -1756,7 +2190,7 @@ function generateReadingSecondaryActivities(age, stageSpec) {
           textForAge(age, 'קִרְאוּ אֶת הַפְּרִיטִים וְהַתְאִימוּ כָּל אֶחָד לַתַּפְקִיד שֶׁלּוֹ.'),
           items,
           targets,
-          textForAge(age, 'הַבַּנּוּ אִם הַפְּרִיט הוּא כּוֹתֶרֶת, שְׁאֵלָה, תְּשׁוּבָה אוֹ חֵלֶק בַּסִּפּוּר.'),
+          textForAge(age, 'קוֹרְאִים אֶת הַפְּרִיט וְשׁוֹאֲלִים: הַאִם זֶה שֵׁם שֶׁל הַסִּפּוּר, שְׁאֵלָה, תְּשׁוּבָה אוֹ חֵלֶק מֵהַמִּבְנֶה? לְפִי זֶה מַתְאִימִים.'),
         ),
       )
       continue
@@ -1777,7 +2211,7 @@ function generateReadingSecondaryActivities(age, stageSpec) {
         textForAge(age, 'קראו בזהירות והתאימו כל פריט למבנה או למשמעות הנכונה.'),
         items,
         targets,
-        textForAge(age, 'זיהינו את התפקיד של כל משפט או מושג בתוך הטקסט, ולכן ידענו לאן לשייך אותו.'),
+        textForAge(age, 'קוֹדֶם מְבִינִים מַה הַפְּרִיט אוֹמֵר. אַחַר כָּךְ בּוֹדְקִים אִם הוּא רַעְיוֹן מֶרְכָּזִי, דֻּגְמָה, נִמּוּק, כּוֹתֶרֶת אוֹ חֵלֶק אַחֵר, וּמַתְאִימִים.'),
       ),
     )
   }
@@ -1785,10 +2219,11 @@ function generateReadingSecondaryActivities(age, stageSpec) {
   return activities
 }
 
-function generateEnglishPrimaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
+function generateEnglishPrimaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
   const activities = []
-  const relevantWords = englishVocabulary.filter((entry) => entry.minAge <= age)
+  const relevantWords = englishVocabulary.filter((entry) => entry.minAge <= Math.max(contentAge, 4))
 
   for (let index = 0; index < activitiesPerStage; index += 1) {
     const correctWord = cyclePick(relevantWords, index)
@@ -1804,7 +2239,7 @@ function generateEnglishPrimaryActivities(age, stageSpec) {
         textForAge(age, 'בַּחֲרוּ אֶת הַמַּשְׁמָעוּת הַנְּכוֹנָה.'),
         options.map((entry) => ({ label: textForAge(age, entry.meaning), emoji: entry.emoji })),
         0,
-        textForAge(age, `"${correctWord.word}" פֵּרוּשׁוֹ ${correctWord.meaning}.`),
+        textForAge(age, `קוֹרְאִים אֶת הַמִּלָּה "${correctWord.word}". חוֹשְׁבִים אֵיזוֹ תְּמוּנָה אוֹ מַשְׁמָעוּת מַתְאִימָה לָהּ. "${correctWord.word}" פֵּרוּשׁוֹ ${correctWord.meaning}.`),
       ),
     )
   }
@@ -1812,13 +2247,14 @@ function generateEnglishPrimaryActivities(age, stageSpec) {
   return activities
 }
 
-function generateEnglishSecondaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
+function generateEnglishSecondaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
   const activities = []
 
   for (let index = 0; index < activitiesPerStage; index += 1) {
-    if (age <= 7) {
-      const correctWord = cyclePick(englishVocabulary.filter((entry) => entry.minAge <= Math.max(age, 5)), index + 2)
+    if (contentAge <= 7) {
+      const correctWord = cyclePick(englishVocabulary.filter((entry) => entry.minAge <= Math.max(contentAge, 4)), index + 2)
       const options = [
         { label: correctWord.word, emoji: correctWord.emoji },
         { label: cyclePick(englishVocabulary, index + 5).word, emoji: '✨' },
@@ -1835,13 +2271,13 @@ function generateEnglishSecondaryActivities(age, stageSpec) {
           textForAge(age, 'בַּחֲרוּ אֶת הַמִּלָּה הַנְּכוֹנָה.'),
           options,
           0,
-          textForAge(age, `${correctWord.meaning} בְּאַנְגְּלִית הִיא "${correctWord.word}".`),
+          textForAge(age, `קוֹרְאִים אֶת הַמַּשְׁמָעוּת בְּעִבְרִית וְחוֹשְׁבִים אֵיךְ אוֹמְרִים אוֹתָהּ בְּאַנְגְּלִית. ${correctWord.meaning} בְּאַנְגְּלִית הִיא "${correctWord.word}".`),
         ),
       )
       continue
     }
 
-    const frame = cyclePick(englishSentenceFrames.filter((entry) => entry.minAge <= age), index)
+    const frame = cyclePick(englishSentenceFrames.filter((entry) => entry.minAge <= contentAge), index)
     activities.push(
       createMultipleChoiceActivity(
         age,
@@ -1852,7 +2288,7 @@ function generateEnglishSecondaryActivities(age, stageSpec) {
         frame.sentence,
         frame.options.map((option) => ({ label: option, emoji: '🔤' })),
         frame.options.indexOf(frame.answer),
-        textForAge(age, `"${frame.answer}" הִיא הַמִּלָּה שֶׁמַּשְׁלִימָה אֶת הַמִּשְׁפָּט.`),
+        textForAge(age, `קוֹרְאִים אֶת כָּל הַמִּשְׁפָּט וּמְחַפְּשִׂים אֵיזוֹ מִלָּה נִשְׁמַעַת וְגוֹרֶמֶת לוֹ לִהְיוֹת הֲגִיּוֹנִי. "${frame.answer}" הִיא הַמִּלָּה שֶׁמַּשְׁלִימָה אֶת הַמִּשְׁפָּט.`),
       ),
     )
   }
@@ -1860,12 +2296,16 @@ function generateEnglishSecondaryActivities(age, stageSpec) {
   return activities
 }
 
-function generateLogicPrimaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
-  const themes = age <= 8 ? youngLogicThemes : advancedLogicThemes
+function generateLogicPrimaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
+  const themes = contentAge <= 8 ? youngLogicThemes : advancedLogicThemes
+  const pairCount = contentAge === 3 ? 2 : 4
 
   return Array.from({ length: activitiesPerStage }, (_, index) => {
-    const pairs = cyclePick(themes, index).map(([left, right]) => [textForAge(age, left), textForAge(age, right)])
+    const pairs = cyclePick(themes, index)
+      .slice(0, pairCount)
+      .map(([left, right]) => [textForAge(age, left), textForAge(age, right)])
     return createMatchPairsActivity(
       age,
       stageSpec.id,
@@ -1873,17 +2313,21 @@ function generateLogicPrimaryActivities(age, stageSpec) {
       difficulty,
       textForAge(age, 'הַתְאִימוּ כָּל פְּרִיט לַמַּשְׁמָעוּת אוֹ לַבֵּן־זוּג הַקָּשׁוּר אֵלָיו.'),
       pairs,
-      textForAge(age, 'כָּל זוּג נִבְחַר לְפִי קֶשֶׁר בָּרוּר: הֶפֶךְ, הַגְדָּרָה, תַּפְקִיד אוֹ חֹק.'),
+      textForAge(age, 'קוֹרְאִים אֶת שְׁנֵי הַחֲלָקִים וְחוֹשְׁבִים מַה מְחַבֵּר בֵּינֵיהֶם: הֶפֶךְ, הַגְדָּרָה, תַּפְקִיד אוֹ חֹק. כְּשֶׁמְּבִינִים אֶת הַקֶּשֶׁר, קַל לְהַתְאִים.'),
     )
   })
 }
 
-function generateLogicSecondaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
-  const themes = age <= 8 ? advancedLogicThemes : [...advancedLogicThemes, ...youngLogicThemes]
+function generateLogicSecondaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
+  const themes = contentAge <= 8 ? advancedLogicThemes : [...advancedLogicThemes, ...youngLogicThemes]
+  const pairCount = contentAge === 3 ? 2 : 4
 
   return Array.from({ length: activitiesPerStage }, (_, index) => {
-    const pairs = cyclePick(themes, index + 1).map(([left, right]) => [textForAge(age, left), textForAge(age, right)])
+    const pairs = cyclePick(themes, index + 1)
+      .slice(0, pairCount)
+      .map(([left, right]) => [textForAge(age, left), textForAge(age, right)])
     return createMatchPairsActivity(
       age,
       stageSpec.id,
@@ -1891,14 +2335,15 @@ function generateLogicSecondaryActivities(age, stageSpec) {
       difficulty,
       textForAge(age, 'מְחַפְּשִׂים יַחַס, חֹק אוֹ הַתְאָמָה מְדוּיֶּקֶת בֵּין כָּל שְׁנֵי חֲלָקִים.'),
       pairs,
-      textForAge(age, 'כְּשֶׁמְּבִינִים אֵיזֶה קֶשֶׁר מְחַבֵּר בֵּין הַפְּרִיטִים, קַל לְהַתְאִים אֶת כָּל הַזּוּגוֹת.'),
+      textForAge(age, 'מַתְחִילִים מֵהַזּוּג שֶׁהֲכִי בָּרוּר. אַחַר כָּךְ בּוֹדְקִים שֶׁכָּל שְׁאָר הַפְּרִיטִים עוֹבְדִים לְפִי אוֹתוֹ חֹק אוֹ אוֹתָהּ מַשְׁמָעוּת.'),
     )
   })
 }
 
-function generateMemoryPrimaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
-  const pairCount = ageProfiles[age].memoryPrimaryPairs
+function generateMemoryPrimaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
+  const pairCount = ageProfiles[contentAge].memoryPrimaryPairs
 
   return Array.from({ length: activitiesPerStage }, (_, index) => {
     const theme = cyclePick(memoryPrimaryThemes, index)
@@ -1910,14 +2355,15 @@ function generateMemoryPrimaryActivities(age, stageSpec) {
       difficulty,
       textForAge(age, 'פִּתְחוּ קְלָפִים וּמִצְאוּ אֶת כָּל הַזּוּגוֹת מֵאוֹתוֹ נוֹשֵׂא.'),
       pairs,
-      textForAge(age, 'זָכַרְנוּ אֵיפֹה הוֹפִיעַ כָּל קֶלֶף וּמָצָאנוּ אֶת הַזּוּג הַמַּתְאִים לוֹ.'),
+      textForAge(age, 'מִסְתַּכְּלִים טוֹב אֵיפֹה הִסְתַּתֵּר כָּל קֶלֶף. כְּשֶׁזוֹכְרִים אֶת הַמָּקוֹם וְאֶת הַנּוֹשֵׂא, קַל לִמְצֹא אֶת הַזּוּג.'),
     )
   })
 }
 
-function generateMemorySecondaryActivities(age, stageSpec) {
-  const difficulty = stageSpec.difficultyByAge[age]
-  const pairCount = ageProfiles[age].memorySecondaryPairs
+function generateMemorySecondaryActivities(displayAge, contentAge, stageSpec) {
+  const age = displayAge
+  const difficulty = stageSpec.difficultyByAge[contentAge]
+  const pairCount = ageProfiles[contentAge].memorySecondaryPairs
 
   return Array.from({ length: activitiesPerStage }, (_, index) => {
     const theme = cyclePick(memorySecondaryThemes, index)
@@ -1929,27 +2375,27 @@ function generateMemorySecondaryActivities(age, stageSpec) {
       difficulty,
       textForAge(age, 'זוֹכְרִים יוֹתֵר פְּרָטִים וּמְחַפְּשִׂים זוּגוֹת בֵּין קְלָפִים דּוֹמִים.'),
       pairs,
-      textForAge(age, 'כְּכָל שֶׁזוֹכְרִים אֶת הַמָּקוֹם וְאֶת הַנּוֹשֵׂא שֶׁל כָּל קֶלֶף, קַל יוֹתֵר לִסְגֹּר אֶת כָּל הַזּוּגוֹת.'),
+      textForAge(age, 'מַסְתִּירִים בַּזִּיכָּרוֹן אֵיפֹה רָאִינוּ כָּל קֶלֶף וּמָה הָיָה עָלָיו. כָּכָה אֶפְשָׁר לַחְזֹר לַמָּקוֹם הַנָּכוֹן וְלִסְגֹּר זוּגוֹת יוֹתֵר מַהֵר.'),
     )
   })
 }
 
-function buildStageLevel(stageSpec, age) {
-  const activities = stageSpec.generator(age, stageSpec)
+function buildStageLevel(stageSpec, displayAge, contentAge) {
+  const activities = stageSpec.generator(displayAge, contentAge, stageSpec)
 
   if (activities.length !== activitiesPerStage) {
-    throw new Error(`${stageSpec.id} בגיל ${age} נוצר עם ${activities.length} פעילויות במקום ${activitiesPerStage}.`)
+    throw new Error(`${stageSpec.id} בגיל תצוגה ${displayAge} נוצר עם ${activities.length} פעילויות במקום ${activitiesPerStage}.`)
   }
 
-  return {
+  return transformTextTreeForDisplayAge({
     version: 1,
     id: stageSpec.id,
     worldId: stageSpec.worldId,
     missionId: stageSpec.missionId,
-    title: textForAge(age, stageSpec.title),
+    title: stageSpec.title,
     subject: stageSpec.subject,
-    instructions: textForAge(age, stageSpec.instructions),
-    difficulty: stageSpec.difficultyByAge[age],
+    instructions: stageSpec.instructions,
+    difficulty: stageSpec.difficultyByAge[contentAge],
     rewards: {
       xp: stageSpec.rewardBase.xp * 3,
       coins: stageSpec.rewardBase.coins * 3,
@@ -1962,7 +2408,7 @@ function buildStageLevel(stageSpec, age) {
     },
     assets: [],
     activities,
-  }
+  }, displayAge)
 }
 
 async function writeStageFile(filePath, payload) {
@@ -1972,16 +2418,21 @@ async function writeStageFile(filePath, payload) {
 
 async function generateAgeLevels() {
   await rm(ageLevelsRoot, { recursive: true, force: true })
+  await rm(advancedLevelsRoot, { recursive: true, force: true })
   await mkdir(ageLevelsRoot, { recursive: true })
+  await mkdir(advancedLevelsRoot, { recursive: true })
 
-  for (const age of supportedAges) {
+  for (const displayAge of supportedAges) {
     for (const stageSpec of stageSpecs) {
-      const payload = buildStageLevel(stageSpec, age)
-      const ageFilePath = path.join(ageLevelsRoot, String(age), stageSpec.worldId, `${stageSpec.id}.json`)
-      await writeStageFile(ageFilePath, payload)
+      const standardPayload = buildStageLevel(stageSpec, displayAge, resolveStandardContentAge(displayAge))
+      const advancedPayload = buildStageLevel(stageSpec, displayAge, resolveAdvancedContentAge(displayAge))
+      const standardFilePath = path.join(ageLevelsRoot, String(displayAge), stageSpec.worldId, `${stageSpec.id}.json`)
+      const advancedFilePath = path.join(advancedLevelsRoot, String(displayAge), stageSpec.worldId, `${stageSpec.id}.json`)
+      await writeStageFile(standardFilePath, standardPayload)
+      await writeStageFile(advancedFilePath, advancedPayload)
 
-      if (age === defaultAge) {
-        await writeStageFile(path.join(levelsRoot, `${stageSpec.id}.json`), payload)
+      if (displayAge === defaultAge) {
+        await writeStageFile(path.join(levelsRoot, `${stageSpec.id}.json`), standardPayload)
       }
     }
   }
@@ -1989,7 +2440,9 @@ async function generateAgeLevels() {
 
 generateAgeLevels()
   .then(() => {
-    console.log(`Generated ${stageSpecs.length * supportedAges.length} age-based stage files with ${activitiesPerStage} activities each.`)
+    console.log(
+      `Generated ${stageSpecs.length * supportedAges.length * 2} stage files across standard and advanced tracks, with ${activitiesPerStage} activities each.`,
+    )
   })
   .catch((error) => {
     console.error(error)

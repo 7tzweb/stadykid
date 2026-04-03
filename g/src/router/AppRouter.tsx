@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 
 import { ScreenLayout } from '@/components/layout/ScreenLayout'
+import { ExperienceModeSwitcher } from '@/components/ui/ExperienceModeSwitcher'
 import { Card } from '@/components/ui/Card'
 
 const SplashScreen = lazy(() => import('@/screens/SplashScreen').then((module) => ({ default: module.SplashScreen })))
@@ -78,6 +79,7 @@ export function AppRouter() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <ExperienceModeSwitcher />
       <Suspense fallback={<RouterFallback />}>
         <Routes>
           <Route element={<SplashScreen />} path="/" />

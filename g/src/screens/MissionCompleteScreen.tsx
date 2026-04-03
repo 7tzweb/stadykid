@@ -9,6 +9,7 @@ import { Modal } from '@/components/ui/Modal'
 import type { GameLevel } from '@/game/engine/level-schema'
 import { useGame } from '@/hooks/useGame'
 import { loadLevelDefinition } from '@/services/levelService'
+import { getResolvedActiveLevelTrack } from '@/services/levelTrackService'
 import type { MissionOutcome } from '@/types/models'
 
 interface CompletionState {
@@ -24,16 +25,17 @@ export function MissionCompleteScreen() {
   const routeState = location.state as CompletionState | null
   const [level, setLevel] = useState<GameLevel | null>(routeState?.level ?? null)
   const [showExplanation, setShowExplanation] = useState(false)
+  const outcome = routeState?.outcome ?? lastMissionOutcome
+  const resolvedLevelTrack = outcome?.levelTrack ?? getResolvedActiveLevelTrack(currentChildProfile)
 
   useEffect(() => {
     if (level || !levelId) {
       return
     }
 
-    void loadLevelDefinition(levelId, currentChildProfile?.age).then(setLevel).catch(() => undefined)
-  }, [currentChildProfile?.age, level, levelId])
+    void loadLevelDefinition(levelId, currentChildProfile?.age, resolvedLevelTrack).then(setLevel).catch(() => undefined)
+  }, [currentChildProfile?.age, level, levelId, resolvedLevelTrack])
 
-  const outcome = routeState?.outcome ?? lastMissionOutcome
   const summaryHints = level?.activities.flatMap((activity) => activity.hints.slice(0, 1)).slice(0, 5) ?? []
 
   if (!level || !outcome) {

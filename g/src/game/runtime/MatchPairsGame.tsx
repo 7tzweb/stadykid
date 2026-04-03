@@ -72,59 +72,70 @@ export function MatchPairsGame({
   }
 
   return (
-    <Card className="space-y-4 p-4 lg:p-5">
+    <Card className="overflow-hidden border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(245,243,255,0.98))] p-4 shadow-[0_18px_48px_rgba(15,23,42,0.08)] lg:p-5">
       <div className="space-y-2 text-center">
-        <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">התאמת זוגות</p>
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#ddd6fe] bg-[#f5f3ff] px-4 py-2 text-sm font-bold text-[#7c3aed]">
+          <span className="text-base">🔗</span>
+          תחנת זוגות
+        </div>
         <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{activity.content.prompt}</h3>
       </div>
 
       <div className="grid gap-3 lg:grid-cols-2">
-        <div className="space-y-3">
-          {activity.content.pairs.map((pair) => {
-            const isMatched = matchedIds.includes(pair.id)
+        <div className="rounded-[28px] bg-white/68 p-3 shadow-[0_12px_24px_rgba(15,23,42,0.04)]">
+          <p className="mb-3 text-xs font-semibold tracking-[0.18em] text-slate-500">צַד רִאשׁוֹן</p>
+          <div className="space-y-3">
+            {activity.content.pairs.map((pair) => {
+              const isMatched = matchedIds.includes(pair.id)
 
-            return (
-              <button
-                className={clsx(
-                  'w-full rounded-[22px] border px-4 py-3 text-right transition',
-                  isMatched && 'border-emerald-300 bg-emerald-50 text-emerald-900',
-                  selectedLeftId === pair.id && !isMatched && 'border-[#8b5cf6] bg-[#f5f3ff]',
-                  !isMatched && selectedLeftId !== pair.id && 'border-slate-200 bg-white hover:border-[#8b5cf6]',
-                )}
-                disabled={disabled || isMatched}
-                key={pair.id}
-                onClick={() => handleLeftSelect(pair.id)}
-                type="button"
-              >
-                <p className="text-base font-bold">{pair.left}</p>
-              </button>
-            )
-          })}
+              return (
+                <button
+                  className={clsx(
+                    'w-full rounded-[24px] border px-4 py-3 text-right shadow-[0_10px_24px_rgba(15,23,42,0.05)] transition',
+                    isMatched && 'border-emerald-300 bg-emerald-50 text-emerald-900',
+                    selectedLeftId === pair.id && !isMatched && 'border-[#8b5cf6] bg-[#f5f3ff]',
+                    !isMatched &&
+                      selectedLeftId !== pair.id &&
+                      'border-white/80 bg-white hover:-translate-y-0.5 hover:border-[#8b5cf6]',
+                  )}
+                  disabled={disabled || isMatched}
+                  key={pair.id}
+                  onClick={() => handleLeftSelect(pair.id)}
+                  type="button"
+                >
+                  <p className="text-base font-black">{pair.left}</p>
+                </button>
+              )
+            })}
+          </div>
         </div>
 
-        <div className="space-y-3">
-          {shuffledPairs.map((pair) => {
-            const isMatched = matchedIds.includes(pair.id)
+        <div className="rounded-[28px] bg-white/68 p-3 shadow-[0_12px_24px_rgba(15,23,42,0.04)]">
+          <p className="mb-3 text-xs font-semibold tracking-[0.18em] text-slate-500">מְחַפְּשִׂים אֶת הַזּוּג</p>
+          <div className="space-y-3">
+            {shuffledPairs.map((pair) => {
+              const isMatched = matchedIds.includes(pair.id)
 
-            return (
-              <button
-                className={clsx(
-                  'w-full rounded-[22px] border px-4 py-3 text-right transition',
-                  isMatched && 'border-emerald-300 bg-emerald-50 text-emerald-900',
-                  selectedRightId === pair.id && !isMatched && 'border-[#8b5cf6] bg-[#f5f3ff]',
-                  !isMatched &&
-                    selectedRightId !== pair.id &&
-                    'border-slate-200 bg-white hover:border-[#8b5cf6]',
-                )}
-                disabled={disabled || isMatched}
-                key={pair.id}
-                onClick={() => handleRightSelect(pair.id)}
-                type="button"
-              >
-                <p className="text-base font-bold">{pair.right}</p>
-              </button>
-            )
-          })}
+              return (
+                <button
+                  className={clsx(
+                    'w-full rounded-[24px] border px-4 py-3 text-right shadow-[0_10px_24px_rgba(15,23,42,0.05)] transition',
+                    isMatched && 'border-emerald-300 bg-emerald-50 text-emerald-900',
+                    selectedRightId === pair.id && !isMatched && 'border-[#8b5cf6] bg-[#f5f3ff]',
+                    !isMatched &&
+                      selectedRightId !== pair.id &&
+                      'border-white/80 bg-white hover:-translate-y-0.5 hover:border-[#8b5cf6]',
+                  )}
+                  disabled={disabled || isMatched}
+                  key={pair.id}
+                  onClick={() => handleRightSelect(pair.id)}
+                  type="button"
+                >
+                  <p className="text-base font-black">{pair.right}</p>
+                </button>
+              )
+            })}
+          </div>
         </div>
       </div>
     </Card>

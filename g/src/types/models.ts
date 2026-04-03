@@ -5,6 +5,9 @@ export interface AppUser {
   photoUrl?: string
 }
 
+export type ExperienceMode = 'admin' | 'player'
+export type LevelTrack = 'standard' | 'advanced'
+
 export interface AvatarSelection {
   bodyColor: string
   hair: string
@@ -22,6 +25,8 @@ export interface ChildProfile {
   favoriteSubject: string
   petName: string
   completedLevelIds: string[]
+  advancedCompletedLevelIds: string[]
+  activeLevelTrack: LevelTrack
   equippedItems: string[]
 }
 
@@ -49,7 +54,8 @@ export interface WorldDefinition {
   missionIds: string[]
 }
 
-export type ShopCategory = 'Eggs' | 'Clothes' | 'Accessories'
+export type ShopCategory = 'Eggs' | 'Clothes' | 'Accessories' | 'Props'
+export type ShopCurrency = 'stars' | 'coins'
 
 export interface ShopItem {
   id: string
@@ -57,8 +63,22 @@ export interface ShopItem {
   name: string
   description: string
   price: number
+  currency?: ShopCurrency
   icon: string
   accent: string
+  image?: string
+}
+
+export interface ShopPurchasePrice {
+  currency: ShopCurrency
+  amount: number
+}
+
+export interface PlacedProp {
+  itemId: string
+  homeWorldId: string
+  x: number
+  y: number
 }
 
 export interface CreatureCareRequirements {
@@ -106,7 +126,8 @@ export interface CreatureDefinition {
   id: string
   name: string
   description: string
-  priceStars: number
+  priceStars?: number
+  priceCoins?: number
   accent: string
   eggImage: string
   cardImage: string
@@ -141,7 +162,13 @@ export interface OwnedCreature {
   equippedItems: string[]
 }
 
-export type CreaturePurchaseResult = 'success' | 'owned' | 'insufficient-stars'
+export interface CreaturePurchasePrice {
+  currency: ShopCurrency
+  amount: number
+}
+
+export type CreaturePurchaseResult = 'success' | 'owned' | 'insufficient-stars' | 'insufficient-coins'
+export type ShopPurchaseResult = CreaturePurchaseResult
 export type CreatureCareAction = 'feed' | 'pet' | 'play' | 'rest'
 export type CreaturePlacementResult = 'placed' | 'removed' | 'room-full' | 'assigned-other-room'
 
@@ -167,6 +194,7 @@ export interface DailyLimits {
 export interface MissionOutcome {
   success: boolean
   levelId: string
+  levelTrack?: LevelTrack
   score: number
   xpEarned: number
   coinsEarned: number
@@ -188,6 +216,7 @@ export interface AvatarCatalog {
 }
 
 export interface GameState {
+  experienceMode: ExperienceMode
   currentUser: AppUser | null
   childProfiles: ChildProfile[]
   currentChildProfileId: string | null
@@ -199,6 +228,7 @@ export interface GameState {
   progressBySubject: Record<string, SubjectProgress>
   settings: GameSettings
   inventory: string[]
+  placedProps: PlacedProp[]
   ownedCreatures: OwnedCreature[]
   currentLevelId: string | null
   hearts: number

@@ -1,5 +1,6 @@
 import { getMissionByLevelId, missionCatalog } from '@/game/content/catalog'
 import { LevelValidationError, parseGameLevel } from '@/game/engine/level-parser'
+import type { LevelTrack } from '@/types/models'
 
 export const supportedLevelAges = [4, 5, 6, 7, 8, 9, 10, 11, 12] as const
 
@@ -60,16 +61,35 @@ function buildAgeLevelPath(levelId: string, age: number) {
   return `/levels/ages/${age}/${mission.worldId}/${levelId}.json`
 }
 
+function buildAdvancedAgeLevelPath(levelId: string, age: number) {
+  const mission = getMissionByLevelId(levelId)
+
+  if (!mission) {
+    return `/levels/${levelId}.json`
+  }
+
+  return `/levels/advanced/${age}/${mission.worldId}/${levelId}.json`
+}
+
 export const levelManifest = [
   ...baseLevelManifest.map((levelId) => `/levels/${levelId}.json`),
   ...supportedLevelAges.flatMap((age) =>
     missionCatalog.map((mission) => buildAgeLevelPath(mission.levelId, age)),
   ),
+  ...supportedLevelAges.flatMap((age) =>
+    missionCatalog.map((mission) => buildAdvancedAgeLevelPath(mission.levelId, age)),
+  ),
 ]
 
-export async function loadLevelDefinition(levelId: string, age?: number) {
+export async function loadLevelDefinition(levelId: string, age?: number, levelTrack: LevelTrack = 'standard') {
   const resolvedAge = resolveLevelAgeBucket(age)
-  const candidatePaths = [...new Set([buildAgeLevelPath(levelId, resolvedAge), `/levels/${levelId}.json`])]
+  const candidatePaths = [
+    levelTrack === 'advanced'
+      ? buildAdvancedAgeLevelPath(levelId, resolvedAge)
+      : buildAgeLevelPath(levelId, resolvedAge),
+    buildAgeLevelPath(levelId, resolvedAge),
+    `/levels/${levelId}.json`,
+  ]
 
   for (const path of candidatePaths) {
     const response = await fetch(path)

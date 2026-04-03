@@ -51,7 +51,7 @@ import { getHomeWorldById, homeWorldCatalog } from '@/game/content/home-worlds'
 import { useGame } from '@/hooks/useGame'
 import type { CreatureCareAction } from '@/types/models'
 
-type HomePanel = 'creatures' | 'food' | 'style' | 'rooms' | null
+type HomePanel = 'creatures' | 'food' | 'style' | 'props' | 'rooms' | null
 type FoodMode = 'feed' | 'drink'
 
 interface SceneCreature {
@@ -71,8 +71,11 @@ interface SceneCreature {
 }
 
 interface DragTrayItem {
+  kind: 'food' | 'prop'
   id: string
-  emoji: string
+  emoji?: string
+  image?: string
+  itemName?: string
   x: number
   y: number
 }
@@ -112,8 +115,11 @@ interface SpecialRequestGestureSession {
   maxLift: number
   maxDrop: number
   totalHorizontalTravel: number
+  totalVerticalTravel: number
   directionChanges: number
   lastHorizontalDirection: -1 | 0 | 1
+  verticalDirectionChanges: number
+  lastVerticalDirection: -1 | 0 | 1
   accumulatedRotation: number
   lastAngle: number | null
   holdReady: boolean
@@ -160,7 +166,7 @@ const maxCreaturesInRoom = 4
 
 function getCareBurstDurationMs(action: CreatureVisualAction) {
   if (action === 'rest') {
-    return 1400
+    return 1700
   }
 
   if (action === 'play') {
@@ -184,7 +190,7 @@ function getCareBurstDurationMs(action: CreatureVisualAction) {
   }
 
   if (action === 'soar') {
-    return 1150
+    return 1500
   }
 
   if (action === 'snuggle') {
@@ -200,11 +206,39 @@ function getCareBurstDurationMs(action: CreatureVisualAction) {
   }
 
   if (action === 'zoom') {
-    return 860
+    return 1160
   }
 
   if (action === 'boing') {
     return 980
+  }
+
+  if (action === 'doze') {
+    return 1950
+  }
+
+  if (action === 'bow') {
+    return 1180
+  }
+
+  if (action === 'sniffle') {
+    return 1200
+  }
+
+  if (action === 'dig') {
+    return 1120
+  }
+
+  if (action === 'shake') {
+    return 980
+  }
+
+  if (action === 'sprint') {
+    return 1220
+  }
+
+  if (action === 'nest') {
+    return 1650
   }
 
   return 850
@@ -277,6 +311,34 @@ function getCreatureAnimationClass(pulse: CreatureVisualAction | null, isJumping
 
   if (pulse === 'boing') {
     return 'puppy-animate puppy-animate-boing'
+  }
+
+  if (pulse === 'doze') {
+    return 'puppy-animate puppy-animate-doze'
+  }
+
+  if (pulse === 'bow') {
+    return 'puppy-animate puppy-animate-bow'
+  }
+
+  if (pulse === 'sniffle') {
+    return 'puppy-animate puppy-animate-sniffle'
+  }
+
+  if (pulse === 'dig') {
+    return 'puppy-animate puppy-animate-dig'
+  }
+
+  if (pulse === 'shake') {
+    return 'puppy-animate puppy-animate-shake'
+  }
+
+  if (pulse === 'sprint') {
+    return 'puppy-animate puppy-animate-sprint'
+  }
+
+  if (pulse === 'nest') {
+    return 'puppy-animate puppy-animate-nest'
   }
 
   if (isJumping) {
@@ -374,6 +436,8 @@ export function PetHomeScreen() {
     currentHomeWorldId,
     inventory,
     ownedCreatures,
+    placeProp,
+    placedProps,
     setCurrentHomeWorld,
     stars,
     toggleCreatureItem,
@@ -397,15 +461,19 @@ export function PetHomeScreen() {
   const [placementMessage, setPlacementMessage] = useState<string | null>(null)
   const [isHomeWorldTransitioning, setIsHomeWorldTransitioning] = useState(false)
   const announcedHatchRef = useRef(new Set<string>())
+  const careBurstRef = useRef<CareBurstState | null>(null)
   const heartProgressRef = useRef<Record<string, number>>({})
   const feedProgressRef = useRef<Record<string, number>>({})
   const specialRequestRef = useRef<Record<string, ActiveSpecialRequestState>>({})
   const specialRequestGestureRef = useRef<SpecialRequestGestureSession | null>(null)
+  const lastPropInteractionAtRef = useRef<Record<string, number>>({})
   const sceneRef = useRef<HTMLDivElement | null>(null)
 
-  const wearableItems = inventory
+  const inventoryItems = inventory
     .map((itemId) => getShopItemById(itemId))
     .filter((item): item is NonNullable<typeof item> => Boolean(item))
+  const wearableItems = inventoryItems.filter((item) => item.category === 'Clothes' || item.category === 'Accessories')
+  const propItems = inventoryItems.filter((item) => item.category === 'Props')
   const completedLevelCount = currentChildProfile?.completedLevelIds.length ?? 0
   const unlockedHomeWorlds = homeWorldCatalog.filter(
     (homeWorld) => completedLevelCount >= homeWorld.requiredCompletedLevels,
@@ -423,6 +491,8 @@ export function PetHomeScreen() {
       ? unlockedHomeWorlds[currentHomeWorldIndex + 1]
       : null
   const homeCreatures = ownedCreatures.filter((creature) => creature.placedHomeWorldId === resolvedHomeWorldId)
+  const placedRoomProps = placedProps.filter((placedProp) => placedProp.homeWorldId === resolvedHomeWorldId)
+  const placedPropByItemId = new Map(placedProps.map((placedProp) => [placedProp.itemId, placedProp] as const))
 
   const resolvedSelectedCreatureId = ownedCreatures.some((creature) => creature.creatureId === selectedCreatureId)
     ? selectedCreatureId
@@ -433,6 +503,40 @@ export function PetHomeScreen() {
   const selectedCreature = selectedOwnedCreature ? getCreatureById(selectedOwnedCreature.creatureId) ?? null : null
   const selectedIsHatched =
     selectedCreature && selectedOwnedCreature ? isCreatureHatched(selectedCreature, selectedOwnedCreature, now) : false
+  const selectedSpecialRequestState = selectedOwnedCreature
+    ? specialRequestByCreatureId[selectedOwnedCreature.creatureId] ?? null
+    : null
+  const selectedSpecialRequest =
+    selectedSpecialRequestState?.requestId ? getCreatureSpecialRequestById(selectedSpecialRequestState.requestId) ?? null : null
+  const selectedNeeds =
+    selectedCreature && selectedOwnedCreature && selectedIsHatched
+      ? getCreatureNeedState(selectedCreature, selectedOwnedCreature, now)
+      : null
+  const fallbackSpecialRequestEntry = homeCreatures.find((ownedCreature) => {
+    const creature = getCreatureById(ownedCreature.creatureId)
+
+    if (!creature || !isCreatureHatched(creature, ownedCreature, now)) {
+      return false
+    }
+
+    const requestState = specialRequestByCreatureId[ownedCreature.creatureId]
+
+    if (!requestState?.requestId) {
+      return false
+    }
+
+    return !getCreatureNeedState(creature, ownedCreature, now).primaryNeed
+  })
+  const focusedSpecialRequestCreatureId =
+    selectedSpecialRequest && !selectedNeeds?.primaryNeed
+      ? selectedOwnedCreature?.creatureId ?? null
+      : fallbackSpecialRequestEntry?.creatureId ?? null
+  const focusedSpecialRequestState =
+    focusedSpecialRequestCreatureId ? specialRequestByCreatureId[focusedSpecialRequestCreatureId] ?? null : null
+  const focusedSpecialRequest =
+    focusedSpecialRequestState?.requestId
+      ? getCreatureSpecialRequestById(focusedSpecialRequestState.requestId)
+      : null
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -445,9 +549,16 @@ export function PetHomeScreen() {
       return
     }
 
+    careBurstRef.current = careBurst
     const timer = window.setTimeout(() => setCareBurst(null), getCareBurstDurationMs(careBurst.action))
 
     return () => window.clearTimeout(timer)
+  }, [careBurst])
+
+  useEffect(() => {
+    if (!careBurst) {
+      careBurstRef.current = null
+    }
   }, [careBurst])
 
   useEffect(() => {
@@ -618,6 +729,141 @@ export function PetHomeScreen() {
   }, [now, ownedCreatures])
 
   useEffect(() => {
+    const ambientActions: CreatureSpecialRequestMotion[] = ['curious', 'stretch', 'snuggle', 'cheer', 'shake']
+    const timer = window.setInterval(() => {
+      if (careBurstRef.current || draggedCreatureId) {
+        return
+      }
+
+      const candidates = homeCreatures.filter((ownedCreature) => {
+        const creature = getCreatureById(ownedCreature.creatureId)
+
+        if (!creature || !isCreatureHatched(creature, ownedCreature, Date.now())) {
+          return false
+        }
+
+        if (specialRequestRef.current[ownedCreature.creatureId]?.requestId) {
+          return false
+        }
+
+        return !getCreatureNeedState(creature, ownedCreature, Date.now()).primaryNeed
+      })
+
+      if (candidates.length === 0 || Math.random() < 0.56) {
+        return
+      }
+
+      const ownedCreature = candidates[Math.floor(Math.random() * candidates.length)]
+      const action = ambientActions[Math.floor(Math.random() * ambientActions.length)] ?? 'curious'
+
+      setCareBurst({ creatureId: ownedCreature.creatureId, action })
+    }, 2300)
+
+    return () => window.clearInterval(timer)
+  }, [draggedCreatureId, homeCreatures])
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      if (careBurstRef.current || draggedCreatureId || !placedRoomProps.length) {
+        return
+      }
+
+      const nowTs = Date.now()
+      const candidates = homeCreatures.flatMap((ownedCreature) => {
+        const creature = getCreatureById(ownedCreature.creatureId)
+        const sceneCreature = sceneCreatures.find((entry) => entry.creatureId === ownedCreature.creatureId)
+
+        if (!creature || !sceneCreature || !isCreatureHatched(creature, ownedCreature, nowTs)) {
+          return []
+        }
+
+        const needs = getCreatureNeedState(creature, ownedCreature, nowTs)
+
+        if (needs.primaryNeed) {
+          return []
+        }
+
+        const lastPropInteractionAt = lastPropInteractionAtRef.current[ownedCreature.creatureId] ?? 0
+
+        if (nowTs - lastPropInteractionAt < 5200) {
+          return []
+        }
+
+        const nearbyProp = placedRoomProps.find((placedProp) => {
+          const deltaX = Math.abs(placedProp.x - sceneCreature.x)
+          const deltaY = Math.abs(placedProp.y - sceneCreature.y)
+          return deltaX <= 8 && deltaY <= 10
+        })
+
+        if (!nearbyProp) {
+          return []
+        }
+
+        const item = getShopItemById(nearbyProp.itemId)
+
+        if (!item || item.category !== 'Props') {
+          return []
+        }
+
+        const resolvedRequest = resolveActiveSpecialRequest(ownedCreature.creatureId)
+
+        if (resolvedRequest?.request.requiredItemId && resolvedRequest.request.requiredItemId !== item.id) {
+          return []
+        }
+
+        return [{ ownedCreature, item, resolvedRequest }]
+      })
+
+      if (!candidates.length || Math.random() < 0.38) {
+        return
+      }
+
+      const pickedInteraction = candidates[Math.floor(Math.random() * candidates.length)]
+
+      if (!pickedInteraction) {
+        return
+      }
+
+      lastPropInteractionAtRef.current[pickedInteraction.ownedCreature.creatureId] = nowTs
+      setSelectedCreatureId(pickedInteraction.ownedCreature.creatureId)
+
+      if (
+        pickedInteraction.resolvedRequest &&
+        pickedInteraction.resolvedRequest.request.requiredItemId === pickedInteraction.item.id
+      ) {
+        void advanceSpecialRequest(
+          pickedInteraction.ownedCreature.creatureId,
+          pickedInteraction.resolvedRequest.specialRequestState,
+          pickedInteraction.resolvedRequest.request.id,
+          pickedInteraction.resolvedRequest.request.animation,
+          pickedInteraction.resolvedRequest.ownedCreature.specialRequestCount,
+          pickedInteraction.resolvedRequest.request.progressEmojis,
+          pickedInteraction.resolvedRequest.request.completionEmoji,
+          pickedInteraction.resolvedRequest.request.tapsRequired,
+        )
+        return
+      }
+
+      setCareBurst({
+        creatureId: pickedInteraction.ownedCreature.creatureId,
+        action: resolvePropAnimation(pickedInteraction.item.id),
+      })
+      showReaction(pickedInteraction.ownedCreature.creatureId, pickedInteraction.item.icon)
+    }, 1450)
+
+    return () => window.clearInterval(timer)
+  }, [draggedCreatureId, homeCreatures, placedRoomProps, sceneCreatures])
+
+  useEffect(() => {
+    const availablePropIdsByHomeWorld = placedProps.reduce<Record<string, string[]>>((mapping, placedProp) => {
+      if (!mapping[placedProp.homeWorldId]) {
+        mapping[placedProp.homeWorldId] = []
+      }
+
+      mapping[placedProp.homeWorldId]?.push(placedProp.itemId)
+      return mapping
+    }, {})
+
     setSpecialRequestByCreatureId((current) => {
       const nextState: Record<string, ActiveSpecialRequestState> = {}
       let changed = false
@@ -646,13 +892,28 @@ export function PetHomeScreen() {
             }
 
           let resolvedState = baseState
+          const availablePropItemIds = availablePropIdsByHomeWorld[ownedCreature.placedHomeWorldId ?? ''] ?? []
 
           if (!currentRequestState) {
             changed = true
           }
 
+          if (resolvedState.requestId) {
+            const activeRequest = getCreatureSpecialRequestById(resolvedState.requestId)
+
+            if (activeRequest?.requiredItemId && !availablePropItemIds.includes(activeRequest.requiredItemId)) {
+              resolvedState = {
+                requestId: null,
+                progress: 0,
+                nextRequestAt: now + Math.round(getInitialSpecialRequestDelayMs() * 0.45),
+                previousRequestId: activeRequest.id,
+              }
+              changed = true
+            }
+          }
+
           if (!resolvedState.requestId && now >= resolvedState.nextRequestAt) {
-            const request = pickRandomCreatureSpecialRequest(resolvedState.previousRequestId)
+            const request = pickRandomCreatureSpecialRequest(resolvedState.previousRequestId, availablePropItemIds)
 
             resolvedState = {
               ...resolvedState,
@@ -689,7 +950,7 @@ export function PetHomeScreen() {
 
       return nextState
     })
-  }, [now, ownedCreatures])
+  }, [now, ownedCreatures, placedProps])
 
   function triggerCareAction(creatureId: string, action: CreatureCareAction) {
     const ownedCreature = getOwnedCreatureById(creatureId, ownedCreatures)
@@ -794,7 +1055,7 @@ export function PetHomeScreen() {
     const creature = getCreatureById(creatureId)
 
     if (!specialRequestState || !request || !ownedCreature || !creature || !isCreatureHatched(creature, ownedCreature, now)) {
-      return false
+      return null
     }
 
     const needs = getCreatureNeedState(creature, ownedCreature, now)
@@ -1038,7 +1299,96 @@ export function PetHomeScreen() {
     setCareBurst({ creatureId: selectedCreature.id, action: 'play' })
   }
 
-  function handleStartDragging(event: ReactPointerEvent<HTMLButtonElement>, item: { id: string; emoji: string }) {
+  function resolvePropAnimation(itemId: string): CreatureVisualAction {
+    if (itemId === 'moon-pillow') {
+      return 'doze'
+    }
+
+    if (itemId === 'sparkle-ball') {
+      return 'sprint'
+    }
+
+    if (itemId === 'flower-sniff-mat') {
+      return 'sniffle'
+    }
+
+    if (itemId === 'cloud-blanket') {
+      return 'snuggle'
+    }
+
+    if (itemId === 'rainbow-tunnel') {
+      return 'zoom'
+    }
+
+    if (itemId === 'butterfly-ribbon') {
+      return 'play'
+    }
+
+    if (itemId === 'squeaky-duck') {
+      return 'cheer'
+    }
+
+    if (itemId === 'heart-plush') {
+      return 'snuggle'
+    }
+
+    if (itemId === 'dream-unicorn-playground' || itemId === 'garden-slide-park') {
+      return 'zoom'
+    }
+
+    if (itemId === 'sweet-skateboard') {
+      return 'sprint'
+    }
+
+    if (itemId === 'tea-party-table' || itemId === 'teddy-twin-seat') {
+      return 'snuggle'
+    }
+
+    if (itemId === 'heart-surprise-booth' || itemId === 'starlight-play-console') {
+      return 'cheer'
+    }
+
+    if (itemId === 'fluffy-heart-rug' || itemId === 'flower-dream-bed') {
+      return 'nest'
+    }
+
+    if (itemId === 'rainbow-splash-pool' || itemId === 'rainbow-beach-ball') {
+      return 'play'
+    }
+
+    if (itemId === 'golden-moon-swing') {
+      return 'sway'
+    }
+
+    return 'play'
+  }
+
+  function placePropAtPointer(clientX: number, clientY: number, itemId: string) {
+    const sceneBounds = sceneRef.current?.getBoundingClientRect()
+    const item = getShopItemById(itemId)
+
+    if (!sceneBounds || !item || item.category !== 'Props') {
+      return false
+    }
+
+    const x = clamp(((clientX - sceneBounds.left) / sceneBounds.width) * 100, 12, 88)
+    const y = clamp(((clientY - sceneBounds.top) / sceneBounds.height) * 100, 24, 84)
+
+    placeProp({
+      itemId,
+      homeWorldId: resolvedHomeWorldId,
+      x,
+      y,
+    })
+    setOpenPanel(null)
+    setPlacementMessage(`הוֹסַפְתָּ לַחֶדֶר אֶת ${item.name}`)
+    return true
+  }
+
+  function handleStartDragging(
+    event: ReactPointerEvent<HTMLButtonElement>,
+    item: { id: string; emoji?: string; image?: string; itemName?: string; kind: 'food' | 'prop' },
+  ) {
     event.preventDefault()
     setDraggedTrayItem({
       ...item,
@@ -1047,17 +1397,22 @@ export function PetHomeScreen() {
     })
   }
 
-  const resolveFoodDrop = useEffectEvent((clientX: number, clientY: number) => {
-    const element = document.elementFromPoint(clientX, clientY)
-    const dropTarget =
-      element instanceof HTMLElement ? (element.closest('[data-drop-creature-id]') as HTMLElement | null) : null
-    const creatureId = dropTarget?.dataset.dropCreatureId
+  const resolveTrayDrop = useEffectEvent((clientX: number, clientY: number, item: DragTrayItem) => {
+    if (item.kind === 'food') {
+      const element = document.elementFromPoint(clientX, clientY)
+      const dropTarget =
+        element instanceof HTMLElement ? (element.closest('[data-drop-creature-id]') as HTMLElement | null) : null
+      const creatureId = dropTarget?.dataset.dropCreatureId
 
-    if (!creatureId) {
+      if (!creatureId) {
+        return
+      }
+
+      handleFeedCreature(creatureId)
       return
     }
 
-    handleFeedCreature(creatureId)
+    placePropAtPointer(clientX, clientY, item.id)
   })
 
   function getGestureOffset(
@@ -1093,17 +1448,45 @@ export function PetHomeScreen() {
       }
     }
 
-    if (interaction === 'dash') {
-      return {
-        x: clamp(deltaX * 0.3, -34, 34),
-        y: clamp(deltaY * 0.05, -4, 4),
-      }
-    }
-
+  if (interaction === 'dash') {
     return {
-      x: clamp(deltaX * 0.12, -10, 10),
-      y: clamp(deltaY * 0.35, -8, 30),
+      x: clamp(deltaX * 0.3, -34, 34),
+      y: clamp(deltaY * 0.05, -4, 4),
     }
+  }
+
+  if (interaction === 'lower') {
+    return {
+      x: clamp(deltaX * 0.08, -8, 8),
+      y: clamp(deltaY * 0.38, -6, 34),
+    }
+  }
+
+  if (interaction === 'shake') {
+    return {
+      x: clamp(deltaX * 0.34, -24, 24),
+      y: clamp(deltaY * 0.06, -4, 6),
+    }
+  }
+
+  if (interaction === 'scratch') {
+    return {
+      x: clamp(deltaX * 0.08, -8, 8),
+      y: clamp(deltaY * 0.3, -6, 28),
+    }
+  }
+
+  if (interaction === 'sniff') {
+    return {
+      x: clamp(deltaX * 0.16, -18, 18),
+      y: clamp(deltaY * 0.16, -18, 18),
+    }
+  }
+
+  return {
+    x: clamp(deltaX * 0.12, -10, 10),
+    y: clamp(deltaY * 0.35, -8, 30),
+  }
   }
 
   function didSpecialGestureSucceed(session: SpecialRequestGestureSession) {
@@ -1123,12 +1506,31 @@ export function PetHomeScreen() {
       return Math.abs(session.accumulatedRotation) >= Math.PI * 1.3
     }
 
-    if (session.interaction === 'dash') {
-      return session.totalHorizontalTravel >= 160
-    }
-
-    return session.maxDrop >= 72
+  if (session.interaction === 'dash') {
+    return session.totalHorizontalTravel >= 160
   }
+
+  if (session.interaction === 'lower') {
+    return session.maxDrop >= 58
+  }
+
+  if (session.interaction === 'shake') {
+    return session.directionChanges >= 4 && session.totalHorizontalTravel >= 120
+  }
+
+  if (session.interaction === 'scratch') {
+    return session.verticalDirectionChanges >= 3 && session.totalVerticalTravel >= 132
+  }
+
+  if (session.interaction === 'sniff') {
+    return (
+      Math.abs(session.accumulatedRotation) >= Math.PI * 0.7 &&
+      session.totalHorizontalTravel + session.totalVerticalTravel >= 78
+    )
+  }
+
+  return session.maxDrop >= 72
+}
 
   function handleStartSpecialRequestGesture(
     event: ReactPointerEvent<HTMLButtonElement>,
@@ -1170,8 +1572,11 @@ export function PetHomeScreen() {
       maxLift: 0,
       maxDrop: 0,
       totalHorizontalTravel: 0,
+      totalVerticalTravel: 0,
       directionChanges: 0,
       lastHorizontalDirection: 0,
+      verticalDirectionChanges: 0,
+      lastVerticalDirection: 0,
       accumulatedRotation: 0,
       lastAngle: null,
       holdReady: false,
@@ -1203,7 +1608,9 @@ export function PetHomeScreen() {
       const deltaX = moveEvent.clientX - activeSession.startX
       const deltaY = moveEvent.clientY - activeSession.startY
       const horizontalStep = moveEvent.clientX - activeSession.lastX
+      const verticalStep = moveEvent.clientY - activeSession.lastY
       const nextHorizontalDirection = horizontalStep > 3 ? 1 : horizontalStep < -3 ? -1 : 0
+      const nextVerticalDirection = verticalStep > 3 ? 1 : verticalStep < -3 ? -1 : 0
       const radius = Math.hypot(deltaX, deltaY)
       const nextAngle = radius > 18 ? Math.atan2(deltaY, deltaX) : activeSession.lastAngle
       const angleDelta =
@@ -1223,6 +1630,7 @@ export function PetHomeScreen() {
         maxLift: Math.max(activeSession.maxLift, activeSession.startY - moveEvent.clientY),
         maxDrop: Math.max(activeSession.maxDrop, moveEvent.clientY - activeSession.startY),
         totalHorizontalTravel: activeSession.totalHorizontalTravel + Math.abs(horizontalStep),
+        totalVerticalTravel: activeSession.totalVerticalTravel + Math.abs(verticalStep),
         directionChanges:
           nextHorizontalDirection !== 0 &&
           activeSession.lastHorizontalDirection !== 0 &&
@@ -1231,6 +1639,14 @@ export function PetHomeScreen() {
             : activeSession.directionChanges,
         lastHorizontalDirection:
           nextHorizontalDirection !== 0 ? nextHorizontalDirection : activeSession.lastHorizontalDirection,
+        verticalDirectionChanges:
+          nextVerticalDirection !== 0 &&
+          activeSession.lastVerticalDirection !== 0 &&
+          nextVerticalDirection !== activeSession.lastVerticalDirection
+            ? activeSession.verticalDirectionChanges + 1
+            : activeSession.verticalDirectionChanges,
+        lastVerticalDirection:
+          nextVerticalDirection !== 0 ? nextVerticalDirection : activeSession.lastVerticalDirection,
         accumulatedRotation: activeSession.accumulatedRotation + angleDelta,
         lastAngle: nextAngle,
       }
@@ -1369,7 +1785,7 @@ export function PetHomeScreen() {
         return
       }
 
-      resolveFoodDrop(event.clientX, event.clientY)
+      resolveTrayDrop(event.clientX, event.clientY, draggedTrayItem)
       setDraggedTrayItem(null)
     }
 
@@ -1380,7 +1796,7 @@ export function PetHomeScreen() {
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('pointerup', handlePointerUp)
     }
-  }, [draggedTrayItem])
+  }, [draggedTrayItem, resolveTrayDrop])
 
   return (
     <div
@@ -1443,6 +1859,25 @@ export function PetHomeScreen() {
         </button>
       </div>
 
+      {focusedSpecialRequest && (
+        <div className="pointer-events-none absolute inset-x-0 top-24 z-40 flex justify-center px-4">
+          <div className="pointer-events-auto flex items-center gap-3 rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.97),rgba(255,246,240,0.94))] px-4 py-3 shadow-[0_20px_50px_rgba(56,37,87,0.16)] backdrop-blur">
+            <div
+              className={`flex h-12 w-12 items-center justify-center rounded-full text-2xl shadow-[0_12px_30px_rgba(84,60,126,0.1)] ring-2 ${focusedSpecialRequest.bubbleClass}`}
+            >
+              {focusedSpecialRequest.emoji}
+            </div>
+            <div className="text-right">
+              <p className="text-[11px] font-black tracking-[0.18em] text-slate-400">מָה הַגּוּר מְבַקֵּשׁ?</p>
+              <div className="mt-1 flex items-center justify-end gap-2 text-sm font-black text-slate-900">
+                <span>{focusedSpecialRequest.hintEmoji ?? focusedSpecialRequest.emoji}</span>
+                <span>{focusedSpecialRequest.hintLabel ?? focusedSpecialRequest.label}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="absolute left-4 top-4 z-40 flex items-center gap-2 rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(243,238,255,0.88))] p-2 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur-xl">
         <div className="flex items-center gap-2 rounded-full border border-white/80 bg-white/80 px-4 py-3 text-sm font-bold text-[#b45309] shadow-[0_12px_30px_rgba(84,60,126,0.08)]">
           <Sparkles className="h-4 w-4" />
@@ -1479,6 +1914,9 @@ export function PetHomeScreen() {
         <WorldIconButton active={openPanel === 'food'} onClick={() => setOpenPanel((current) => (current === 'food' ? null : 'food'))} title="אוֹכֶל וּשְׁתִיָּה">
           <Milk className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
+        <WorldIconButton active={openPanel === 'props'} onClick={() => setOpenPanel((current) => (current === 'props' ? null : 'props'))} title="חֲפָצִים">
+          <Gamepad2 className="h-6 w-6 text-slate-700" />
+        </WorldIconButton>
         <WorldIconButton active={openPanel === 'style'} onClick={() => setOpenPanel((current) => (current === 'style' ? null : 'style'))} title="בְּגָדִים">
           <Shirt className="h-6 w-6 text-slate-700" />
         </WorldIconButton>
@@ -1506,12 +1944,73 @@ export function PetHomeScreen() {
               <button
                 className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-white text-3xl shadow-sm transition hover:scale-105"
                 key={item.id}
-                onPointerDown={(event) => handleStartDragging(event, item)}
+                onPointerDown={(event) => handleStartDragging(event, { ...item, kind: 'food' })}
                 type="button"
               >
                 {item.emoji}
               </button>
             ))}
+          </div>
+
+          <button
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100"
+            onClick={() => setOpenPanel(null)}
+            type="button"
+          >
+            <X className="h-5 w-5 text-slate-700" />
+          </button>
+        </div>
+      )}
+
+      {openPanel === 'props' && (
+        <div className="absolute bottom-4 left-1/2 z-50 flex w-[min(92vw,760px)] -translate-x-1/2 items-center gap-3 rounded-[34px] border border-white/85 bg-white/88 px-4 py-4 shadow-[0_24px_70px_rgba(84,60,126,0.16)] backdrop-blur-xl">
+          <div className="shrink-0 rounded-[22px] bg-[#fff7ed] px-4 py-3 text-right">
+            <p className="text-xs font-black text-[#c2410c]">חֲפָצִים לַגּוּרִים</p>
+            <p className="mt-1 text-[11px] font-semibold text-slate-500">גוֹרְרִים לַחֶדֶר וּמַנִּיחִים בַּמָּקוֹם שֶׁרוֹצִים</p>
+          </div>
+          <div className="flex flex-1 items-center justify-center gap-3 overflow-x-auto">
+            {propItems.length ? (
+              propItems.map((item) => (
+                <button
+                  className={`flex h-20 min-w-[98px] shrink-0 flex-col items-center justify-center rounded-[24px] px-3 text-center shadow-sm transition hover:scale-105 ${
+                    placedPropByItemId.get(item.id)?.homeWorldId === resolvedHomeWorldId
+                      ? 'bg-[#fff1fb] ring-2 ring-[#f472b6]'
+                      : 'bg-white'
+                  }`}
+                  key={item.id}
+                  onPointerDown={(event) =>
+                    handleStartDragging(event, {
+                      id: item.id,
+                      emoji: item.icon,
+                      image: item.image,
+                      itemName: item.name,
+                      kind: 'prop',
+                    })}
+                  type="button"
+                >
+                  {item.image ? (
+                    <img alt={item.name} className="h-10 w-14 object-contain" src={item.image} />
+                  ) : (
+                    <span className="text-2xl leading-none">{item.icon}</span>
+                  )}
+                  <span className="mt-1 line-clamp-1 text-[10px] font-bold text-slate-500">{item.name}</span>
+                  {placedPropByItemId.get(item.id)?.homeWorldId === resolvedHomeWorldId && (
+                    <span className="mt-1 rounded-full bg-[#fde7f5] px-2 py-0.5 text-[9px] font-black text-[#be185d]">
+                      בַּחֶדֶר
+                    </span>
+                  )}
+                </button>
+              ))
+            ) : (
+              <button
+                className="flex h-16 items-center gap-2 rounded-[22px] bg-slate-100 px-5 text-sm font-bold text-slate-500"
+                onClick={() => navigate('/shop')}
+                type="button"
+              >
+                <Gamepad2 className="h-5 w-5" />
+                הולכים לחנות חפצים
+              </button>
+            )}
           </div>
 
           <button
@@ -1768,6 +2267,43 @@ export function PetHomeScreen() {
         </div>
       )}
 
+      {placedRoomProps.map((placedProp) => {
+        const item = getShopItemById(placedProp.itemId)
+
+        if (!item || item.category !== 'Props') {
+          return null
+        }
+
+        return (
+          <div
+            className="pointer-events-none absolute z-[12] -translate-x-1/2 -translate-y-1/2"
+            key={`${placedProp.homeWorldId}:${placedProp.itemId}`}
+            style={{
+              left: `${placedProp.x}%`,
+              top: `${placedProp.y}%`,
+            }}
+          >
+            <div className="relative flex items-center justify-center">
+              <div
+                className="absolute inset-x-6 bottom-1 h-6 rounded-full bg-[rgba(86,63,118,0.18)] blur-md"
+                style={{ transform: 'translateY(18px) scale(1.05)' }}
+              />
+              {item.image ? (
+                <img
+                  alt={item.name}
+                  className="max-h-[170px] max-w-[220px] object-contain drop-shadow-[0_18px_34px_rgba(86,63,118,0.16)]"
+                  src={item.image}
+                />
+              ) : (
+                <div className="flex h-24 w-24 items-center justify-center rounded-[28px] bg-white/88 text-5xl shadow-[0_18px_34px_rgba(86,63,118,0.12)]">
+                  {item.icon}
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      })}
+
       {homeCreatures.length ? (
         homeCreatures.map((ownedCreature) => {
           const creature = getCreatureById(ownedCreature.creatureId)
@@ -1899,11 +2435,20 @@ export function PetHomeScreen() {
 	                    onClick={(event) => {
 	                      event.stopPropagation()
 	                      if (getSpecialRequestInteraction(specialRequest!.id) === 'tap') {
+                          if (specialRequest!.requiredItemId) {
+                            setSelectedCreatureId(ownedCreature.creatureId)
+                            setOpenPanel('props')
+                            showReaction(ownedCreature.creatureId, specialRequest!.hintEmoji ?? specialRequest!.emoji)
+                            return
+                          }
 	                        handleSpecialRequestTap(ownedCreature.creatureId)
 	                        return
 	                      }
 
 	                      setSelectedCreatureId(ownedCreature.creatureId)
+                        if (specialRequest!.requiredItemId) {
+                          setOpenPanel('props')
+                        }
 	                      showReaction(ownedCreature.creatureId, specialRequest!.hintEmoji ?? specialRequest!.emoji)
 	                    }}
 	                    onPointerDown={(event) => event.stopPropagation()}
@@ -1958,14 +2503,28 @@ export function PetHomeScreen() {
 	                                      ? 'bg-[#bfdbfe]'
 	                                      : pulse === 'snuggle'
 	                                        ? 'bg-[#fecdd3]'
-	                                        : pulse === 'sway'
-	                                          ? 'bg-[#fde68a]'
-	                                          : pulse === 'twirl'
-	                                            ? 'bg-[#ddd6fe]'
-	                                            : pulse === 'zoom'
-	                                              ? 'bg-[#bbf7d0]'
-	                                              : pulse === 'boing'
-	                                                ? 'bg-[#fdba74]'
+	                                : pulse === 'sway'
+	                                  ? 'bg-[#fde68a]'
+	                                  : pulse === 'twirl'
+	                                    ? 'bg-[#ddd6fe]'
+	                                    : pulse === 'zoom'
+	                                      ? 'bg-[#bbf7d0]'
+	                                      : pulse === 'boing'
+	                                        ? 'bg-[#fdba74]'
+	                                        : pulse === 'doze'
+	                                          ? 'bg-[#c4b5fd]'
+	                                          : pulse === 'bow'
+	                                            ? 'bg-[#bbf7d0]'
+	                                            : pulse === 'sniffle'
+	                                              ? 'bg-[#bae6fd]'
+	                                              : pulse === 'dig'
+	                                                ? 'bg-[#fed7aa]'
+	                                                : pulse === 'shake'
+	                                                  ? 'bg-[#fbcfe8]'
+	                                                  : pulse === 'sprint'
+	                                                    ? 'bg-[#fcd34d]'
+	                                                    : pulse === 'nest'
+	                                                      ? 'bg-[#fecdd3]'
 	                                    : isSelected
 	                                      ? 'bg-[#ffb6dc]/65'
 	                                      : 'bg-[#c9edff]/65'
@@ -2022,10 +2581,18 @@ export function PetHomeScreen() {
 
       {draggedTrayItem && (
         <div
-          className="pointer-events-none fixed z-[80] -translate-x-1/2 -translate-y-1/2 rounded-[24px] bg-white/96 px-4 py-3 text-4xl shadow-[0_24px_60px_rgba(84,60,126,0.2)]"
+          className="pointer-events-none fixed z-[80] -translate-x-1/2 -translate-y-1/2 rounded-[28px] bg-white/96 px-4 py-3 shadow-[0_24px_60px_rgba(84,60,126,0.2)]"
           style={{ left: draggedTrayItem.x, top: draggedTrayItem.y }}
         >
-          {draggedTrayItem.emoji}
+          {draggedTrayItem.image ? (
+            <img
+              alt={draggedTrayItem.itemName ?? ''}
+              className="h-20 w-24 object-contain drop-shadow-[0_16px_26px_rgba(86,63,118,0.16)]"
+              src={draggedTrayItem.image}
+            />
+          ) : (
+            <div className="text-4xl">{draggedTrayItem.emoji}</div>
+          )}
         </div>
       )}
     </div>

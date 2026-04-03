@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react'
-import { BarChart3, Check, ChevronDown, Coins, House, Lock, Move, Settings, ShoppingBag, Sparkles } from 'lucide-react'
+import { BarChart3, Check, ChevronDown, Coins, House, Lock, LogIn, Move, Settings, ShoppingBag, Sparkles } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 import { ScreenLayout } from '@/components/layout/ScreenLayout'
@@ -8,6 +8,18 @@ import { Card } from '@/components/ui/Card'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { getWorldById, missionCatalog } from '@/game/content/catalog'
 import { useGame } from '@/hooks/useGame'
+import {
+  buildLevelProgressStorageKey,
+  loadStoredLevelProgress,
+  resolveStoredLevelProgressPercent,
+} from '@/services/levelProgressService'
+import {
+  getChallengeAgeForTrack,
+  getCompletedLevelIdsForTrack,
+  getLevelTrackLabel,
+  getResolvedActiveLevelTrack,
+  isAdvancedTrackUnlocked,
+} from '@/services/levelTrackService'
 
 const mapCanvasWidth = 1260
 const mapCanvasHeight = 3000
@@ -105,12 +117,12 @@ function buildMapPath(points: ReadonlyArray<{ x: number; y: number }>) {
   }, '')
 }
 
-function getMissionProgress(levelId: string, completedLevelIds: string[]) {
+function getMissionProgress(levelId: string, completedLevelIds: string[], partialProgress: number) {
   const isCompleted = completedLevelIds.includes(levelId)
 
   return {
     isCompleted,
-    progress: isCompleted ? 100 : 0,
+    progress: isCompleted ? 100 : partialProgress,
   }
 }
 
@@ -124,7 +136,17 @@ function isStageButtonTarget(target: EventTarget | null) {
 
 export function WorldMapScreen() {
   const navigate = useNavigate()
-  const { childProfiles, coins, currentChildProfile, currentUser, setCurrentChildProfile, stars, xp } = useGame()
+  const {
+    childProfiles,
+    coins,
+    currentChildProfile,
+    currentUser,
+    experienceMode,
+    isAdminMode,
+    setCurrentChildProfile,
+    stars,
+    xp,
+  } = useGame()
   const mapViewportRef = useRef<HTMLDivElement | null>(null)
   const mapCardRef = useRef<HTMLDivElement | null>(null)
   const profileSwitcherRef = useRef<HTMLDivElement | null>(null)
@@ -132,9 +154,23 @@ export function WorldMapScreen() {
   const [isDragging, setIsDragging] = useState(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [mapCardHeight, setMapCardHeight] = useState<number | null>(null)
-  const completedLevelIds = currentChildProfile?.completedLevelIds ?? []
+  const activeLevelTrack = getResolvedActiveLevelTrack(currentChildProfile)
+  const completedLevelIds = getCompletedLevelIdsForTrack(currentChildProfile, activeLevelTrack)
+  const challengeAge = getChallengeAgeForTrack(currentChildProfile?.age, activeLevelTrack)
+  const advancedTrackUnlocked = isAdvancedTrackUnlocked(currentChildProfile)
   const sortedChildProfiles = [...childProfiles].sort((left, right) => left.age - right.age)
-  const isDemoProfileMode = !currentUser || currentUser.id === 'demo-parent'
+  const isDemoProfileMode = isAdminMode
+
+  useEffect(() => {
+    if (!isAdminMode && !currentUser) {
+      navigate('/auth')
+      return
+    }
+
+    if (!currentChildProfile) {
+      navigate('/profiles')
+    }
+  }, [currentChildProfile, currentUser, isAdminMode, navigate])
 
   useEffect(() => {
     const viewport = mapViewportRef.current
@@ -185,7 +221,11 @@ export function WorldMapScreen() {
 
     if (mission) {
       const world = getWorldById(mission.worldId)
-      const { isCompleted, progress } = getMissionProgress(mission.levelId, completedLevelIds)
+      const storedLevelProgress = loadStoredLevelProgress(
+        buildLevelProgressStorageKey(experienceMode, currentChildProfile?.id, mission.levelId, activeLevelTrack),
+      )
+      const partialProgress = resolveStoredLevelProgressPercent(storedLevelProgress, 30)
+      const { isCompleted, progress } = getMissionProgress(mission.levelId, completedLevelIds, partialProgress)
       const previousMission = missionCatalog[index - 1]
       const isUnlocked =
         isCompleted ||
@@ -310,6 +350,10 @@ export function WorldMapScreen() {
               <ShoppingBag className="h-5 w-5" />
               חֲנוּת
             </Button>
+            <Button onClick={() => navigate('/auth')} size="md" variant="secondary">
+              <LogIn className="h-5 w-5" />
+              מָסַךְ חִבּוּר
+            </Button>
             <Button onClick={() => navigate('/settings')} size="md" variant="secondary">
               <Settings className="h-5 w-5" />
               הַגְדָּרוֹת
@@ -333,7 +377,7 @@ export function WorldMapScreen() {
                 </div>
                 <div className="min-w-[110px]">
                   <p className="text-[11px] font-semibold tracking-[0.14em] text-slate-400">
-                    {isDemoProfileMode ? 'פְּרוֹפִיל דֵּמוֹ' : 'פְּרוֹפִיל'}
+                    {isDemoProfileMode ? 'פְּרוֹפִילֵי אַדְמִין' : 'פְּרוֹפִיל יֶלֶד'}
                   </p>
                   <p className="text-sm font-bold text-slate-900">
                     {currentChildProfile?.name ?? 'חָבֵר חָדָשׁ'}
@@ -341,6 +385,9 @@ export function WorldMapScreen() {
                 </div>
                 <div className="rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-600">
                   גיל {currentChildProfile?.age ?? '--'}
+                </div>
+                <div className="rounded-full bg-[#eef6ff] px-3 py-2 text-xs font-semibold text-[#2563eb]">
+                  {getLevelTrackLabel(activeLevelTrack)}
                 </div>
                 <ChevronDown className={`h-4 w-4 text-slate-500 transition ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
               </button>
@@ -361,7 +408,9 @@ export function WorldMapScreen() {
                 <div className="mb-3 px-2">
                   <p className="text-sm font-bold text-slate-900">מחליפים פרופיל לבדיקה</p>
                   <p className="mt-1 text-xs leading-5 text-slate-500">
-                    כרגע אלה פרופילי דמו לפי גיל. בהמשך פרופילי הילדים ינוהלו מתוך חשבון Google.
+                    {experienceMode === 'admin'
+                      ? 'כרגע אלה פרופילי דמו לפי גיל לבדיקת כל השאלות והשלבים.'
+                      : 'אלה פרופילי הילדים של המשתמש המחובר. כאן מחליפים בין הילדים שנוצרו בחשבון.'}
                   </p>
                 </div>
 
@@ -400,7 +449,8 @@ export function WorldMapScreen() {
                         <div className="flex items-center gap-2">
                           {isActive && <Check className="h-4 w-4 text-[#2563eb]" />}
                           <span className="rounded-full bg-white px-3 py-2 text-xs font-semibold text-slate-600">
-                            {profile.completedLevelIds.length}/{missionCatalog.length} שלבים
+                            {getCompletedLevelIdsForTrack(profile, getResolvedActiveLevelTrack(profile)).length}/{missionCatalog.length}{' '}
+                            {getLevelTrackLabel(getResolvedActiveLevelTrack(profile))}
                           </span>
                         </div>
                       </button>
@@ -423,7 +473,13 @@ export function WorldMapScreen() {
             <div className="sm:max-w-[42rem]">
               <h2 className="font-display text-2xl text-slate-900">12 תַּחֲנוֹת עַל הַמַּפָּה</h2>
               <p className="mt-1 text-sm text-slate-500">
-                אֶפְשָׁר לִגְרֹר עִם הָעַכְבָּר אוֹ לִגְלֹל כְּדֵי לִרְאוֹת שְׁלָבִים נוֹסָפִים בְּלִי חֲפִיפוֹת.
+                {activeLevelTrack === 'advanced'
+                  ? isAdminMode
+                    ? `הַסְּבָב הַמִּתְקַדֵּם פָּתוּחַ. כָּאן רוֹאִים שׁוּב אֶת כָּל הַשְּׁלָבִים בְּרָמַת גִּיל ${challengeAge}.`
+                    : 'הַסְּבָב הַמִּתְקַדֵּם פָּתוּחַ. כָּאן נִפְתָּחִים שׁוּב כָּל הַשְּׁלָבִים בְּרָמָה מְאַתְגֶּרֶת יוֹתֵר.'
+                  : `אֶפְשָׁר לִגְרֹר עִם הָעַכְבָּר אוֹ לִגְלֹל כְּדֵי לִרְאוֹת שְׁלָבִים נוֹסָפִים בְּלִי חֲפִיפוֹת.${
+                      advancedTrackUnlocked ? ' אַחֲרֵי סִיּוּם כָּל 10 הַשְּׁלָבִים יִפָּתַח גַּם סְבָב מִתְקַדֵּם.' : ''
+                    }`}
               </p>
             </div>
             <div className="flex max-w-full items-center gap-3 self-start rounded-full border border-[#ffd9cf] bg-white/94 px-4 py-3 text-sm font-semibold text-slate-700 shadow-[0_10px_20px_rgba(242,106,75,0.08)] sm:max-w-[32rem] sm:self-center">
@@ -530,7 +586,9 @@ export function WorldMapScreen() {
                             valueLabel={`${stage.progress}%`}
                           />
                           <div className="rounded-[22px] bg-white/82 px-4 py-3 text-sm font-semibold text-slate-700">
-                            {stage.questionCount} שְׁאֵלוֹת מֻתְאָמוֹת לְגִיל {currentChildProfile?.age ?? '--'}
+                            {isAdminMode
+                              ? `${stage.questionCount} שְׁאֵלוֹת בְּרָמַת גִּיל ${challengeAge}`
+                              : `${stage.questionCount} שְׁאֵלוֹת מֻתְאָמוֹת לַשָּׁלָב הַנּוֹכְחִי`}
                           </div>
                         </div>
                       ) : (

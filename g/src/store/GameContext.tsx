@@ -9,28 +9,178 @@ import { createOwnedCreature, creatureCatalog } from '@/game/content/creatures'
 import { homeWorldCatalog } from '@/game/content/home-worlds'
 import { missionCatalog, seedChildProfiles, worldCatalog } from '@/game/content/catalog'
 import { GameContext, type CompleteMissionInput, type GameContextValue } from '@/store/game-context'
+import {
+  getCompletedLevelIdsForTrack,
+  getResolvedActiveLevelTrack,
+  totalMissionStageCount,
+} from '@/services/levelTrackService'
 import type {
   AppUser,
   AvatarSelection,
   ChildProfile,
   CreatureCareAction,
+  CreaturePurchasePrice,
   DailyLimits,
+  ExperienceMode,
   GameSettings,
   GameState,
+  LevelTrack,
+  PlacedProp,
+  ShopPurchasePrice,
 } from '@/types/models'
-import { loadStoredSnapshot, persistSnapshot, syncSnapshot } from '@/services/progressService'
+import { loadStoredExperienceMode, loadStoredSnapshot, persistSnapshot, syncSnapshot } from '@/services/progressService'
 
 const maxCreaturesInHome = 4
 const demoUnlockedWorldIds = worldCatalog.map((world) => world.id)
+const starterUnlockedWorldIds = [worldCatalog[0]?.id ?? 'forest-of-numbers']
+const adminDemoUser: AppUser = {
+  id: 'admin-demo',
+  name: 'אדמין דמו',
+  email: 'admin@demo.gamekids',
+}
+
+function cloneChildProfile(profile: ChildProfile): ChildProfile {
+  const completedLevelIds = [...profile.completedLevelIds]
+  const advancedCompletedLevelIds = [...(profile.advancedCompletedLevelIds ?? [])]
+
+  return {
+    ...profile,
+    avatarSeed: {
+      ...profile.avatarSeed,
+    },
+    completedLevelIds,
+    advancedCompletedLevelIds,
+    activeLevelTrack: getResolvedActiveLevelTrack({
+      ...profile,
+      completedLevelIds,
+      advancedCompletedLevelIds,
+      activeLevelTrack: profile.activeLevelTrack ?? 'standard',
+    }),
+    equippedItems: [...profile.equippedItems],
+  }
+}
 
 function mergeSeedProfiles(childProfiles: ChildProfile[] | undefined) {
-  const mergedProfiles = new Map(seedChildProfiles.map((profile) => [profile.id, profile]))
+  const mergedProfiles = new Map(seedChildProfiles.map((profile) => [profile.id, cloneChildProfile(profile)]))
 
   childProfiles?.forEach((profile) => {
-    mergedProfiles.set(profile.id, profile)
+    mergedProfiles.set(profile.id, cloneChildProfile(profile))
   })
 
   return [...mergedProfiles.values()].sort((left, right) => left.age - right.age)
+}
+
+function createProgressBySubject(completed = 0, accuracy = 0) {
+  return {
+    math: { completed, total: 8, accuracy },
+    reading: { completed, total: 8, accuracy },
+    english: { completed, total: 8, accuracy },
+    logic: { completed, total: 6, accuracy },
+    memory: { completed, total: 6, accuracy },
+  }
+}
+
+function getDefaultState(mode: ExperienceMode): GameState {
+  if (mode === 'player') {
+    return {
+      experienceMode: 'player',
+      currentUser: null,
+      childProfiles: [],
+      currentChildProfileId: null,
+      currentHomeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
+      xp: 0,
+      coins: 0,
+      stars: 40,
+      unlockedWorlds: [...starterUnlockedWorldIds],
+      progressBySubject: createProgressBySubject(0, 0),
+      settings: {
+        soundEnabled: true,
+        musicEnabled: true,
+        language: 'he',
+        touchFeedback: true,
+      },
+      inventory: [],
+      placedProps: [],
+      ownedCreatures: [],
+      currentLevelId: null,
+      hearts: 3,
+      dailyLimits: {
+        enabled: false,
+        minutes: 20,
+        enabledSubjects: ['math', 'reading', 'english', 'logic', 'memory'],
+      },
+      lastMissionOutcome: null,
+    }
+  }
+
+  return {
+    experienceMode: 'admin',
+    currentUser: adminDemoUser,
+    childProfiles: seedChildProfiles.map(cloneChildProfile),
+    currentChildProfileId: seedChildProfiles[0]?.id ?? null,
+    currentHomeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
+    xp: 566,
+    coins: 1000,
+    stars: 120,
+    unlockedWorlds: [...demoUnlockedWorldIds],
+    progressBySubject: {
+      math: { completed: 3, total: 8, accuracy: 92 },
+      reading: { completed: 2, total: 8, accuracy: 84 },
+      english: { completed: 1, total: 8, accuracy: 77 },
+      logic: { completed: 1, total: 6, accuracy: 80 },
+      memory: { completed: 2, total: 6, accuracy: 89 },
+    },
+    settings: {
+      soundEnabled: true,
+      musicEnabled: true,
+      language: 'he',
+      touchFeedback: true,
+    },
+    inventory: [
+      'starlight-cape',
+      'moon-pillow',
+      'sparkle-ball',
+      'flower-sniff-mat',
+      'cloud-blanket',
+      'rainbow-tunnel',
+      'butterfly-ribbon',
+      'squeaky-duck',
+      'heart-plush',
+    ],
+    placedProps: [
+      {
+        itemId: 'moon-pillow',
+        homeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
+        x: 24,
+        y: 74,
+      },
+    ],
+    ownedCreatures: [
+      {
+        ...createOwnedCreature('sun-corgi', '2026-03-12T08:00:00.000Z'),
+        placedInHome: true,
+        placedHomeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
+        lastFedAt: '2026-03-13T08:00:00.000Z',
+        lastPettedAt: '2026-03-13T09:00:00.000Z',
+        lastPlayedAt: '2026-03-13T10:00:00.000Z',
+        lastRestedAt: '2026-03-13T11:00:00.000Z',
+        care: {
+          feedCount: 2,
+          petCount: 2,
+          playCount: 1,
+          restCount: 1,
+        },
+      },
+    ],
+    currentLevelId: null,
+    hearts: 3,
+    dailyLimits: {
+      enabled: true,
+      minutes: 25,
+      enabledSubjects: ['math', 'reading', 'english', 'logic', 'memory'],
+    },
+    lastMissionOutcome: null,
+  }
 }
 
 function normalizeOwnedCreaturePlacement(creature: GameState['ownedCreatures'][number], fallbackHomeWorldId: string) {
@@ -49,57 +199,8 @@ function normalizeOwnedCreaturePlacement(creature: GameState['ownedCreatures'][n
   }
 }
 
-const defaultState: GameState = {
-  currentUser: null,
-  childProfiles: seedChildProfiles,
-  currentChildProfileId: seedChildProfiles[0]?.id ?? null,
-  currentHomeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
-  xp: 420,
-  coins: 135,
-  stars: 28,
-  unlockedWorlds: demoUnlockedWorldIds,
-  progressBySubject: {
-    math: { completed: 3, total: 8, accuracy: 92 },
-    reading: { completed: 2, total: 8, accuracy: 84 },
-    english: { completed: 1, total: 8, accuracy: 77 },
-    logic: { completed: 1, total: 6, accuracy: 80 },
-    memory: { completed: 2, total: 6, accuracy: 89 },
-  },
-  settings: {
-    soundEnabled: true,
-    musicEnabled: true,
-    language: 'he',
-    touchFeedback: true,
-  },
-  inventory: ['starlight-cape'],
-  ownedCreatures: [
-    {
-      ...createOwnedCreature('sun-corgi', '2026-03-12T08:00:00.000Z'),
-      placedInHome: true,
-      placedHomeWorldId: homeWorldCatalog[0]?.id ?? 'playroom-1',
-      lastFedAt: '2026-03-13T08:00:00.000Z',
-      lastPettedAt: '2026-03-13T09:00:00.000Z',
-      lastPlayedAt: '2026-03-13T10:00:00.000Z',
-      lastRestedAt: '2026-03-13T11:00:00.000Z',
-      care: {
-        feedCount: 2,
-        petCount: 2,
-        playCount: 1,
-        restCount: 1,
-      },
-    },
-  ],
-  currentLevelId: null,
-  hearts: 3,
-  dailyLimits: {
-    enabled: true,
-    minutes: 25,
-    enabledSubjects: ['math', 'reading', 'english', 'logic', 'memory'],
-  },
-  lastMissionOutcome: null,
-}
-
 type GameAction =
+  | { type: 'REPLACE_STATE'; payload: GameState }
   | { type: 'SET_USER'; payload: AppUser | null }
   | { type: 'SET_CURRENT_CHILD'; payload: string }
   | { type: 'SET_CURRENT_HOME_WORLD'; payload: string }
@@ -113,12 +214,13 @@ type GameAction =
   | { type: 'ADD_XP'; payload: number }
   | { type: 'ADD_COINS'; payload: number }
   | { type: 'ADD_STARS'; payload: number }
-  | { type: 'BUY_ITEM'; payload: { itemId: string; price: number } }
-  | { type: 'BUY_CREATURE'; payload: { creatureId: string; priceStars: number; purchasedAt: string } }
+  | { type: 'BUY_ITEM'; payload: { itemId: string; price: ShopPurchasePrice } }
+  | { type: 'BUY_CREATURE'; payload: { creatureId: string; price: CreaturePurchasePrice; purchasedAt: string } }
   | { type: 'TOGGLE_CREATURE_PLACEMENT'; payload: { creatureId: string; homeWorldId: string } }
   | { type: 'CARE_FOR_CREATURE'; payload: { creatureId: string; action: CreatureCareAction; at: string; rewardStars: number } }
   | { type: 'COMPLETE_SPECIAL_REQUEST'; payload: { creatureId: string; rewardStars: number } }
   | { type: 'TOGGLE_CREATURE_ITEM'; payload: { creatureId: string; itemId: string } }
+  | { type: 'PLACE_PROP'; payload: PlacedProp }
   | { type: 'UPDATE_SETTINGS'; payload: Partial<GameSettings> }
   | { type: 'UPDATE_DAILY_LIMITS'; payload: Partial<DailyLimits> }
   | { type: 'RESET_PROGRESS' }
@@ -146,8 +248,9 @@ function migrateLegacyPetEggs(
   })
 }
 
-function getInitialState() {
-  const storedSnapshot = loadStoredSnapshot() as (Partial<GameState> & {
+function hydrateState(mode: ExperienceMode) {
+  const defaultState = getDefaultState(mode)
+  const storedSnapshot = loadStoredSnapshot(mode) as (Partial<GameState> & {
     petEggs?: Array<{ eggId: string; purchasedAt: string }>
   }) | null
 
@@ -175,7 +278,10 @@ function getInitialState() {
       }
     : null
 
-  const mergedChildProfiles = mergeSeedProfiles(storedSnapshot.childProfiles)
+  const mergedChildProfiles =
+    mode === 'admin'
+      ? mergeSeedProfiles(storedSnapshot.childProfiles)
+      : (storedSnapshot.childProfiles ?? []).map(cloneChildProfile)
   const currentChildProfileId = mergedChildProfiles.some((profile) => profile.id === storedSnapshot.currentChildProfileId)
     ? storedSnapshot.currentChildProfileId ?? defaultState.currentChildProfileId
     : mergedChildProfiles[0]?.id ?? defaultState.currentChildProfileId
@@ -183,14 +289,25 @@ function getInitialState() {
   return {
     ...defaultState,
     ...storedSnapshot,
+    experienceMode: mode,
     stars: storedSnapshot.stars ?? defaultState.stars,
+    coins: storedSnapshot.coins ?? defaultState.coins,
     childProfiles: mergedChildProfiles,
     currentHomeWorldId: storedSnapshot.currentHomeWorldId ?? defaultState.currentHomeWorldId,
-    unlockedWorlds: Array.from(new Set([...(storedSnapshot.unlockedWorlds ?? []), ...defaultState.unlockedWorlds])),
+    placedProps: storedSnapshot.placedProps ?? defaultState.placedProps,
+    unlockedWorlds:
+      mode === 'admin'
+        ? Array.from(new Set([...(storedSnapshot.unlockedWorlds ?? []), ...defaultState.unlockedWorlds]))
+        : Array.from(new Set(storedSnapshot.unlockedWorlds?.length ? storedSnapshot.unlockedWorlds : defaultState.unlockedWorlds)),
     ownedCreatures: migratedOwnedCreatures.length ? migratedOwnedCreatures : defaultState.ownedCreatures,
     currentChildProfileId,
     lastMissionOutcome: migratedOutcome,
   }
+}
+
+function getInitialState() {
+  const mode = loadStoredExperienceMode() ?? 'admin'
+  return hydrateState(mode)
 }
 
 function unlockNextWorld(unlockedWorlds: string[], currentWorldId: string) {
@@ -204,29 +321,44 @@ function unlockNextWorld(unlockedWorlds: string[], currentWorldId: string) {
   return [...unlockedWorlds, nextWorld.id]
 }
 
-function upsertCompletedLevel(state: GameState, levelId: string) {
+function upsertCompletedLevel(state: GameState, levelId: string, levelTrack: LevelTrack) {
   return state.childProfiles.map((profile) => {
     if (profile.id !== state.currentChildProfileId) {
       return profile
     }
 
-    if (profile.completedLevelIds.includes(levelId)) {
+    if (getCompletedLevelIdsForTrack(profile, levelTrack).includes(levelId)) {
       return profile
     }
 
     const relatedMission = missionCatalog.find((mission) => mission.levelId === levelId)
     const nextLevel = Math.max(profile.level, profile.level + (relatedMission ? 1 : 0))
+    const nextStandardCompletedLevelIds =
+      levelTrack === 'standard' ? [...profile.completedLevelIds, levelId] : [...profile.completedLevelIds]
+    const nextAdvancedCompletedLevelIds =
+      levelTrack === 'advanced'
+        ? [...(profile.advancedCompletedLevelIds ?? []), levelId]
+        : [...(profile.advancedCompletedLevelIds ?? [])]
+    const nextActiveLevelTrack =
+      levelTrack === 'standard' && nextStandardCompletedLevelIds.length >= totalMissionStageCount
+        ? 'advanced'
+        : profile.activeLevelTrack
 
     return {
       ...profile,
       level: nextLevel,
-      completedLevelIds: [...profile.completedLevelIds, levelId],
+      completedLevelIds: nextStandardCompletedLevelIds,
+      advancedCompletedLevelIds: nextAdvancedCompletedLevelIds,
+      activeLevelTrack: nextActiveLevelTrack,
     }
   })
 }
 
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
+    case 'REPLACE_STATE':
+      return action.payload
+
     case 'SET_USER':
       return {
         ...state,
@@ -246,16 +378,17 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       }
 
     case 'UPSERT_CHILD': {
-      const exists = state.childProfiles.some((profile) => profile.id === action.payload.id)
+      const normalizedProfile = cloneChildProfile(action.payload)
+      const exists = state.childProfiles.some((profile) => profile.id === normalizedProfile.id)
 
       return {
         ...state,
         childProfiles: exists
           ? state.childProfiles.map((profile) =>
-              profile.id === action.payload.id ? action.payload : profile,
+              profile.id === normalizedProfile.id ? normalizedProfile : profile,
             )
-          : [...state.childProfiles, action.payload],
-        currentChildProfileId: action.payload.id,
+          : [...state.childProfiles, normalizedProfile],
+        currentChildProfileId: normalizedProfile.id,
       }
     }
 
@@ -285,22 +418,25 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         total: 6,
         accuracy: 0,
       }
+      const currentChildProfile = state.childProfiles.find((profile) => profile.id === state.currentChildProfileId)
       const starsEarned =
         action.payload.starsEarned ??
         (action.payload.score >= 95 ? 3 : action.payload.score >= 80 ? 2 : 1)
-      const alreadyCompleted = state.childProfiles
-        .find((profile) => profile.id === state.currentChildProfileId)
-        ?.completedLevelIds.includes(action.payload.levelId)
+      const alreadyCompleted = getCompletedLevelIdsForTrack(currentChildProfile, action.payload.levelTrack).includes(
+        action.payload.levelId,
+      )
+      const resolvedStarsEarned = alreadyCompleted ? 0 : starsEarned
+      const shouldAddStarsToBalance = !alreadyCompleted && !action.payload.starsAlreadyGranted
 
       return {
         ...state,
         xp: alreadyCompleted ? state.xp : state.xp + action.payload.xpEarned,
         coins: alreadyCompleted ? state.coins : state.coins + action.payload.coinsEarned,
-        stars: alreadyCompleted ? state.stars : state.stars + starsEarned,
+        stars: shouldAddStarsToBalance ? state.stars + resolvedStarsEarned : state.stars,
         currentLevelId: null,
         childProfiles: alreadyCompleted
           ? state.childProfiles
-          : upsertCompletedLevel(state, action.payload.levelId),
+          : upsertCompletedLevel(state, action.payload.levelId, action.payload.levelTrack),
         progressBySubject: {
           ...state.progressBySubject,
           [action.payload.subject]: {
@@ -315,10 +451,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         lastMissionOutcome: {
           success: true,
           levelId: action.payload.levelId,
+          levelTrack: action.payload.levelTrack,
           score: action.payload.score,
           xpEarned: action.payload.xpEarned,
           coinsEarned: action.payload.coinsEarned,
-          starsEarned,
+          starsEarned: resolvedStarsEarned,
           explanation: action.payload.explanation,
         },
       }
@@ -343,19 +480,31 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       }
 
     case 'BUY_ITEM':
-      if (state.coins < action.payload.price || state.inventory.includes(action.payload.itemId)) {
+      if (
+        (action.payload.price.currency === 'coins' && state.coins < action.payload.price.amount) ||
+        (action.payload.price.currency === 'stars' && state.stars < action.payload.price.amount) ||
+        state.inventory.includes(action.payload.itemId)
+      ) {
         return state
       }
 
       return {
         ...state,
-        coins: state.coins - action.payload.price,
+        coins:
+          action.payload.price.currency === 'coins'
+            ? state.coins - action.payload.price.amount
+            : state.coins,
+        stars:
+          action.payload.price.currency === 'stars'
+            ? state.stars - action.payload.price.amount
+            : state.stars,
         inventory: [...state.inventory, action.payload.itemId],
       }
 
     case 'BUY_CREATURE':
       if (
-        state.stars < action.payload.priceStars ||
+        (action.payload.price.currency === 'stars' && state.stars < action.payload.price.amount) ||
+        (action.payload.price.currency === 'coins' && state.coins < action.payload.price.amount) ||
         state.ownedCreatures.some((creature) => creature.creatureId === action.payload.creatureId)
       ) {
         return state
@@ -363,7 +512,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
       return {
         ...state,
-        stars: state.stars - action.payload.priceStars,
+        stars:
+          action.payload.price.currency === 'stars'
+            ? state.stars - action.payload.price.amount
+            : state.stars,
+        coins:
+          action.payload.price.currency === 'coins'
+            ? state.coins - action.payload.price.amount
+            : state.coins,
         ownedCreatures: [
           ...state.ownedCreatures,
           createOwnedCreature(action.payload.creatureId, action.payload.purchasedAt),
@@ -479,6 +635,28 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         }),
       }
 
+    case 'PLACE_PROP': {
+      if (!state.inventory.includes(action.payload.itemId)) {
+        return state
+      }
+
+      const itemAlreadyPlacedIndex = state.placedProps.findIndex((placedProp) => placedProp.itemId === action.payload.itemId)
+
+      if (itemAlreadyPlacedIndex === -1) {
+        return {
+          ...state,
+          placedProps: [...state.placedProps, action.payload],
+        }
+      }
+
+      return {
+        ...state,
+        placedProps: state.placedProps.map((placedProp) =>
+          placedProp.itemId === action.payload.itemId ? action.payload : placedProp,
+        ),
+      }
+    }
+
     case 'UPDATE_SETTINGS':
       return {
         ...state,
@@ -497,18 +675,30 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         },
       }
 
-    case 'RESET_PROGRESS':
+    case 'RESET_PROGRESS': {
+      const resetDefaultState = getDefaultState(state.experienceMode)
+      const resetProfiles: ChildProfile[] =
+        state.experienceMode === 'admin'
+          ? resetDefaultState.childProfiles.map(cloneChildProfile)
+          : state.childProfiles.map((profile) => ({
+              ...profile,
+              completedLevelIds: [],
+              advancedCompletedLevelIds: [],
+              activeLevelTrack: 'standard' as LevelTrack,
+              level: 1,
+            }))
+
       return {
-        ...defaultState,
+        ...resetDefaultState,
         currentUser: state.currentUser,
-        childProfiles: state.childProfiles.map((profile) => ({
-          ...profile,
-          completedLevelIds: [],
-          level: 1,
-        })),
-        currentChildProfileId: state.currentChildProfileId,
-        currentHomeWorldId: defaultState.currentHomeWorldId,
+        childProfiles: resetProfiles,
+        currentChildProfileId:
+          resetProfiles.find((profile) => profile.id === state.currentChildProfileId)?.id ??
+          resetProfiles[0]?.id ??
+          resetDefaultState.currentChildProfileId,
+        currentHomeWorldId: resetDefaultState.currentHomeWorldId,
       }
+    }
 
     default:
       return state
@@ -533,8 +723,18 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const value: GameContextValue = {
     ...state,
     currentChildProfile,
+    isAdminMode: state.experienceMode === 'admin',
     setCurrentUser(user) {
       dispatch({ type: 'SET_USER', payload: user })
+    },
+    setExperienceMode(mode) {
+      dispatch({ type: 'REPLACE_STATE', payload: hydrateState(mode) })
+    },
+    toggleExperienceMode() {
+      dispatch({
+        type: 'REPLACE_STATE',
+        payload: hydrateState(state.experienceMode === 'admin' ? 'player' : 'admin'),
+      })
     },
     setCurrentChildProfile(childId) {
       dispatch({ type: 'SET_CURRENT_CHILD', payload: childId })
@@ -559,9 +759,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatch({ type: 'START_MISSION', payload: levelId })
     },
     completeMission(input) {
-      const alreadyCompleted = state.childProfiles
-        .find((profile) => profile.id === state.currentChildProfileId)
-        ?.completedLevelIds.includes(input.levelId)
+      const profile = state.childProfiles.find((nextProfile) => nextProfile.id === state.currentChildProfileId)
+      const alreadyCompleted = getCompletedLevelIdsForTrack(profile, input.levelTrack).includes(input.levelId)
       const starsEarned =
         input.starsEarned ?? (input.score >= 95 ? 3 : input.score >= 80 ? 2 : 1)
 
@@ -570,6 +769,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
       return {
         success: true,
         levelId: input.levelId,
+        levelTrack: input.levelTrack,
         score: input.score,
         xpEarned: alreadyCompleted ? 0 : input.xpEarned,
         coinsEarned: alreadyCompleted ? 0 : input.coinsEarned,
@@ -587,25 +787,37 @@ export function GameProvider({ children }: { children: ReactNode }) {
       dispatch({ type: 'ADD_STARS', payload: value })
     },
     buyItem(itemId, price) {
-      if (state.coins < price || state.inventory.includes(itemId)) {
-        return false
+      if (state.inventory.includes(itemId)) {
+        return 'owned'
+      }
+
+      if (price.currency === 'stars' && state.stars < price.amount) {
+        return 'insufficient-stars'
+      }
+
+      if (price.currency === 'coins' && state.coins < price.amount) {
+        return 'insufficient-coins'
       }
 
       dispatch({ type: 'BUY_ITEM', payload: { itemId, price } })
-      return true
+      return 'success'
     },
-    buyCreature(creatureId, priceStars) {
+    buyCreature(creatureId, price) {
       if (state.ownedCreatures.some((creature) => creature.creatureId === creatureId)) {
         return 'owned'
       }
 
-      if (state.stars < priceStars) {
+      if (price.currency === 'stars' && state.stars < price.amount) {
         return 'insufficient-stars'
+      }
+
+      if (price.currency === 'coins' && state.coins < price.amount) {
+        return 'insufficient-coins'
       }
 
       dispatch({
         type: 'BUY_CREATURE',
-        payload: { creatureId, priceStars, purchasedAt: new Date().toISOString() },
+        payload: { creatureId, price, purchasedAt: new Date().toISOString() },
       })
       return 'success'
     },
@@ -656,6 +868,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     },
     toggleCreatureItem(creatureId, itemId) {
       dispatch({ type: 'TOGGLE_CREATURE_ITEM', payload: { creatureId, itemId } })
+    },
+    placeProp(placement) {
+      dispatch({ type: 'PLACE_PROP', payload: placement })
     },
     updateSettings(input) {
       dispatch({ type: 'UPDATE_SETTINGS', payload: input })

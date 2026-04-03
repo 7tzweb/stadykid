@@ -7,11 +7,14 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { getWorldById, missionCatalog } from '@/game/content/catalog'
 import { useGame } from '@/hooks/useGame'
+import { getCompletedLevelIdsForTrack, getResolvedActiveLevelTrack } from '@/services/levelTrackService'
 
 export function MissionSelectionScreen() {
   const navigate = useNavigate()
   const { worldId } = useParams()
   const { currentChildProfile, startMission, unlockedWorlds } = useGame()
+  const activeLevelTrack = getResolvedActiveLevelTrack(currentChildProfile)
+  const completedLevelIds = getCompletedLevelIdsForTrack(currentChildProfile, activeLevelTrack)
   const world = worldId ? getWorldById(worldId) : undefined
 
   useEffect(() => {
@@ -45,7 +48,7 @@ export function MissionSelectionScreen() {
             const unlockedByProgress =
               !mission.isLocked ||
               !previousMission ||
-              currentChildProfile?.completedLevelIds.includes(previousMission.levelId) ||
+              completedLevelIds.includes(previousMission.levelId) ||
               false
             const isUnlocked = unlockedWorlds.includes(world.id) && unlockedByProgress
 

@@ -8,6 +8,7 @@ import type {
   WorldDefinition,
 } from '@/types/models'
 import shopItemPriceOverridesJson from './shop-item-price-overrides.json'
+import shopItemsJson from './shop-items.json'
 
 export const avatarCatalog: AvatarCatalog = {
   hair: ['כֶּתֶר כּוֹכָבִים', 'קוֹקִיּוֹת קֶשֶׁת', 'בָּרָק כָּתוֹם', 'גַּל יָרֵחַ'],
@@ -38,6 +39,8 @@ export const seedChildProfiles: ChildProfile[] = demoAges.map((age, index) => ({
   favoriteSubject: demoFavoriteSubjects[index % demoFavoriteSubjects.length],
   petName: demoPetNames[index % demoPetNames.length],
   completedLevelIds: [...demoCompletedLevelIds],
+  advancedCompletedLevelIds: [],
+  activeLevelTrack: 'standard',
   equippedItems: index === 0 ? ['starlight-cape'] : [],
   avatarSeed: {
     bodyColor: demoBodyColors[index % demoBodyColors.length],
@@ -221,72 +224,22 @@ export const missionCatalog: MissionDefinition[] = [
 
 const shopItemPriceOverrides = shopItemPriceOverridesJson as Record<string, number>
 
-const baseShopCatalog: ShopItem[] = [
-  {
-    id: 'starlight-cape',
-    category: 'Clothes',
-    name: 'גְּלִימַת אוֹר כּוֹכָבִים',
-    description: 'נוֹתֶנֶת לַדְּמוּת נוֹכְחוּת נוֹצֶצֶת בַּמַּפָּה.',
-    price: 40,
-    icon: '🧥',
-    accent: '#F97316',
-  },
-  {
-    id: 'jungle-boots',
-    category: 'Clothes',
-    name: 'מִגְפֵּי ג׳וּנְגֶּל',
-    description: 'מוּכָנִים לִקְפִיצוֹת בְּיַעַר הַמִּסְפָּרִים.',
-    price: 28,
-    icon: '🥾',
-    accent: '#16A34A',
-  },
-  {
-    id: 'sunny-cap',
-    category: 'Clothes',
-    name: 'כּוֹבַע שֶׁמֶשׁ',
-    description: 'שׁוֹמֵר עַל הַגּוּר מוּכָן לְיוֹם מוּאָר בֶּחָצֵר.',
-    price: 22,
-    icon: '🧢',
-    accent: '#FB7185',
-  },
-  {
-    id: 'sun-pin',
-    category: 'Accessories',
-    name: 'סִיכַּת שֶׁמֶשׁ',
-    description: 'אֲבִיזָר קָטָן עִם הַרְבֵּה מַצַּב רוּחַ.',
-    price: 18,
-    icon: '🌞',
-    accent: '#EAB308',
-  },
-  {
-    id: 'cloud-bag',
-    category: 'Accessories',
-    name: 'תִּיק עָנָן',
-    description: 'אוֹסֵף בְּתוֹכוֹ פְּרָסִים מֵהָאִי.',
-    price: 24,
-    icon: '☁️',
-    accent: '#06B6D4',
-  },
-  {
-    id: 'sunny-shades',
-    category: 'Accessories',
-    name: 'מִשְׁקְפֵי שֶׁמֶשׁ',
-    description: 'נוֹתְנִים לַגּוּר מַרְאֶה קַיָּצִי וְשָׂמֵחַ בִּמְיֻחָד.',
-    price: 26,
-    icon: '🕶️',
-    accent: '#0F172A',
-  },
-]
+const baseShopCatalog = shopItemsJson as ShopItem[]
 
 export const shopCatalog: ShopItem[] = baseShopCatalog.map((item) => {
   const overriddenPrice = shopItemPriceOverrides[item.id]
+  const currency = item.currency ?? 'stars'
 
   if (typeof overriddenPrice !== 'number') {
-    return item
+    return {
+      ...item,
+      currency,
+    }
   }
 
   return {
     ...item,
+    currency,
     price: overriddenPrice,
   }
 })
@@ -303,6 +256,7 @@ export const shopCategoryLabels: Record<ShopCategory, string> = {
   Eggs: 'בֵּיצִים',
   Clothes: 'בְּגָדִים',
   Accessories: 'אֲבִיזָרִים',
+  Props: 'חֲפָצִים',
 }
 
 export const parentInsights: ParentInsight[] = [

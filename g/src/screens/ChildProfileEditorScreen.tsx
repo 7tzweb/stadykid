@@ -14,7 +14,7 @@ const starterColors = ['#FFD166', '#7BDFF2', '#CDB4FF', '#A7F3D0']
 export function ChildProfileEditorScreen() {
   const navigate = useNavigate()
   const { childId } = useParams()
-  const { childProfiles, addChildProfile, updateChildProfile } = useGame()
+  const { childProfiles, addChildProfile, isAdminMode, setCurrentChildProfile, updateChildProfile } = useGame()
   const existingProfile = childProfiles.find((profile) => profile.id === childId)
   const [name, setName] = useState(existingProfile?.name ?? '')
   const [age, setAge] = useState(existingProfile?.age.toString() ?? '6')
@@ -39,6 +39,8 @@ export function ChildProfileEditorScreen() {
       favoriteSubject,
       petName,
       completedLevelIds: existingProfile?.completedLevelIds ?? [],
+      advancedCompletedLevelIds: existingProfile?.advancedCompletedLevelIds ?? [],
+      activeLevelTrack: existingProfile?.activeLevelTrack ?? 'standard',
       equippedItems: existingProfile?.equippedItems ?? [],
       avatarSeed: existingProfile?.avatarSeed ?? {
         bodyColor,
@@ -58,13 +60,24 @@ export function ChildProfileEditorScreen() {
       addChildProfile(nextProfile)
     }
 
-    navigate(`/avatar-builder/${nextProfile.id}`)
+    setCurrentChildProfile(nextProfile.id)
+
+    if (isAdminMode) {
+      navigate(`/avatar-builder/${nextProfile.id}`)
+      return
+    }
+
+    navigate('/worlds')
   }
 
   return (
     <ScreenLayout
       eyebrow="עֲרִיכַת פְּרוֹפִיל"
-      subtitle="יוֹצְרִים אוֹ עוֹרְכִים פְּרוֹפִיל יֶלֶד לִפְנֵי בְּחִירַת הַדְּמוּת וְהַתְחָלַת הַמִּשְׂחָק."
+      subtitle={
+        isAdminMode
+          ? 'יוֹצְרִים אוֹ עוֹרְכִים פְּרוֹפִיל יֶלֶד לִפְנֵי בְּחִירַת הַדְּמוּת וְהַתְחָלַת הַמִּשְׂחָק.'
+          : 'במצב שחקן ממלאים רק שם וגיל, שומרים ונכנסים מיד למשחק.'
+      }
       title={existingProfile ? 'עֲרִיכַת פְּרוֹפִיל ילד' : 'יְצִירַת פְּרוֹפִיל חָדָשׁ'}
       tone="sand"
     >
@@ -92,31 +105,35 @@ export function ChildProfileEditorScreen() {
               />
             </label>
 
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-slate-600">נושא אהוב</span>
-              <select
-                className="w-full rounded-[22px] border border-slate-200 bg-white px-4 py-4 outline-none focus:border-[#f26a4b]"
-                onChange={(event) => setFavoriteSubject(event.target.value)}
-                value={favoriteSubject}
-              >
-                {['חֶשְׁבּוֹן', 'קְרִיאָה', 'אַנְגְּלִית', 'לוֹגִיקָה', 'זִיכָּרוֹן'].map((subject) => (
-                  <option key={subject} value={subject}>
-                    {subject}
-                  </option>
-                ))}
-              </select>
-            </label>
+            {isAdminMode && (
+              <>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-slate-600">נושא אהוב</span>
+                  <select
+                    className="w-full rounded-[22px] border border-slate-200 bg-white px-4 py-4 outline-none focus:border-[#f26a4b]"
+                    onChange={(event) => setFavoriteSubject(event.target.value)}
+                    value={favoriteSubject}
+                  >
+                    {['חֶשְׁבּוֹן', 'קְרִיאָה', 'אַנְגְּלִית', 'לוֹגִיקָה', 'זִיכָּרוֹן'].map((subject) => (
+                      <option key={subject} value={subject}>
+                        {subject}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-            <label className="block space-y-2">
-              <span className="text-sm font-semibold text-slate-600">שם חיית המחמד</span>
-              <input
-                className="w-full rounded-[22px] border border-slate-200 bg-white px-4 py-4 outline-none focus:border-[#f26a4b]"
-                onChange={(event) => setPetName(event.target.value)}
-                value={petName}
-              />
-            </label>
+                <label className="block space-y-2">
+                  <span className="text-sm font-semibold text-slate-600">שם חיית המחמד</span>
+                  <input
+                    className="w-full rounded-[22px] border border-slate-200 bg-white px-4 py-4 outline-none focus:border-[#f26a4b]"
+                    onChange={(event) => setPetName(event.target.value)}
+                    value={petName}
+                  />
+                </label>
+              </>
+            )}
 
-            {!existingProfile && (
+            {isAdminMode && !existingProfile && (
               <div className="space-y-3">
                 <span className="text-sm font-semibold text-slate-600">צבע בסיס לדמות</span>
                 <div className="flex flex-wrap gap-3">
@@ -138,7 +155,7 @@ export function ChildProfileEditorScreen() {
 
             <div className="flex flex-wrap gap-3">
               <Button type="submit">
-                המשך לבניית אווטאר
+                {isAdminMode ? 'המשך לבניית אווטאר' : 'שומרים וּמַתְחִילִים'}
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <Button onClick={() => navigate('/profiles')} type="button" variant="secondary">
@@ -154,8 +171,9 @@ export function ChildProfileEditorScreen() {
           </div>
           <h2 className="font-display text-3xl text-slate-900">מה יקרה בשלב הבא?</h2>
           <p className="text-slate-600">
-            אחרי שמירת הפרופיל עוברים למסך בְּנִיַּת דְּמוּת. שם בוחרים שֵׂעָר, עֵינַיִם, בְּגָדִים וחיית
-            מחמד, ואז ממשיכים ישר למפת העולם.
+            {isAdminMode
+              ? 'אחרי שמירת הפרופיל עוברים למסך בְּנִיַּת דְּמוּת. שם בוחרים שֵׂעָר, עֵינַיִם, בְּגָדִים וחיית מחמד, ואז ממשיכים ישר למפת העולם.'
+              : 'אחרי השמירה נכנסים ישר למשחק עם פרופיל חדש, בלי שלב נוסף של בניית דמות.'}
           </p>
           <div
             className="mx-auto mt-4 flex h-52 w-44 flex-col items-center justify-center rounded-[36px] border border-white/70 shadow-inner"

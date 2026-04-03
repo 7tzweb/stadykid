@@ -9,7 +9,7 @@ import { useGame } from '@/hooks/useGame'
 
 export function SplashScreen() {
   const navigate = useNavigate()
-  const { currentUser } = useGame()
+  const { currentUser, experienceMode } = useGame()
 
   return (
     <ScreenLayout contentClassName="flex flex-col justify-between" tone="sunrise">
@@ -47,7 +47,10 @@ export function SplashScreen() {
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            <Button className="min-w-[220px]" onClick={() => navigate('/profiles')}>
+            <Button
+              className="min-w-[220px]"
+              onClick={() => navigate(experienceMode === 'player' && !currentUser ? '/auth' : '/profiles')}
+            >
               מַתְחִילִים לְשַׂחֵק
               <ArrowLeft className="h-5 w-5" />
             </Button>

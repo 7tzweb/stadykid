@@ -1,0 +1,341 @@
+[
+  {
+    "id": "starlight-cape",
+    "category": "Clothes",
+    "name": "גְּלִימַת אוֹר כּוֹכָבִים",
+    "description": "נוֹתֶנֶת לַדְּמוּת נוֹכְחוּת נוֹצֶצֶת בַּמַּפָּה.",
+    "price": 40,
+    "icon": "🧥",
+    "accent": "#F97316"
+  },
+  {
+    "id": "jungle-boots",
+    "category": "Clothes",
+    "name": "מִגְפֵּי ג׳וּנְגֶּל",
+    "description": "מוּכָנִים לִקְפִיצוֹת בְּיַעַר הַמִּסְפָּרִים.",
+    "price": 28,
+    "icon": "🥾",
+    "accent": "#16A34A"
+  },
+  {
+    "id": "sunny-cap",
+    "category": "Clothes",
+    "name": "כּוֹבַע שֶׁמֶשׁ",
+    "description": "שׁוֹמֵר עַל הַגּוּר מוּכָן לְיוֹם מוּאָר בֶּחָצֵר.",
+    "price": 22,
+    "icon": "🧢",
+    "accent": "#FB7185"
+  },
+  {
+    "id": "patchwork-dream-shorts",
+    "category": "Clothes",
+    "name": "מִכְנְסוֹנֵי חֲלוֹם טְלָאִים",
+    "description": "מִכְנְסוֹנִים רַכִּים עִם כִּיסִים קְטַנִּים בְּגוֹנֵי מַמְתָּקִים.",
+    "price": 27,
+    "icon": "🩳",
+    "accent": "#C4B5FD",
+    "image": "/assets/shop/clothes/patchwork-dream-shorts.png"
+  },
+  {
+    "id": "pastel-pocket-vest",
+    "category": "Clothes",
+    "name": "וֶסְט כִּיסִים פַּסְטֵלִי",
+    "description": "וֶסְט נָעִים וּמָלֵא כִּיסִים קְטַנִּים לְמַרְאֶה מָתוֹק וּמְסֻדָּר.",
+    "price": 29,
+    "icon": "🦺",
+    "accent": "#FDBA74",
+    "image": "/assets/shop/clothes/pastel-pocket-vest.png"
+  },
+  {
+    "id": "rainbow-tutu-skirt",
+    "category": "Clothes",
+    "name": "חֲצָאִית טוּטוּ קֶשֶׁת",
+    "description": "חֲצָאִית שְׁכָבוֹת מְנַצְנֶצֶת שֶׁמַּרְגִּישָׁה כְּמוֹ מַסִּיבָּה קְטַנָּה.",
+    "price": 31,
+    "icon": "🩰",
+    "accent": "#F9A8D4",
+    "image": "/assets/shop/clothes/rainbow-tutu-skirt.png"
+  },
+  {
+    "id": "angel-heart-shirt",
+    "category": "Clothes",
+    "name": "חוּלְצַת כַּנְפֵי לֵב",
+    "description": "חוּלְצָה בְּגוֹנֵי שָׁמַיִם עִם לֵב מוּכְנָף לְמַרְאֶה רַךְ וּזָהִיר.",
+    "price": 30,
+    "icon": "👕",
+    "accent": "#93C5FD",
+    "image": "/assets/shop/clothes/angel-heart-shirt.png"
+  },
+  {
+    "id": "kitty-wings-shirt",
+    "category": "Clothes",
+    "name": "חוּלְצַת חֲתוּלִית מְכוּנֶּפֶת",
+    "description": "חוּלְצָה מְתוּקָה עִם חֲתוּלִית קְטַנָּה וְכַנְפַיִם קַלּוֹת.",
+    "price": 32,
+    "icon": "🎀",
+    "accent": "#FCA5A5",
+    "image": "/assets/shop/clothes/kitty-wings-shirt.png"
+  },
+  {
+    "id": "rainbow-smile-shirt",
+    "category": "Clothes",
+    "name": "חוּלְצַת קֶשֶׁת מְחַיֶּכֶת",
+    "description": "חוּלְצָה קְלִילָה עִם קֶשֶׁת חַמָּה וְגוֹנִים רַכִּים.",
+    "price": 28,
+    "icon": "🌈",
+    "accent": "#FDE68A",
+    "image": "/assets/shop/clothes/rainbow-smile-shirt.png"
+  },
+  {
+    "id": "glow-heart-shirt",
+    "category": "Clothes",
+    "name": "חוּלְצַת לֵב זוֹהֵר",
+    "description": "חוּלְצָה עֲדִינָה עִם לֵב גָּדוֹל וּנִיצוֹצוֹת עַל הַחָזֶה.",
+    "price": 27,
+    "icon": "💖",
+    "accent": "#FDA4AF",
+    "image": "/assets/shop/clothes/glow-heart-shirt.png"
+  },
+  {
+    "id": "sun-pin",
+    "category": "Accessories",
+    "name": "סִיכַּת שֶׁמֶשׁ",
+    "description": "אֲבִיזָר קָטָן עִם הַרְבֵּה מַצַּב רוּחַ.",
+    "price": 18,
+    "icon": "🌞",
+    "accent": "#EAB308"
+  },
+  {
+    "id": "cloud-bag",
+    "category": "Accessories",
+    "name": "תִּיק עָנָן",
+    "description": "אוֹסֵף בְּתוֹכוֹ פְּרָסִים מֵהָאִי.",
+    "price": 24,
+    "icon": "☁️",
+    "accent": "#06B6D4"
+  },
+  {
+    "id": "sunny-shades",
+    "category": "Accessories",
+    "name": "מִשְׁקְפֵי שֶׁמֶשׁ",
+    "description": "נוֹתְנִים לַגּוּר מַרְאֶה קַיָּצִי וְשָׂמֵחַ בִּמְיֻחָד.",
+    "price": 26,
+    "currency": "coins",
+    "icon": "🕶️",
+    "accent": "#0F172A"
+  },
+  {
+    "id": "butterfly-glasses",
+    "category": "Accessories",
+    "name": "מִשְׁקְפֵי פַּרְפַּר נִיצוֹץ",
+    "description": "מִשְׁקְפַיִם מְתוּקִים בְּצוּרַת פַּרְפָּר לְמַרְאֶה קָסוּם וּמְשַׂחֵק.",
+    "price": 23,
+    "currency": "coins",
+    "icon": "🦋",
+    "accent": "#F9A8D4",
+    "image": "/assets/shop/accessories/butterfly-glasses.png"
+  },
+  {
+    "id": "heart-crystal-necklace",
+    "category": "Accessories",
+    "name": "שַׁרְשֶׁרֶת לֵב קְרִיסְטָל",
+    "description": "שַׁרְשֶׁרֶת עֲדִינָה עִם לֵב זוֹהֵר וְאַבְנֵי פַּסְטֵל קְטַנּוֹת.",
+    "price": 25,
+    "currency": "coins",
+    "icon": "📿",
+    "accent": "#C4B5FD",
+    "image": "/assets/shop/accessories/heart-crystal-necklace.png"
+  },
+  {
+    "id": "moon-pillow",
+    "category": "Props",
+    "name": "כַּר יָרֵחַ רַךְ",
+    "description": "כַּר רַךְ לִמְנוּחָה, הִתְכַּרְבְּלוּת וּשְׁנָצִים קְטַנִּים.",
+    "price": 24,
+    "icon": "🛏️",
+    "accent": "#C4B5FD"
+  },
+  {
+    "id": "sparkle-ball",
+    "category": "Props",
+    "name": "כַּדּוּר נִיצוֹץ",
+    "description": "כַּדּוּר קַל וּקוֹפְצָנִי שֶׁמַּזְמִין רִיצוֹת וְמֶרְדָּפִים.",
+    "price": 29,
+    "icon": "🎾",
+    "accent": "#FCD34D"
+  },
+  {
+    "id": "flower-sniff-mat",
+    "category": "Props",
+    "name": "מַשָּׁט רֵיחוֹת פְּרָחִים",
+    "description": "מַשָּׁט חִפּוּשׂ רֵיחוֹת שֶׁמְּעוֹרֵר סַקְרָנוּת וַחֲקִירָה.",
+    "price": 31,
+    "icon": "🌼",
+    "accent": "#86EFAC"
+  },
+  {
+    "id": "cloud-blanket",
+    "category": "Props",
+    "name": "שְׂמִיכַת עָנָן",
+    "description": "שְׂמִיכָה נָעִימָה לְהִתְכַּסּוֹת, לְהִתְכַּרְבֵּל וּלְהֵרָגַע.",
+    "price": 28,
+    "icon": "🧸",
+    "accent": "#BAE6FD"
+  },
+  {
+    "id": "rainbow-tunnel",
+    "category": "Props",
+    "name": "מִנְהֶרֶת קֶשֶׁת",
+    "description": "מִנְהֶרֶת צִבְעוֹנִית לִרְצוֹת בָּהּ, לְהִתְחַבֵּא וְלַחֲזֹר הַחוּצָה.",
+    "price": 34,
+    "icon": "🌈",
+    "accent": "#FDBA74"
+  },
+  {
+    "id": "butterfly-ribbon",
+    "category": "Props",
+    "name": "סֶרֶט פַּרְפַּר",
+    "description": "סֶרֶט קַל וּמַרְחֵף שֶׁמַּזְמִין מַרְדָּפִים וְקְפִיצוֹת שְׂמֵחוֹת.",
+    "price": 27,
+    "icon": "🪁",
+    "accent": "#F9A8D4"
+  },
+  {
+    "id": "squeaky-duck",
+    "category": "Props",
+    "name": "בַּרְוָז חוֹרֵק",
+    "description": "צַעֲצוּעַ קָטָן וּמַצְחִיק שֶׁמַּעֲלֶה לַגּוּר אֶת מַצַּב הָרוּחַ.",
+    "price": 22,
+    "icon": "🦆",
+    "accent": "#FDE68A"
+  },
+  {
+    "id": "heart-plush",
+    "category": "Props",
+    "name": "בֻּבַּת לֵב רַכָּה",
+    "description": "בֻּבָּה רַכָּה לְחִבּוּק, הַרְגָּעָה וְרִגְעֵי קִרְבָה.",
+    "price": 26,
+    "icon": "💗",
+    "accent": "#FDA4AF"
+  },
+  {
+    "id": "dream-unicorn-playground",
+    "category": "Props",
+    "name": "מִגְרַשׁ חַד־קֶרֶן חֲלוֹמוֹת",
+    "description": "מִתְקַן מִשְׂחָק רַךְ עִם מַסְלוּל וּשְׁקִיפוּת מַמְתָּקִית לִמְשַׂחֲקִים אֲרוּכִּים.",
+    "price": 46,
+    "icon": "🦄",
+    "accent": "#F9A8D4",
+    "image": "/assets/shop/props/dream-unicorn-playground.png"
+  },
+  {
+    "id": "sweet-skateboard",
+    "category": "Props",
+    "name": "סְקֵיְטְבּוֹרְד מַמְתָּקִים",
+    "description": "סְקֵיְטְבּוֹרְד קָטָן וּצְבַעְבָּע לִגְלִישׁוֹת מְשַׂחֲקוֹת בַּחֶדֶר.",
+    "price": 25,
+    "icon": "🛹",
+    "accent": "#93C5FD",
+    "image": "/assets/shop/props/sweet-skateboard.png"
+  },
+  {
+    "id": "tea-party-table",
+    "category": "Props",
+    "name": "שֻׁלְחַן מְסִבַּת תֵּה",
+    "description": "שֻׁלְחָן עָגוֹל לִפְגִישׁוֹת חֲבֵרִים, סִפּוּרִים וּמְנוּחָה נְעִימָה.",
+    "price": 33,
+    "icon": "🫖",
+    "accent": "#FCA5A5",
+    "image": "/assets/shop/props/tea-party-table.png"
+  },
+  {
+    "id": "garden-slide-park",
+    "category": "Props",
+    "name": "גַּן מַגְלֵשָׁה פַּסְטֵלִי",
+    "description": "פִּנַּת חָצֵר מָתוֹקָה עִם מַגְלֵשָׁה וּפִנַּת מִשְׂחָק לַגּוּרִים.",
+    "price": 44,
+    "icon": "🛝",
+    "accent": "#86EFAC",
+    "image": "/assets/shop/props/garden-slide-park.png"
+  },
+  {
+    "id": "teddy-twin-seat",
+    "category": "Props",
+    "name": "סַפְסַל דֻּבּוֹנִים זוּגִי",
+    "description": "סַפְסַל רַךְ לִשְׁנֵי חֲבֵרִים קְטַנִּים לְרִגְעֵי קִרְבָה.",
+    "price": 28,
+    "icon": "🧸",
+    "accent": "#FDE68A",
+    "image": "/assets/shop/props/teddy-twin-seat.png"
+  },
+  {
+    "id": "heart-surprise-booth",
+    "category": "Props",
+    "name": "דֻּכַּן הַפְתָּעוֹת לֵב",
+    "description": "דֻּכָּן נוֹצֵץ שֶׁמַּרְגִּישׁ כְּמוֹ פִּנַּת הַפְתָּעוֹת בִּירִיד קָסוּם.",
+    "price": 38,
+    "icon": "🎁",
+    "accent": "#FDA4AF",
+    "image": "/assets/shop/props/heart-surprise-booth.png"
+  },
+  {
+    "id": "fluffy-heart-rug",
+    "category": "Props",
+    "name": "שְׁטִיחַ לֵב פַּלָּפִי",
+    "description": "שְׁטִיחַ רַךְ וְחַמִּים לִרְבִיצָה, חִבּוּק וּפִנַּת שֶׁקֶט.",
+    "price": 22,
+    "icon": "🩷",
+    "accent": "#F9A8D4",
+    "image": "/assets/shop/props/fluffy-heart-rug.png"
+  },
+  {
+    "id": "starlight-play-console",
+    "category": "Props",
+    "name": "שֻׁלְחַן מִשְׂחָק כּוֹכָבִים",
+    "description": "מִתְקַן מְאוֹרָה קָטָן עִם כַּפּוֹרִים וְאֳרוֹת לִמְשַׂחֲקֵי חֶדֶר שְׂמֵחִים.",
+    "price": 36,
+    "icon": "🎮",
+    "accent": "#93C5FD",
+    "image": "/assets/shop/props/starlight-play-console.png"
+  },
+  {
+    "id": "rainbow-splash-pool",
+    "category": "Props",
+    "name": "בְּרֵיכַת קֶשֶׁת מְשַׂחֶקֶת",
+    "description": "בְּרֵיכָה צִבְעוֹנִית וּמְנֻפַּחַת לְמִשְׂחָקֵי קַיִץ מְרַעֲנְנִים.",
+    "price": 41,
+    "icon": "🏖️",
+    "accent": "#67E8F9",
+    "image": "/assets/shop/props/rainbow-splash-pool.png"
+  },
+  {
+    "id": "golden-moon-swing",
+    "category": "Props",
+    "name": "נַדְנֶדֶת יָרֵחַ זָהָב",
+    "description": "נַדְנֶדֶת תְּלוּיָה בְּצוּרַת יָרֵחַ לִרְגָעִים שֶׁל שֶׁקֶט וְחֲלוֹם.",
+    "price": 34,
+    "icon": "🌙",
+    "accent": "#FCD34D",
+    "image": "/assets/shop/props/golden-moon-swing.png"
+  },
+  {
+    "id": "flower-dream-bed",
+    "category": "Props",
+    "name": "מִטַּת חֲלוֹם פְּרָחִים",
+    "description": "מִטָּה עֲגוּלָּה וּרַכָּה בְּעִטּוּר פְּרָחִים לִמְנוּחָה מְפוֹנֶקֶת.",
+    "price": 32,
+    "icon": "🌸",
+    "accent": "#C4B5FD",
+    "image": "/assets/shop/props/flower-dream-bed.png"
+  },
+  {
+    "id": "rainbow-beach-ball",
+    "category": "Props",
+    "name": "כַּדּוּר חוֹף קֶשֶׁת",
+    "description": "כַּדּוּר קַלִּיל וּקַיָּצִי לִרְדִיפוֹת, זְרִיקוֹת וּקְפִיצוֹת.",
+    "price": 23,
+    "icon": "🏐",
+    "accent": "#FDE68A",
+    "image": "/assets/shop/props/rainbow-beach-ball.png"
+  }
+]

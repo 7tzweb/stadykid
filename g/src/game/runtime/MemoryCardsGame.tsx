@@ -94,13 +94,16 @@ export function MemoryCardsGame({
   }
 
   return (
-    <Card className="space-y-4 p-4 lg:p-5">
+    <Card className="overflow-hidden border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.95),rgba(240,253,244,0.98))] p-4 shadow-[0_18px_48px_rgba(15,23,42,0.08)] lg:p-5">
       <div className="space-y-2 text-center">
-        <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">קלפי זִיכָּרוֹן</p>
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#bbf7d0] bg-[#f0fdf4] px-4 py-2 text-sm font-bold text-[#15803d]">
+          <span className="text-base">🃏</span>
+          תחנת זיכרון
+        </div>
         <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{activity.content.prompt}</h3>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 rounded-[30px] bg-[linear-gradient(180deg,rgba(240,253,244,0.72),rgba(255,255,255,0.72))] p-3 sm:grid-cols-3 lg:grid-cols-4">
         {deck.map((card) => {
           const isMatched = matchedPairIds.includes(card.pairId)
           const isFlipped = flippedCardIds.includes(card.id)
@@ -108,10 +111,10 @@ export function MemoryCardsGame({
           return (
             <button
               className={clsx(
-                'aspect-square rounded-[28px] border transition',
+                'aspect-square rounded-[30px] border shadow-[0_10px_24px_rgba(15,23,42,0.05)] transition',
                 isMatched && 'border-emerald-300 bg-emerald-50 text-emerald-900',
                 !isMatched && isFlipped && 'border-[#0ea5e9] bg-[#f0f9ff] text-sky-900',
-                !isMatched && !isFlipped && 'border-slate-200 bg-white hover:border-[#0ea5e9]',
+                !isMatched && !isFlipped && 'border-white/80 bg-white hover:-translate-y-0.5 hover:border-[#0ea5e9]',
               )}
               disabled={disabled || isMatched || flippedCardIds.length === 2}
               key={card.id}
@@ -121,7 +124,7 @@ export function MemoryCardsGame({
               {isMatched || isFlipped ? (
                 <div className="space-y-2">
                   <div className="text-3xl">{card.emoji}</div>
-                  <p className="text-xs font-bold">{card.label}</p>
+                  <p className="text-xs font-black">{card.label}</p>
                 </div>
               ) : (
                 <div className="space-y-2">

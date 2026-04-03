@@ -1,16 +1,28 @@
+import clsx from 'clsx'
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
-import { ArrowLeft, House, Lightbulb, Pause, Settings } from 'lucide-react'
+import { ArrowLeft, CheckCircle2, Circle, Coins, Flag, House, Lightbulb, Pause, Settings, ShoppingBag, Sparkles } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { ScreenLayout } from '@/components/layout/ScreenLayout'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Modal } from '@/components/ui/Modal'
-import type { GameLevel } from '@/game/engine/level-schema'
+import type { GameActivity, GameLevel } from '@/game/engine/level-schema'
 import { MiniGameHost } from '@/game/runtime/MiniGameHost'
 import type { GameCompletion } from '@/game/runtime/renderer-types'
 import { useGame } from '@/hooks/useGame'
 import { loadLevelDefinition } from '@/services/levelService'
+import {
+  getCompletedLevelIdsForTrack,
+  getLevelTrackLabel,
+  getResolvedActiveLevelTrack,
+} from '@/services/levelTrackService'
+import {
+  buildLevelProgressStorageKey,
+  clearStoredLevelProgress,
+  loadStoredLevelProgress,
+  persistStoredLevelProgress,
+} from '@/services/levelProgressService'
 
 type LoadState = 'loading' | 'ready' | 'error'
 type SuccessCelebration = {
@@ -21,6 +33,51 @@ type SuccessCelebration = {
 }
 
 const successCelebrationDurationMs = 1150
+
+function getActivityTypeLabel(activityType: GameActivity['type']) {
+  switch (activityType) {
+    case 'multiple_choice':
+      return 'בחירה'
+    case 'drag_and_drop':
+      return 'גרירה'
+    case 'match_pairs':
+      return 'זוגות'
+    case 'memory_cards':
+      return 'זיכרון'
+    default:
+      return 'משחק'
+  }
+}
+
+function getActivityTypePalette(activityType: GameActivity['type']) {
+  switch (activityType) {
+    case 'multiple_choice':
+      return {
+        badge: 'border-[#ffd8c2] bg-[#fff5ee] text-[#ea580c]',
+        iconWrap: 'bg-[#fff1eb] text-[#ea580c]',
+      }
+    case 'drag_and_drop':
+      return {
+        badge: 'border-[#bfdbfe] bg-[#eff6ff] text-[#2563eb]',
+        iconWrap: 'bg-[#e0f2fe] text-[#0369a1]',
+      }
+    case 'match_pairs':
+      return {
+        badge: 'border-[#ddd6fe] bg-[#f5f3ff] text-[#7c3aed]',
+        iconWrap: 'bg-[#ede9fe] text-[#6d28d9]',
+      }
+    case 'memory_cards':
+      return {
+        badge: 'border-[#bbf7d0] bg-[#f0fdf4] text-[#15803d]',
+        iconWrap: 'bg-[#dcfce7] text-[#166534]',
+      }
+    default:
+      return {
+        badge: 'border-slate-200 bg-slate-50 text-slate-700',
+        iconWrap: 'bg-slate-100 text-slate-700',
+      }
+  }
+}
 
 export function GameScreen() {
   const { levelId } = useParams()
@@ -40,7 +97,7 @@ export function GameScreen() {
 
 function GameScreenSession({ levelId }: { levelId: string }) {
   const navigate = useNavigate()
-  const { completeMission, currentChildProfile, startMission } = useGame()
+  const { addStars, coins, completeMission, currentChildProfile, experienceMode, startMission, stars, xp } = useGame()
   const [level, setLevel] = useState<GameLevel | null>(null)
   const [loadState, setLoadState] = useState<LoadState>('loading')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
@@ -56,6 +113,15 @@ function GameScreenSession({ levelId }: { levelId: string }) {
   const [isCompleted, setIsCompleted] = useState(false)
   const [successCelebration, setSuccessCelebration] = useState<SuccessCelebration | null>(null)
   const successTimerRef = useRef<number | null>(null)
+  const activeLevelTrack = getResolvedActiveLevelTrack(currentChildProfile)
+  const completedLevelIdsForTrack = getCompletedLevelIdsForTrack(currentChildProfile, activeLevelTrack)
+  const isCurrentLevelAlreadyCompleted = completedLevelIdsForTrack.includes(levelId)
+  const levelProgressStorageKey = buildLevelProgressStorageKey(
+    experienceMode,
+    currentChildProfile?.id,
+    levelId,
+    activeLevelTrack,
+  )
 
   const startMissionEffect = useEffectEvent((nextLevelId: string) => {
     startMission(nextLevelId)
@@ -76,19 +142,30 @@ function GameScreenSession({ levelId }: { levelId: string }) {
 
     let isCancelled = false
 
-    void loadLevelDefinition(levelId, currentChildProfile?.age)
+    void loadLevelDefinition(levelId, currentChildProfile?.age, activeLevelTrack)
       .then((nextLevel) => {
         if (isCancelled) {
           return
         }
 
+        const storedProgress = loadStoredLevelProgress(levelProgressStorageKey)
+        const resolvedStoredIndex = storedProgress
+          ? Math.min(Math.max(0, storedProgress.currentActivityIndex), nextLevel.activities.length - 1)
+          : 0
+        const resolvedStoredHintIndex = storedProgress
+          ? Math.min(
+              Math.max(0, storedProgress.hintIndex),
+              Math.max(0, nextLevel.activities[resolvedStoredIndex]?.hints.length - 1),
+            )
+          : 0
+
         setLevel(nextLevel)
-        setCurrentActivityIndex(0)
-        setCurrentActivityMistakes(0)
-        setActivityScores([])
-        setEarnedStars(0)
-        setHintIndex(0)
-        setMistakeCount(0)
+        setCurrentActivityIndex(resolvedStoredIndex)
+        setCurrentActivityMistakes(storedProgress?.currentActivityMistakes ?? 0)
+        setActivityScores(storedProgress?.activityScores.slice(0, nextLevel.activities.length) ?? [])
+        setEarnedStars(storedProgress?.earnedStars ?? 0)
+        setHintIndex(resolvedStoredHintIndex)
+        setMistakeCount(storedProgress?.mistakeCount ?? 0)
         setMistakeMessage(null)
         setIsCompleted(false)
         setSuccessCelebration(null)
@@ -106,7 +183,36 @@ function GameScreenSession({ levelId }: { levelId: string }) {
     return () => {
       isCancelled = true
     }
-  }, [currentChildProfile?.age, levelId])
+  }, [activeLevelTrack, currentChildProfile?.age, levelId, levelProgressStorageKey])
+
+  useEffect(() => {
+    if (loadState !== 'ready' || !level || isCompleted) {
+      return
+    }
+
+    persistStoredLevelProgress(levelProgressStorageKey, {
+      levelId,
+      currentActivityIndex,
+      currentActivityMistakes,
+      activityScores,
+      earnedStars,
+      mistakeCount,
+      hintIndex,
+      totalActivityCount: level.activities.length,
+    })
+  }, [
+    activityScores,
+    currentActivityIndex,
+    currentActivityMistakes,
+    earnedStars,
+    hintIndex,
+    isCompleted,
+    level,
+    levelId,
+    levelProgressStorageKey,
+    loadState,
+    mistakeCount,
+  ])
 
   function handleMistake(message: string) {
     setMistakeMessage(message)
@@ -126,9 +232,22 @@ function GameScreenSession({ levelId }: { levelId: string }) {
     const nextEarnedStars = earnedStars + resolvedStarsPerQuestion
     const isFinalActivity = currentActivityIndex >= resolvedActivityCount - 1
     const nextQuestionNumber = currentActivityIndex + 2
+    const nextActivityIndex = Math.min(currentActivityIndex + 1, resolvedActivityCount - 1)
 
+    setActivityScores(nextScores)
     setEarnedStars(nextEarnedStars)
     setMistakeMessage(null)
+
+    if (!isCurrentLevelAlreadyCompleted && resolvedStarsPerQuestion > 0) {
+      addStars(resolvedStarsPerQuestion)
+    }
+
+    if (!isFinalActivity) {
+      setCurrentActivityIndex(nextActivityIndex)
+      setCurrentActivityMistakes(0)
+      setHintIndex(0)
+    }
+
     setSuccessCelebration({
       id: Date.now(),
       stars: resolvedStarsPerQuestion,
@@ -143,24 +262,23 @@ function GameScreenSession({ levelId }: { levelId: string }) {
       setSuccessCelebration(null)
 
       if (!isFinalActivity) {
-        setActivityScores(nextScores)
-        setCurrentActivityIndex((current) => current + 1)
-        setCurrentActivityMistakes(0)
-        setHintIndex(0)
         return
       }
 
       setIsCompleted(true)
+      clearStoredLevelProgress(levelProgressStorageKey)
 
       const averageScore = Math.round(nextScores.reduce((total, value) => total + value, 0) / nextScores.length)
       const outcome = completeMission({
         levelId: level.id,
+        levelTrack: activeLevelTrack,
         worldId: level.worldId,
         subject: level.subject,
         score: averageScore,
         xpEarned: level.rewards.xp,
         coinsEarned: level.rewards.coins,
         starsEarned: nextEarnedStars,
+        starsAlreadyGranted: !isCurrentLevelAlreadyCompleted && nextEarnedStars > 0,
         explanation: `${completion.explanation} הושלמו ${resolvedActivityCount} שאלות בשלב.`,
       })
 
@@ -202,37 +320,99 @@ function GameScreenSession({ levelId }: { levelId: string }) {
 
   const currentActivity = level.activities[Math.min(currentActivityIndex, level.activities.length - 1)]
   const currentHint = currentActivity.hints[Math.min(hintIndex, currentActivity.hints.length - 1)]
+  const completedActivityCount = Math.min(activityScores.length, level.activities.length)
+  const displayedStars = stars
+  const hasRemainingActivities = completedActivityCount < level.activities.length
+  const trackerCurrentIndex = hasRemainingActivities ? completedActivityCount : null
+  const trackerFocusActivity = trackerCurrentIndex !== null ? level.activities[trackerCurrentIndex] : null
+  const displayQuestionNumber = trackerCurrentIndex !== null ? trackerCurrentIndex + 1 : level.activities.length
+  const activityTrail = level.activities.map((activity, index) => {
+    const status =
+      index < completedActivityCount ? 'completed' : trackerCurrentIndex === index ? 'current' : 'upcoming'
+
+    return {
+      activity,
+      index,
+      status,
+      typeLabel: getActivityTypeLabel(activity.type),
+      palette: getActivityTypePalette(activity.type),
+    }
+  })
 
   return (
     <ScreenLayout
       contentClassName="flex min-h-0 flex-col"
       actions={
-        <div className="flex flex-wrap gap-3">
-          <Button onClick={() => navigate('/worlds')} size="md" variant="secondary">
-            <ArrowLeft className="h-5 w-5" />
-            חֲזָרָה לַמַּפָּה
-          </Button>
-          <Button
-            className="shadow-[0_18px_42px_rgba(242,106,75,0.34)]"
-            onClick={() => navigate('/home')}
-            size="md"
-            variant="primary"
-          >
-            <House className="h-5 w-5" />
-            עוֹלַם הַגּוּרִים
-          </Button>
-          <Button onClick={() => setIsHintOpen(true)} size="md" variant="secondary">
-            <Lightbulb className="h-5 w-5" />
-            רֶמֶז
-          </Button>
-          <Button onClick={() => setIsPauseOpen(true)} size="md" variant="secondary">
-            <Pause className="h-5 w-5" />
-            הַפְסָקָה
-          </Button>
-          <Button onClick={() => navigate('/settings')} size="md" variant="secondary">
-            <Settings className="h-5 w-5" />
-            הַגְדָּרוֹת
-          </Button>
+        <div className="flex flex-col items-start gap-3">
+          <div className="flex flex-wrap gap-3">
+            <Button onClick={() => navigate('/worlds')} size="md" variant="secondary">
+              <ArrowLeft className="h-5 w-5" />
+              חֲזָרָה לַמַּפָּה
+            </Button>
+            <Button
+              className="shadow-[0_18px_42px_rgba(242,106,75,0.34)]"
+              onClick={() => navigate('/home')}
+              size="md"
+              variant="primary"
+            >
+              <House className="h-5 w-5" />
+              עוֹלַם הַגּוּרִים
+            </Button>
+            <Button onClick={() => navigate('/shop')} size="md" variant="secondary">
+              <ShoppingBag className="h-5 w-5" />
+              חֲנוּת
+            </Button>
+            <Button onClick={() => setIsHintOpen(true)} size="md" variant="secondary">
+              <Lightbulb className="h-5 w-5" />
+              רֶמֶז
+            </Button>
+            <Button onClick={() => setIsPauseOpen(true)} size="md" variant="secondary">
+              <Pause className="h-5 w-5" />
+              הַפְסָקָה
+            </Button>
+            <Button onClick={() => navigate('/settings')} size="md" variant="secondary">
+              <Settings className="h-5 w-5" />
+              הַגְדָּרוֹת
+            </Button>
+          </div>
+
+          <div className="flex max-w-full flex-wrap items-center gap-2 rounded-[28px] border border-white/85 bg-white/78 px-3 py-2 shadow-[0_16px_36px_rgba(15,23,42,0.08)] backdrop-blur sm:min-w-[30rem]">
+            <div
+              className="flex h-11 w-11 items-center justify-center rounded-full text-lg shadow-inner"
+              style={{
+                background: `linear-gradient(180deg, ${currentChildProfile?.avatarSeed.bodyColor ?? '#FFD166'} 0%, #ffffff 100%)`,
+              }}
+            >
+              ✨
+            </div>
+            <div className="min-w-[110px]">
+              <p className="text-[11px] font-semibold tracking-[0.14em] text-slate-400">פְּרוֹפִיל יֶלֶד</p>
+              <p className="text-sm font-bold text-slate-900">{currentChildProfile?.name ?? 'חָבֵר חָדָשׁ'}</p>
+            </div>
+            <div className="rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-600">
+              גיל {currentChildProfile?.age ?? '--'}
+            </div>
+            <div className="rounded-full bg-[#eef6ff] px-3 py-2 text-xs font-semibold text-[#2563eb]">
+              {getLevelTrackLabel(activeLevelTrack)}
+            </div>
+            <div className="rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-600">{xp} נ״נ</div>
+            <div className="inline-flex items-center gap-1 rounded-full bg-[#fff7ed] px-3 py-2 text-xs font-bold text-[#f59e0b]">
+              <Coins className="h-3.5 w-3.5" />
+              {coins}
+            </div>
+            <div
+              className={clsx(
+                'inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-bold text-[#d97706] transition',
+                earnedStars > 0 ? 'bg-[#fff1bf] shadow-[0_10px_24px_rgba(245,158,11,0.18)] pulse-soft' : 'bg-[#fff7d1]',
+              )}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              {displayedStars}
+            </div>
+            <div className="rounded-full bg-[#fff7f2] px-3 py-2 text-xs font-semibold text-[#ea580c]">
+              בַּשָּׁלָב: +{earnedStars}
+            </div>
+          </div>
         </div>
       }
       eyebrow="מָסַךְ מִשְׂחָק"
@@ -262,40 +442,205 @@ function GameScreenSession({ levelId }: { levelId: string }) {
           </div>
         )}
 
-        <div className="mx-auto w-full max-w-6xl space-y-4 xl:min-h-0">
-          <Card className="grid gap-3 p-4 md:grid-cols-3">
-            <div className="rounded-[24px] bg-white px-4 py-3 text-center shadow-sm">
-              <p className="text-sm font-semibold text-slate-500">התקדמות בשלב</p>
-              <p className="mt-1 text-2xl font-black text-slate-900">
-                {currentActivityIndex + 1}/{level.activities.length}
-              </p>
+        <div className="mx-auto grid w-full max-w-7xl gap-5 xl:min-h-0 xl:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="space-y-4 xl:order-1">
+            <div className="relative overflow-hidden rounded-[38px] border border-white/85 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,250,243,0.96))] p-3 shadow-[0_28px_80px_rgba(15,23,42,0.12)] sm:p-4">
+              <div className="pointer-events-none absolute -left-8 top-8 h-28 w-28 rounded-full bg-[#fde6c8] blur-3xl" />
+              <div className="pointer-events-none absolute bottom-0 right-10 h-32 w-32 rounded-full bg-[#d9f7ee] blur-3xl" />
+              <div className="pointer-events-none absolute left-1/2 top-0 h-20 w-20 -translate-x-1/2 rounded-full bg-[#ffe7ef] blur-2xl" />
+              <div className="relative">
+                <MiniGameHost
+                  activity={currentActivity}
+                  disabled={isCompleted || Boolean(successCelebration)}
+                  key={currentActivity.id}
+                  onMistake={handleMistake}
+                  onSuccess={handleSuccess}
+                />
+              </div>
             </div>
-            <div className="rounded-[24px] bg-[#fff7ed] px-4 py-3 text-center shadow-sm">
-              <p className="text-sm font-semibold text-slate-500">כוכבים בשלב הזה</p>
-              <p className="mt-1 text-2xl font-black text-[#d97706]">{earnedStars}</p>
+
+            {mistakeMessage && (
+              <Card className="overflow-hidden border-amber-200/80 bg-[linear-gradient(135deg,rgba(255,247,237,0.96),rgba(255,251,235,0.98))] p-0 shadow-[0_16px_36px_rgba(245,158,11,0.12)]">
+                <div className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-xs font-semibold tracking-[0.18em] text-amber-700">כִּמְעַט</p>
+                    <p className="mt-1 text-base font-bold text-amber-950">{mistakeMessage}</p>
+                  </div>
+                  <div className="rounded-full bg-white/80 px-4 py-2 text-sm font-bold text-amber-800 shadow-sm">
+                    נִסָּיוֹנוֹת: {mistakeCount}/{level.completionRules.maxMistakes}
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            <Card className="relative overflow-hidden border-white/80 bg-white/86 p-5 shadow-[0_24px_70px_rgba(15,23,42,0.1)]">
+              <div className="pointer-events-none absolute left-6 top-6 h-24 w-24 rounded-full bg-[#ffd9b5]/55 blur-2xl" />
+              <div className="pointer-events-none absolute bottom-0 right-0 h-32 w-32 rounded-full bg-[#c4f1e6]/55 blur-3xl" />
+              <div className="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-[#ffd8c2] bg-[#fff7f2] px-4 py-2 text-sm font-bold text-[#ea580c]">
+                    <Sparkles className="h-4 w-4" />
+                    מַסְלוּל מִשְׂחָק מָלֵא הַפְתָּעוֹת
+                  </div>
+                  <div className="space-y-2">
+                    <p className="text-sm font-semibold tracking-[0.22em] text-slate-500">עַכְשָׁיו בַּתְּחָנָה</p>
+                    <h2 className="font-display text-3xl text-slate-900 sm:text-4xl">
+                      שְׁאֵלָה {displayQuestionNumber} מִתּוֹךְ {level.activities.length}
+                    </h2>
+                    <p className="max-w-2xl text-lg font-semibold text-slate-700">
+                      {trackerFocusActivity?.content.prompt ?? 'כָּל הַתְּחָנוֹת הוּשְׁלְמוּ בְּהַצְלָחָה!'}
+                    </p>
+                    <p className="max-w-2xl text-sm text-slate-500">
+                      {trackerFocusActivity
+                        ? `מַשְׂחָק ${getActivityTypeLabel(trackerFocusActivity.type)} מְחַכֶּה לָנוּ כָּעֵת.`
+                        : 'אֲסַפְתֶּם אֶת כָּל הַהַצְלָחוֹת בַּשָּׁלָב הַזֶּה.'}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    <div className="rounded-full bg-white/90 px-4 py-2 shadow-[0_10px_24px_rgba(15,23,42,0.08)]">
+                      <p className="text-xs font-semibold tracking-[0.18em] text-slate-500">הַצְלָחוֹת</p>
+                      <p className="mt-1 text-lg font-black text-slate-900">
+                        {completedActivityCount}/{level.activities.length}
+                      </p>
+                    </div>
+                    <div className="rounded-full bg-[#fff7ed] px-4 py-2 shadow-[0_10px_24px_rgba(245,158,11,0.14)]">
+                      <p className="text-xs font-semibold tracking-[0.18em] text-amber-700">כּוֹכָבִים</p>
+                      <p className="mt-1 text-lg font-black text-[#d97706]">{earnedStars}</p>
+                    </div>
+                    <div className="rounded-full bg-[#effcf7] px-4 py-2 shadow-[0_10px_24px_rgba(16,185,129,0.12)]">
+                      <p className="text-xs font-semibold tracking-[0.18em] text-emerald-700">רְמָזִים</p>
+                      <p className="mt-1 text-lg font-black text-emerald-900">{currentActivity.hints.length}</p>
+                    </div>
+                    <div className="rounded-full bg-[#fff8f0] px-4 py-2 shadow-[0_10px_24px_rgba(251,146,60,0.1)]">
+                      <p className="text-xs font-semibold tracking-[0.18em] text-orange-700">נִסָּיוֹנוֹת</p>
+                      <p className="mt-1 text-lg font-black text-slate-900">
+                        {mistakeCount}/{level.completionRules.maxMistakes}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="rounded-[30px] border border-white/80 bg-white/72 p-4 shadow-[0_16px_36px_rgba(15,23,42,0.08)] lg:w-[320px]">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-semibold tracking-[0.18em] text-slate-500">מַפַּת הַכּוֹכָבִים</p>
+                      <p className="mt-1 text-lg font-black text-slate-900">כָּכָה רוֹאִים אֵיפֹה אֲנַחְנוּ</p>
+                    </div>
+                    <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff7ed] text-[#d97706] shadow-inner">
+                      <Flag className="h-5 w-5" />
+                    </div>
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {activityTrail.map((entry) => (
+                      <div
+                        className={clsx(
+                          'inline-flex h-11 min-w-11 items-center justify-center rounded-2xl border px-3 text-sm font-black transition',
+                          entry.status === 'completed' &&
+                            'border-emerald-200 bg-emerald-50 text-emerald-700 shadow-[0_10px_24px_rgba(16,185,129,0.12)]',
+                          entry.status === 'current' &&
+                            'game-journey-current border-[#f26a4b] bg-[#fff1eb] text-[#ea580c] shadow-[0_16px_28px_rgba(242,106,75,0.18)]',
+                          entry.status === 'upcoming' && 'border-slate-200 bg-slate-50 text-slate-400',
+                        )}
+                        key={entry.activity.id}
+                      >
+                        {entry.status === 'completed' ? <CheckCircle2 className="h-4 w-4" /> : entry.index + 1}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          <Card className="order-first border-white/80 bg-white/84 p-4 shadow-[0_22px_60px_rgba(15,23,42,0.1)] xl:order-2 xl:sticky xl:top-6 xl:max-h-[calc(100vh-8rem)]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-semibold tracking-[0.18em] text-slate-500">לוּחַ הַהַצְלָחוֹת</p>
+                <h3 className="mt-1 text-2xl font-black text-slate-900">רוֹאִים מָה כְּבָר הִצְלַחְנוּ</h3>
+              </div>
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff7ed] text-[#d97706]">
+                <Sparkles className="h-5 w-5" />
+              </div>
             </div>
-            <div className="rounded-[24px] bg-[#eefaf6] px-4 py-3 text-center shadow-sm">
-              <p className="text-sm font-semibold text-slate-500">טעויות בשאלה הנוכחית</p>
-              <p className="mt-1 text-2xl font-black text-slate-900">{currentActivityMistakes}</p>
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-3 xl:grid-cols-1">
+              <div className="rounded-[24px] bg-[#eefcf7] px-4 py-3 shadow-sm">
+                <p className="text-xs font-semibold tracking-[0.18em] text-emerald-700">כְּבָר נָכוֹן</p>
+                <p className="mt-1 text-2xl font-black text-emerald-900">{completedActivityCount}</p>
+              </div>
+              <div className="rounded-[24px] bg-[#fff7ed] px-4 py-3 shadow-sm">
+                <p className="text-xs font-semibold tracking-[0.18em] text-amber-700">עַכְשָׁיו</p>
+                <p className="mt-1 text-2xl font-black text-slate-900">
+                  {trackerCurrentIndex !== null ? trackerCurrentIndex + 1 : level.activities.length}
+                </p>
+              </div>
+              <div className="rounded-[24px] bg-[#f8fafc] px-4 py-3 shadow-sm">
+                <p className="text-xs font-semibold tracking-[0.18em] text-slate-500">עוֹד נִשְׁאַר</p>
+                <p className="mt-1 text-2xl font-black text-slate-900">
+                  {Math.max(0, level.activities.length - completedActivityCount)}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 rounded-[28px] bg-[#f8fbff] p-3">
+              <p className="text-sm font-bold text-slate-700">כָּל הַתְּחָנוֹת בַּשָּׁלָב</p>
+              <div className="soft-scroll mt-3 max-h-[18rem] space-y-2 overflow-y-auto pr-1 xl:max-h-[calc(100vh-24rem)]">
+                {activityTrail.map((entry) => (
+                  <div
+                    className={clsx(
+                      'rounded-[24px] border px-4 py-3 transition',
+                      entry.status === 'completed' &&
+                        'border-emerald-200 bg-emerald-50/80 shadow-[0_10px_24px_rgba(16,185,129,0.08)]',
+                      entry.status === 'current' &&
+                        'border-[#f7c3b3] bg-[#fff4ed] shadow-[0_16px_28px_rgba(242,106,75,0.12)]',
+                      entry.status === 'upcoming' && 'border-slate-200 bg-white',
+                    )}
+                    key={`tracker-${entry.activity.id}`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={clsx(
+                          'inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl',
+                          entry.status === 'completed' && 'bg-emerald-100 text-emerald-700',
+                          entry.status === 'current' && 'bg-[#ffe6dc] text-[#ea580c]',
+                          entry.status === 'upcoming' && entry.palette.iconWrap,
+                        )}
+                      >
+                        {entry.status === 'completed' ? (
+                          <CheckCircle2 className="h-5 w-5" />
+                        ) : entry.status === 'current' ? (
+                          <Flag className="h-5 w-5" />
+                        ) : (
+                          <Circle className="h-4 w-4" />
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="text-sm font-black text-slate-900">שְׁאֵלָה {entry.index + 1}</span>
+                          <span
+                            className={clsx(
+                              'rounded-full border px-2.5 py-1 text-[11px] font-bold',
+                              entry.palette.badge,
+                            )}
+                          >
+                            {entry.typeLabel}
+                          </span>
+                          <span className="text-[11px] font-semibold text-slate-400">
+                            {entry.status === 'completed'
+                              ? 'הִצְלַחְנוּ'
+                              : entry.status === 'current'
+                                ? 'מְשַׂחֲקִים עַכְשָׁיו'
+                                : 'עוֹד מְעַט'}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-sm font-semibold text-slate-700">{entry.activity.content.prompt}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </Card>
-
-          {mistakeMessage && (
-            <Card className="border border-amber-200 bg-amber-50 p-4 text-amber-900">
-              <p className="font-semibold">{mistakeMessage}</p>
-              <p className="mt-2 text-sm">
-                טעויות כרגע: {mistakeCount} / {level.completionRules.maxMistakes}
-              </p>
-            </Card>
-          )}
-
-          <MiniGameHost
-            activity={currentActivity}
-            disabled={isCompleted || Boolean(successCelebration)}
-            key={currentActivity.id}
-            onMistake={handleMistake}
-            onSuccess={handleSuccess}
-          />
         </div>
       </div>
 

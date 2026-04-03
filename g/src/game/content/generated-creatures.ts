@@ -43,6 +43,11 @@ const magicEggCount = 6
 const magicPupPriceStarsBySequence = [
   20, 20, 20, 34, 41, 36, 48, 39, 52, 45, 37, 57, 43, 34, 48, 39, 52, 36, 45, 41, 57, 43, 37,
 ] as const
+const magicPupPremiumCoinPriceBySequence: Partial<Record<number, number>> = {
+  21: 150,
+  22: 180,
+  23: 220,
+}
 const normalMagicPupHatchDurationMinutes = 120
 
 function getMagicPupPriceStars(sequence: number) {
@@ -54,12 +59,13 @@ export const generatedCreatureCatalog: CreatureDefinition[] = Array.from({ lengt
   const paddedSequence = String(sequence).padStart(2, '0')
   const eggSequence = (index % magicEggCount) + 1
   const priceStars = getMagicPupPriceStars(sequence)
+  const priceCoins = magicPupPremiumCoinPriceBySequence[sequence]
 
   return {
     id: `magic-pup-${paddedSequence}`,
     name: `גּוּר קָסוּם ${sequence}`,
     description: 'גּוּר חָדָשׁ שֶׁאוֹהֵב לְשַׂחֵק, לְקַבֵּל לִטּוּפִים וּלְהִסְתּוֹבֵב בַּבַּיִת הַקָּסוּם.',
-    priceStars,
+    ...(typeof priceCoins === 'number' ? { priceCoins } : { priceStars }),
     accent: magicPupAccentPalette[index % magicPupAccentPalette.length],
     eggImage: `/assets/pets/eggs/e${eggSequence}.png`,
     cardImage: `/assets/pets/puppies/g${sequence}.png`,

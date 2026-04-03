@@ -10,18 +10,24 @@ import {
   formatCountdown,
   formatMinutesLabel,
   getCurrentCreatureStage,
+  getCreaturePurchasePrice,
   getOwnedCreatureById,
   getTimeUntilCreatureHatch,
   isCreatureHatched,
 } from '@/game/content/creatures'
 import { shopCatalog, shopCategoryLabels } from '@/game/content/catalog'
 import { useGame } from '@/hooks/useGame'
-import type { ShopCategory, ShopItem } from '@/types/models'
+import type { ShopCategory, ShopCurrency, ShopItem, ShopPurchasePrice } from '@/types/models'
 
-const categories: ShopCategory[] = ['Eggs', 'Clothes', 'Accessories']
+const categories: ShopCategory[] = ['Eggs', 'Clothes', 'Accessories', 'Props']
 const hiddenStarterCreatureIds = new Set(['moon-fox', 'sun-corgi'])
-const isAdminShopPricingEnabled = import.meta.env.DEV
 type AdminPriceTargetKind = 'creature' | 'shop-item'
+type MissingFundsState = {
+  currency: ShopCurrency
+  currentAmount: number
+  requiredAmount: number
+  itemName: string
+}
 
 function getShowcaseCardBackground(accent: string) {
   return {
@@ -75,14 +81,14 @@ async function persistShopItemPriceOverride(itemId: string, price: number) {
 
 export function ShopScreen() {
   const navigate = useNavigate()
-  const { buyCreature, buyItem, coins, inventory, ownedCreatures, stars } = useGame()
+  const { buyCreature, buyItem, coins, inventory, isAdminMode, ownedCreatures, stars } = useGame()
   const [activeCategory, setActiveCategory] = useState<ShopCategory>('Eggs')
   const [message, setMessage] = useState<{ text: string; tone: 'success' | 'error' } | null>(null)
   const [now, setNow] = useState(() => Date.now())
   const [expandedCreatureId, setExpandedCreatureId] = useState<string | null>(null)
   const [expandedShopItemId, setExpandedShopItemId] = useState<string | null>(null)
   const [adminPriceByCreatureId, setAdminPriceByCreatureId] = useState<Record<string, number>>(() =>
-    Object.fromEntries(creatureCatalog.map((creature) => [creature.id, creature.priceStars])),
+    Object.fromEntries(creatureCatalog.map((creature) => [creature.id, getCreaturePurchasePrice(creature).amount])),
   )
   const [adminPriceByShopItemId, setAdminPriceByShopItemId] = useState<Record<string, number>>(() =>
     Object.fromEntries(shopCatalog.map((item) => [item.id, item.price])),
@@ -90,6 +96,8 @@ export function ShopScreen() {
   const [editingPriceKey, setEditingPriceKey] = useState<string | null>(null)
   const [priceDraftByKey, setPriceDraftByKey] = useState<Record<string, string>>({})
   const [savingPriceKey, setSavingPriceKey] = useState<string | null>(null)
+  const [missingFunds, setMissingFunds] = useState<MissingFundsState | null>(null)
+  const [highlightedWallet, setHighlightedWallet] = useState<ShopCurrency | null>(null)
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -97,10 +105,28 @@ export function ShopScreen() {
     return () => window.clearInterval(timer)
   }, [])
 
+  useEffect(() => {
+    if (!missingFunds) {
+      return undefined
+    }
+
+    const timer = window.setTimeout(() => setMissingFunds(null), 3200)
+    return () => window.clearTimeout(timer)
+  }, [missingFunds])
+
+  useEffect(() => {
+    if (!highlightedWallet) {
+      return undefined
+    }
+
+    const timer = window.setTimeout(() => setHighlightedWallet(null), 1300)
+    return () => window.clearTimeout(timer)
+  }, [highlightedWallet])
+
   const visibleItems = shopCatalog.filter((item) => item.category === activeCategory)
 
   function openAdminPriceEditor(priceKey: string, currentPrice: number) {
-    if (!isAdminShopPricingEnabled) {
+    if (!isAdminMode) {
       return
     }
 
@@ -119,6 +145,8 @@ export function ShopScreen() {
     const priceKey = getAdminPriceEditKey('creature', creatureId)
     const draftValue = priceDraftByKey[priceKey]?.trim() ?? ''
     const parsedPrice = Number(draftValue)
+    const creature = creatureCatalog.find((entry) => entry.id === creatureId)
+    const currencyLabel = creature && getCreaturePurchasePrice(creature).currency === 'coins' ? 'כֶּסֶף' : 'כּוֹכָבִים'
 
     if (!draftValue || !Number.isInteger(parsedPrice) || parsedPrice < 0) {
       setMessage({ text: 'מַחִיר חַיָּב לִהְיוֹת מִסְפָּר שָׁלֵם וְלֹא שְׁלִילִי.', tone: 'error' })
@@ -135,7 +163,7 @@ export function ShopScreen() {
         [payload.creatureId]: payload.priceStars,
       }))
       setEditingPriceKey((current) => (current === priceKey ? null : current))
-      setMessage({ text: `מְחִיר הַיְּצוּר עוּדְכַּן לְ-${payload.priceStars} כּוֹכָבִים.`, tone: 'success' })
+      setMessage({ text: `מְחִיר הַיְּצוּר עוּדְכַּן לְ-${payload.priceStars} ${currencyLabel}.`, tone: 'success' })
     } catch (error) {
       setMessage({
         text: error instanceof Error ? error.message : 'לֹא הִצְלַחְנוּ לְעַדְכֵּן אֶת הַמְּחִיר כָּרֶגַע.',
@@ -160,13 +188,14 @@ export function ShopScreen() {
 
     try {
       const payload = await persistShopItemPriceOverride(item.id, parsedPrice)
+      const currencyLabel = (item.currency ?? 'stars') === 'coins' ? 'מַטְבְּעוֹת' : 'כּוֹכָבִים'
 
       setAdminPriceByShopItemId((current) => ({
         ...current,
         [payload.itemId]: payload.priceStars,
       }))
       setEditingPriceKey((current) => (current === priceKey ? null : current))
-      setMessage({ text: `מְחִיר הַפְּרִיט עוּדְכַּן לְ-${payload.priceStars} מַטְבְּעוֹת.`, tone: 'success' })
+      setMessage({ text: `מְחִיר הַפְּרִיט עוּדְכַּן לְ-${payload.priceStars} ${currencyLabel}.`, tone: 'success' })
     } catch (error) {
       setMessage({
         text: error instanceof Error ? error.message : 'לֹא הִצְלַחְנוּ לְעַדְכֵּן אֶת מְחִיר הַפְּרִיט.',
@@ -177,26 +206,44 @@ export function ShopScreen() {
     }
   }
 
+  function showInsufficientFunds(price: ShopPurchasePrice, itemName: string) {
+    const currentAmount = price.currency === 'coins' ? coins : stars
+    const currencyLabel = price.currency === 'coins' ? 'מַטְבְּעוֹת' : 'כּוֹכָבִים'
+    const shortfall = Math.max(price.amount - currentAmount, 0)
+
+    setHighlightedWallet(price.currency)
+    setMissingFunds({
+      currency: price.currency,
+      currentAmount,
+      requiredAmount: price.amount,
+      itemName,
+    })
+    setMessage({
+      text: `אוּפְּס, חֲסֵרִים עוֹד ${shortfall} ${currencyLabel} כְּדֵי לִקְנוֹת אֶת ${itemName}.`,
+      tone: 'error',
+    })
+  }
+
   function renderPriceControl({
     kind,
     targetId,
     price,
-    currencyIcon,
+    currency,
     onSave,
   }: {
     kind: AdminPriceTargetKind
     targetId: string
     price: number
-    currencyIcon: 'stars' | 'coins'
+    currency: 'stars' | 'coins'
     onSave: () => void
   }) {
     const priceKey = getAdminPriceEditKey(kind, targetId)
     const isEditingPrice = editingPriceKey === priceKey
     const isSavingPrice = savingPriceKey === priceKey
     const currentPriceDraft = priceDraftByKey[priceKey] ?? String(price)
-    const PriceIcon = currencyIcon === 'stars' ? Sparkles : Coins
+    const PriceIcon = currency === 'stars' ? Sparkles : Coins
 
-    if (!isAdminShopPricingEnabled) {
+    if (!isAdminMode) {
       return (
         <div className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[#ffe29a] bg-[#fff7d6] px-3 py-1.5 text-[14px] font-bold leading-none text-[#b45309] shadow-[0_10px_18px_rgba(245,158,11,0.14)]">
           <PriceIcon className="h-4 w-4" />
@@ -272,13 +319,13 @@ export function ShopScreen() {
         </div>
       }
       eyebrow="חֲנוּת"
-      subtitle="כאן קונים ביצים של יצורים עם כוכבים, ובְּגָדִים ואביזרים עם מטבעות מהמשחקים."
+      subtitle="כאן קונים ביצים ויצורים עם כוכבים או כסף פרימיום. בְּגָדִים, אֲבִיזָרִים וַחֲפָצִים עוֹלִים בְּעִקָּר כּוֹכָבִים, וְרַק כַּמָּה אֲבִיזָרִים מְיֻחָדִים עוֹלִים כֶּסֶף."
       title="חֲנוּת הבית הקסום"
       tone="sand"
       contentClassName="relative"
     >
       <div className="relative space-y-6">
-        {isAdminShopPricingEnabled && (
+        {isAdminMode && (
           <div className="pointer-events-none absolute right-0 top-0 z-20">
             <div className="inline-flex max-w-[min(92vw,28rem)] items-center gap-2 rounded-full border border-white/70 bg-white/86 px-4 py-2 text-xs font-semibold text-slate-600 shadow-[0_12px_28px_rgba(15,23,42,0.06)] backdrop-blur">
               <Sparkles className="h-3.5 w-3.5 shrink-0 text-[#f59e0b]" />
@@ -304,16 +351,63 @@ export function ShopScreen() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#fff5bf] px-4 py-3 font-bold text-[#b45309]">
+            <div
+              className={`inline-flex items-center gap-2 rounded-full px-4 py-3 font-bold text-[#b45309] transition ${
+                highlightedWallet === 'stars'
+                  ? 'shop-wallet-alert bg-[#fff0b4] shadow-[0_16px_28px_rgba(245,158,11,0.24)]'
+                  : 'bg-[#fff5bf]'
+              }`}
+            >
               <Sparkles className="h-5 w-5" />
               {stars}
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#fff7ed] px-4 py-3 font-bold text-[#f59e0b]">
+            <div
+              className={`inline-flex items-center gap-2 rounded-full px-4 py-3 font-bold text-[#f59e0b] transition ${
+                highlightedWallet === 'coins'
+                  ? 'shop-wallet-alert bg-[#fff1e2] shadow-[0_16px_28px_rgba(249,115,22,0.2)]'
+                  : 'bg-[#fff7ed]'
+              }`}
+            >
               <Coins className="h-5 w-5" />
               {coins}
             </div>
           </div>
         </Card>
+
+        {missingFunds && (
+          <div className="shop-funds-alert rounded-[28px] border border-[#ffd2c1] bg-white/95 px-5 py-4 shadow-[0_18px_44px_rgba(242,106,75,0.14)] backdrop-blur">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${
+                    missingFunds.currency === 'coins' ? 'bg-[#fff0e1] text-[#ea580c]' : 'bg-[#fff4bf] text-[#b45309]'
+                  }`}
+                >
+                  {missingFunds.currency === 'coins' ? <Coins className="h-6 w-6" /> : <Sparkles className="h-6 w-6" />}
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-black text-[#f26a4b]">
+                    אֵין עוֹד מַסְפִּיק {missingFunds.currency === 'coins' ? 'כֶּסֶף' : 'כּוֹכָבִים'} לְקְנִיַּת {missingFunds.itemName}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-600">
+                    צָרִיךְ {missingFunds.requiredAmount} וְיֵשׁ לָךְ עַכְשָׁו {missingFunds.currentAmount}.
+                  </p>
+                </div>
+              </div>
+
+              <div
+                className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-black ${
+                  missingFunds.currency === 'coins'
+                    ? 'bg-[#fff4e9] text-[#c2410c]'
+                    : 'bg-[#fff7d6] text-[#b45309]'
+                }`}
+              >
+                {missingFunds.currency === 'coins' ? <Coins className="h-4 w-4" /> : <Sparkles className="h-4 w-4" />}
+                עַכְשָׁו יֵשׁ: {missingFunds.currentAmount}
+              </div>
+            </div>
+          </div>
+        )}
 
         {message && (
           <p
@@ -334,7 +428,11 @@ export function ShopScreen() {
                 const nextStagePreview = creature.stages[1] ?? null
                 const isDisabled = Boolean(ownedCreature)
                 const isExpanded = expandedCreatureId === creature.id
-                const creaturePriceStars = adminPriceByCreatureId[creature.id] ?? creature.priceStars
+                const baseCreaturePrice = getCreaturePurchasePrice(creature)
+                const creaturePrice = {
+                  ...baseCreaturePrice,
+                  amount: adminPriceByCreatureId[creature.id] ?? baseCreaturePrice.amount,
+                }
                 const statusLabel = !ownedCreature
                   ? `בְּקִיעָה: ${formatMinutesLabel(creature.hatchDurationMinutes)}`
                   : !hatched
@@ -380,8 +478,8 @@ export function ShopScreen() {
                             {renderPriceControl({
                               kind: 'creature',
                               targetId: creature.id,
-                              price: creaturePriceStars,
-                              currencyIcon: 'stars',
+                              price: creaturePrice.amount,
+                              currency: creaturePrice.currency,
                               onSave: () => {
                                 void saveAdminCreaturePrice(creature.id)
                               },
@@ -391,13 +489,18 @@ export function ShopScreen() {
                               className="min-h-[28px] min-w-[66px] shrink-0 px-2 py-0 text-[7.5px] shadow-[0_6px_12px_rgba(242,106,75,0.1)]"
                               disabled={isDisabled}
                               onClick={() => {
-                                const result = buyCreature(creature.id, creaturePriceStars)
+                                const result = buyCreature(creature.id, creaturePrice)
+                                if (result === 'insufficient-coins' || result === 'insufficient-stars') {
+                                  showInsufficientFunds(creaturePrice, creature.name)
+                                }
                                 setMessage(
                                   result === 'success'
                                     ? { text: `נִרְכְּשָׁה בֵּיצָה חֲדָשָׁה: ${creature.name}`, tone: 'success' }
                                     : result === 'owned'
                                       ? { text: 'הַיְּצוּר הַזֶּה כְּבָר אֶצְלְךָ', tone: 'error' }
-                                      : { text: 'אֵין מַסְפִּיק כּוֹכָבִים כָּרֶגַע', tone: 'error' },
+                                      : result === 'insufficient-coins'
+                                        ? { text: 'אֵין מַסְפִּיק כֶּסֶף פְּרִימְיוּם כָּרֶגַע', tone: 'error' }
+                                        : { text: 'אֵין מַסְפִּיק כּוֹכָבִים כָּרֶגַע', tone: 'error' },
                                 )
                               }}
                               size="md"
@@ -453,7 +556,10 @@ export function ShopScreen() {
             : visibleItems.map((item) => {
                 const owned = inventory.includes(item.id)
                 const isExpanded = expandedShopItemId === item.id
-                const itemPrice = adminPriceByShopItemId[item.id] ?? item.price
+                const itemPrice: ShopPurchasePrice = {
+                  amount: adminPriceByShopItemId[item.id] ?? item.price,
+                  currency: item.currency ?? 'stars',
+                }
 
                 return (
                   <div key={item.id}>
@@ -461,8 +567,16 @@ export function ShopScreen() {
                       className="relative min-h-[380px] overflow-hidden rounded-[34px] shadow-[0_18px_50px_rgba(15,23,42,0.08)]"
                       style={getShowcaseCardBackground(item.accent)}
                     >
-                      <div className="absolute inset-0 flex items-center justify-center pt-14 text-[8.5rem]">
-                        <span className="drop-shadow-[0_18px_28px_rgba(255,255,255,0.35)]">{item.icon}</span>
+                      <div className="absolute inset-0 flex items-center justify-center px-6 pt-14">
+                        {item.image ? (
+                          <img
+                            alt={item.name}
+                            className="max-h-[240px] w-full object-contain drop-shadow-[0_18px_28px_rgba(255,255,255,0.35)]"
+                            src={item.image}
+                          />
+                        ) : (
+                          <span className="text-[8.5rem] drop-shadow-[0_18px_28px_rgba(255,255,255,0.35)]">{item.icon}</span>
+                        )}
                       </div>
                       <div className="absolute inset-0 rounded-[34px] bg-gradient-to-t from-white/10 via-white/4 to-transparent" />
                       <div className="absolute inset-x-3 top-3 z-10">
@@ -484,8 +598,8 @@ export function ShopScreen() {
                             {renderPriceControl({
                               kind: 'shop-item',
                               targetId: item.id,
-                              price: itemPrice,
-                              currencyIcon: 'coins',
+                              price: itemPrice.amount,
+                              currency: itemPrice.currency,
                               onSave: () => {
                                 void saveAdminShopItemPrice(item)
                               },
@@ -495,13 +609,18 @@ export function ShopScreen() {
                               className="min-h-[28px] min-w-[66px] shrink-0 px-2 py-0 text-[7.5px] shadow-[0_6px_12px_rgba(242,106,75,0.1)]"
                               disabled={owned}
                               onClick={() => {
-                                const didBuy = buyItem(item.id, itemPrice)
+                                const result = buyItem(item.id, itemPrice)
+                                if (result === 'insufficient-coins' || result === 'insufficient-stars') {
+                                  showInsufficientFunds(itemPrice, item.name)
+                                }
                                 setMessage(
-                                  didBuy
+                                  result === 'success'
                                     ? { text: `נִרְכַּשׁ בְּהַצְלָחָה: ${item.name}`, tone: 'success' }
-                                    : owned
+                                    : result === 'owned'
                                       ? { text: 'הַפְּרִיט כְּבָר נִמְצָא בַּמְּלַאי', tone: 'error' }
-                                      : { text: 'אֵין מַסְפִּיק מַטְבְּעוֹת כָּרֶגַע', tone: 'error' },
+                                      : result === 'insufficient-coins'
+                                        ? { text: 'אֵין מַסְפִּיק כֶּסֶף כָּרֶגַע.', tone: 'error' }
+                                        : { text: 'אֵין מַסְפִּיק כּוֹכָבִים כָּרֶגַע.', tone: 'error' },
                                 )
                               }}
                               variant={owned ? 'secondary' : 'primary'}
@@ -520,7 +639,11 @@ export function ShopScreen() {
                           {isExpanded && (
                             <div className="mt-4 border-t border-slate-200/80 pt-4">
                               <p className="text-xs font-semibold text-slate-500">
-                                {item.category === 'Clothes' ? 'בֶּגֶד קָסוּם' : 'אֲבִיזָר מְיֻחָד'}
+                                {item.category === 'Clothes'
+                                  ? 'בֶּגֶד קָסוּם'
+                                  : item.category === 'Accessories'
+                                    ? 'אֲבִיזָר מְיֻחָד'
+                                    : 'חֵפֶץ לְגוּרִים'}
                               </p>
                               <p className="mt-3 text-sm leading-6 text-slate-600">{item.description}</p>
                             </div>

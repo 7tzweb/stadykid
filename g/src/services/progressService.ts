@@ -1,16 +1,41 @@
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 
 import { getFirebaseServices } from '@/firebase/config'
-import type { GameState } from '@/types/models'
+import type { ExperienceMode, GameState } from '@/types/models'
 
-const STORAGE_KEY = 'gamekids-state-v1'
+const LEGACY_STORAGE_KEY = 'gamekids-state-v1'
+const MODE_STORAGE_KEY = 'gamekids-experience-mode-v1'
+const SNAPSHOT_STORAGE_KEYS: Record<ExperienceMode, string> = {
+  admin: 'gamekids-admin-state-v1',
+  player: 'gamekids-player-state-v1',
+}
 
-export function loadStoredSnapshot(): GameState | null {
+export function loadStoredExperienceMode(): ExperienceMode | null {
   if (typeof window === 'undefined') {
     return null
   }
 
-  const rawValue = window.localStorage.getItem(STORAGE_KEY)
+  const rawValue = window.localStorage.getItem(MODE_STORAGE_KEY)
+
+  return rawValue === 'admin' || rawValue === 'player' ? rawValue : null
+}
+
+export function persistExperienceMode(mode: ExperienceMode) {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.localStorage.setItem(MODE_STORAGE_KEY, mode)
+}
+
+export function loadStoredSnapshot(mode: ExperienceMode): GameState | null {
+  if (typeof window === 'undefined') {
+    return null
+  }
+
+  const rawValue =
+    window.localStorage.getItem(SNAPSHOT_STORAGE_KEYS[mode]) ??
+    (mode === 'admin' ? window.localStorage.getItem(LEGACY_STORAGE_KEY) : null)
 
   if (!rawValue) {
     return null
@@ -28,13 +53,14 @@ export function persistSnapshot(snapshot: GameState) {
     return
   }
 
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot))
+  persistExperienceMode(snapshot.experienceMode)
+  window.localStorage.setItem(SNAPSHOT_STORAGE_KEYS[snapshot.experienceMode], JSON.stringify(snapshot))
 }
 
 export async function syncSnapshot(snapshot: GameState) {
   const services = getFirebaseServices()
 
-  if (!services || !snapshot.currentUser) {
+  if (!services || !snapshot.currentUser || snapshot.experienceMode !== 'player') {
     return
   }
 
