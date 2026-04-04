@@ -46,21 +46,38 @@ const baseActivitySchema = z.object({
   hints: z.array(hintSchema).min(1),
 })
 
-const multipleChoiceContentSchema = z.object({
-  prompt: z.string().min(1),
-  question: z.string().min(1),
-  options: z
-    .array(
-      z.object({
-        id: z.string().min(1),
-        label: z.string().min(1),
-        emoji: z.string().optional(),
-      }),
-    )
-    .min(2),
-  correctOptionId: z.string().min(1),
-  explanation: z.string().min(1),
-})
+const multipleChoiceContentSchema = z
+  .object({
+    prompt: z.string().min(1),
+    question: z.string().min(1),
+    options: z
+      .array(
+        z.object({
+          id: z.string().min(1),
+          label: z.string().min(1),
+          emoji: z.string().optional(),
+        }),
+      )
+      .min(2),
+    correctOptionId: z.string().min(1),
+    explanation: z.string().min(1),
+  })
+  .superRefine(({ options }, context) => {
+    const seenLabels = new Set<string>()
+
+    options.forEach((option, index) => {
+      if (seenLabels.has(option.label)) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Multiple choice options must have unique labels. Duplicate label: ${option.label}`,
+          path: ['options', index, 'label'],
+        })
+        return
+      }
+
+      seenLabels.add(option.label)
+    })
+  })
 
 const dragAndDropContentSchema = z.object({
   prompt: z.string().min(1),

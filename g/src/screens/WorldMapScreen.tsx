@@ -135,6 +135,7 @@ function isStageButtonTarget(target: EventTarget | null) {
 }
 
 export function WorldMapScreen() {
+  const supportsTouch = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
   const navigate = useNavigate()
   const {
     childProfiles,
@@ -275,6 +276,10 @@ export function WorldMapScreen() {
   const mapPath = buildMapPath(adventureStages.map((stage) => ({ x: stage.x, y: stage.y })))
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+    if (supportsTouch) {
+      return
+    }
+
     if (isStageButtonTarget(event.target)) {
       return
     }
@@ -298,6 +303,10 @@ export function WorldMapScreen() {
   }
 
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    if (supportsTouch) {
+      return
+    }
+
     const viewport = mapViewportRef.current
     const dragState = dragStateRef.current
 
@@ -310,6 +319,10 @@ export function WorldMapScreen() {
   }
 
   function finishPointerDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (supportsTouch) {
+      return
+    }
+
     const viewport = mapViewportRef.current
     const dragState = dragStateRef.current
 
@@ -484,18 +497,23 @@ export function WorldMapScreen() {
             </div>
             <div className="flex max-w-full items-center gap-3 self-start rounded-full border border-[#ffd9cf] bg-white/94 px-4 py-3 text-sm font-semibold text-slate-700 shadow-[0_10px_20px_rgba(242,106,75,0.08)] sm:max-w-[32rem] sm:self-center">
               <Move className="h-4 w-4 text-[#f26a4b]" />
-              <span className="whitespace-normal leading-5">גִּרְרוּ אוֹ הַחְלִיקוּ כְּדֵי לִרְאוֹת עוֹד בַּמַּפָּה</span>
+              <span className="whitespace-normal leading-5">
+                {supportsTouch ? 'מַחְלִיקִים עִם הָאֶצְבַּע כְּדֵי לִרְאוֹת עוֹד בַּמַּפָּה' : 'גִּרְרוּ אוֹ הַחְלִיקוּ כְּדֵי לִרְאוֹת עוֹד בַּמַּפָּה'}
+              </span>
             </div>
           </div>
 
           <div
-            className={`relative flex-1 overflow-hidden bg-[radial-gradient(circle_at_top,#ffffff_0%,#f7f9ff_52%,#edf2ff_100%)] touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+            className={`relative flex-1 overflow-auto overscroll-contain bg-[radial-gradient(circle_at_top,#ffffff_0%,#f7f9ff_52%,#edf2ff_100%)] ${
+              supportsTouch ? '' : isDragging ? 'cursor-grabbing' : 'cursor-grab'
+            }`}
             onPointerCancel={finishPointerDrag}
             onPointerDown={handlePointerDown}
             onPointerLeave={finishPointerDrag}
             onPointerMove={handlePointerMove}
             onPointerUp={finishPointerDrag}
             ref={mapViewportRef}
+            style={{ WebkitOverflowScrolling: 'touch', touchAction: supportsTouch ? 'pan-x pan-y' : 'none' }}
           >
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#edf2ff] via-[#edf2ff]/75 to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#edf2ff] via-[#edf2ff]/75 to-transparent" />

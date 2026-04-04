@@ -552,7 +552,7 @@ function GameScreenSession({ levelId }: { levelId: string }) {
             </Card>
           </div>
 
-          <Card className="order-first border-white/80 bg-white/84 p-4 shadow-[0_22px_60px_rgba(15,23,42,0.1)] xl:order-2 xl:sticky xl:top-6 xl:max-h-[calc(100vh-8rem)]">
+          <Card className="order-2 border-white/80 bg-white/84 p-4 shadow-[0_22px_60px_rgba(15,23,42,0.1)] xl:order-2 xl:sticky xl:top-6 xl:max-h-[calc(100vh-8rem)]">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-semibold tracking-[0.18em] text-slate-500">לוּחַ הַהַצְלָחוֹת</p>

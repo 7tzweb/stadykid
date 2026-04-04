@@ -221,6 +221,7 @@ type GameAction =
   | { type: 'COMPLETE_SPECIAL_REQUEST'; payload: { creatureId: string; rewardStars: number } }
   | { type: 'TOGGLE_CREATURE_ITEM'; payload: { creatureId: string; itemId: string } }
   | { type: 'PLACE_PROP'; payload: PlacedProp }
+  | { type: 'REMOVE_PROP'; payload: { itemId: string } }
   | { type: 'UPDATE_SETTINGS'; payload: Partial<GameSettings> }
   | { type: 'UPDATE_DAILY_LIMITS'; payload: Partial<DailyLimits> }
   | { type: 'RESET_PROGRESS' }
@@ -657,6 +658,12 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       }
     }
 
+    case 'REMOVE_PROP':
+      return {
+        ...state,
+        placedProps: state.placedProps.filter((placedProp) => placedProp.itemId !== action.payload.itemId),
+      }
+
     case 'UPDATE_SETTINGS':
       return {
         ...state,
@@ -871,6 +878,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
     },
     placeProp(placement) {
       dispatch({ type: 'PLACE_PROP', payload: placement })
+    },
+    removeProp(itemId) {
+      dispatch({ type: 'REMOVE_PROP', payload: { itemId } })
     },
     updateSettings(input) {
       dispatch({ type: 'UPDATE_SETTINGS', payload: input })

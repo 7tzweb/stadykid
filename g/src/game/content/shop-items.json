@@ -153,7 +153,8 @@
     "description": "כַּר רַךְ לִמְנוּחָה, הִתְכַּרְבְּלוּת וּשְׁנָצִים קְטַנִּים.",
     "price": 24,
     "icon": "🛏️",
-    "accent": "#C4B5FD"
+    "accent": "#C4B5FD",
+    "image": "/assets/shop/props/moon-pillow.png"
   },
   {
     "id": "sparkle-ball",

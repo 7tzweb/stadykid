@@ -51,7 +51,13 @@ const careCountByAction: Record<CreatureCareAction, keyof OwnedCreature['care']>
   rest: 'restCount',
 }
 
-const randomizedCareIntervalsMinutes = [1, 2, 3] as const
+const careActions = ['feed', 'pet', 'play', 'rest'] as const
+const careActionOrder: Record<CreatureCareAction, number> = {
+  feed: 0,
+  pet: 1,
+  play: 2,
+  rest: 3,
+}
 
 export function createOwnedCreature(creatureId: string, purchasedAt = new Date().toISOString()): OwnedCreature {
   return {
@@ -151,31 +157,119 @@ function getLastActionAt(ownedCreature: OwnedCreature, action: CreatureCareActio
 }
 
 function hashSeed(input: string) {
-  return input.split('').reduce((total, character) => total + character.charCodeAt(0), 0)
+  let hash = 2166136261
+
+  for (const character of input) {
+    hash ^= character.charCodeAt(0)
+    hash = Math.imul(hash, 16777619)
+  }
+
+  return hash >>> 0
 }
 
-function getRandomizedCareIntervalMs(ownedCreature: OwnedCreature, action: Extract<CreatureCareAction, 'feed' | 'pet'>) {
-  const referenceTimestamp = ownedCreature[careTimestampByAction[action]] ?? ownedCreature.purchasedAt
-  const seed = `${ownedCreature.creatureId}:${action}:${referenceTimestamp}`
-  const selectedMinutes = randomizedCareIntervalsMinutes[hashSeed(seed) % randomizedCareIntervalsMinutes.length]
-
-  return selectedMinutes * 60_000
+function seededUnit(seed: string) {
+  return hashSeed(seed) / 4_294_967_295
 }
 
-function getNeedIntervalMs(creature: CreatureDefinition, ownedCreature: OwnedCreature, action: CreatureCareAction) {
+function getTotalCareCount(ownedCreature: OwnedCreature) {
+  return careActions.reduce((total, action) => total + ownedCreature.care[careCountByAction[action]], 0)
+}
+
+function getLatestCareAt(ownedCreature: OwnedCreature) {
+  return careActions.reduce(
+    (latestTimestamp, action) => Math.max(latestTimestamp, getLastActionAt(ownedCreature, action)),
+    new Date(ownedCreature.purchasedAt).getTime(),
+  )
+}
+
+function getRecentCareActions(ownedCreature: OwnedCreature) {
+  return careActions
+    .map((action) => {
+      const lastActionAt = ownedCreature[careTimestampByAction[action]]
+
+      if (typeof lastActionAt !== 'string') {
+        return null
+      }
+
+      return {
+        action,
+        at: new Date(lastActionAt).getTime(),
+      }
+    })
+    .filter((entry): entry is { action: CreatureCareAction; at: number } => Boolean(entry))
+    .sort((left, right) => {
+      if (right.at !== left.at) {
+        return right.at - left.at
+      }
+
+      return careActionOrder[left.action] - careActionOrder[right.action]
+    })
+    .map((entry) => entry.action)
+}
+
+function getBaseNeedDelayMs(creature: CreatureDefinition, action: CreatureCareAction) {
   if (action === 'feed') {
-    return getRandomizedCareIntervalMs(ownedCreature, action)
+    const seconds = creature.needs.hungerIntervalSeconds ?? Math.max(48, Math.round(creature.needs.hungerIntervalMinutes * 2.1))
+    return seconds * 1000
   }
 
   if (action === 'pet') {
-    return getRandomizedCareIntervalMs(ownedCreature, action)
+    const seconds =
+      creature.needs.pettingIntervalSeconds ?? Math.max(36, Math.round(creature.needs.pettingIntervalMinutes * 2))
+    return seconds * 1000
   }
 
   if (action === 'play') {
-    return creature.needs.playIntervalMinutes * 60_000
+    return Math.max(58, Math.round(creature.needs.playIntervalMinutes * 2.25)) * 1000
   }
 
-  return creature.needs.restIntervalMinutes * 60_000
+  return Math.max(72, Math.round(creature.needs.restIntervalMinutes * 2.1)) * 1000
+}
+
+function getNeedDelayMs(creature: CreatureDefinition, ownedCreature: OwnedCreature, action: CreatureCareAction) {
+  const totalCareCount = getTotalCareCount(ownedCreature)
+  const baseDelayMs = getBaseNeedDelayMs(creature, action)
+  const jitterSeed = seededUnit(`${ownedCreature.creatureId}:${totalCareCount}:${action}:need-delay`)
+  const jitterMultiplier =
+    action === 'feed' || action === 'pet' ? 0.76 + jitterSeed * 0.42 : 0.74 + jitterSeed * 0.48
+  const creatureOffsetMs = Math.round(seededUnit(`${ownedCreature.creatureId}:${action}:stagger`) * 10_000)
+
+  return Math.round(baseDelayMs * jitterMultiplier) + creatureOffsetMs
+}
+
+function getQueuedNeedBufferMs(creature: CreatureDefinition, ownedCreature: OwnedCreature, action: CreatureCareAction) {
+  const queueSeed = seededUnit(`${ownedCreature.creatureId}:${action}:queued-buffer`)
+  return Math.round(getBaseNeedDelayMs(creature, action) * (0.38 + queueSeed * 0.24))
+}
+
+function pickScheduledNeedAction(creature: CreatureDefinition, ownedCreature: OwnedCreature) {
+  const totalCareCount = getTotalCareCount(ownedCreature)
+  const averageCareCount = totalCareCount / careActions.length
+  const recentActions = getRecentCareActions(ownedCreature)
+
+  return careActions
+    .map((action) => {
+      const actionCareCount = ownedCreature.care[careCountByAction[action]]
+      const balanceBoost = Math.max(-1.4, Math.min(2.8, (averageCareCount - actionCareCount) * 2.2))
+      const recentPenalty = recentActions[0] === action ? 3.7 : recentActions[1] === action ? 1.45 : 0
+      const firstTimeBoost = actionCareCount === 0 ? 0.72 : 0
+      const creatureBias = seededUnit(`${creature.id}:${action}:bias`) * 1.15
+      const cycleRandomness = seededUnit(
+        `${ownedCreature.creatureId}:${creature.id}:${totalCareCount}:${action}:next-need`,
+      ) * 3.25
+
+      return {
+        action,
+        score: 1 + balanceBoost + firstTimeBoost + creatureBias + cycleRandomness - recentPenalty,
+      }
+    })
+    .sort((left, right) => {
+      if (right.score !== left.score) {
+        return right.score - left.score
+      }
+
+      return careActionOrder[left.action] - careActionOrder[right.action]
+    })[0]?.action
 }
 
 export function getCreatureNeedState(
@@ -183,24 +277,25 @@ export function getCreatureNeedState(
   ownedCreature: OwnedCreature,
   now = Date.now(),
 ) {
-  const entries = (['feed', 'pet', 'play', 'rest'] as CreatureCareAction[]).map((action) => {
-    const dueAfter = getNeedIntervalMs(creature, ownedCreature, action)
-    const elapsed = now - getLastActionAt(ownedCreature, action)
+  const scheduledAction = pickScheduledNeedAction(creature, ownedCreature) ?? 'feed'
+  const elapsed = now - getLatestCareAt(ownedCreature)
+  const dueAfter = getNeedDelayMs(creature, ownedCreature, scheduledAction)
+  const queueRemainingMs = Math.max(0, dueAfter - elapsed)
+
+  const entries = careActions.map((action) => {
+    const isScheduledAction = action === scheduledAction
+    const queuedBufferMs = getQueuedNeedBufferMs(creature, ownedCreature, action)
 
     return {
       action,
-      isDue: elapsed >= dueAfter,
-      overdueBy: Math.max(0, elapsed - dueAfter),
-      remainingMs: Math.max(0, dueAfter - elapsed),
+      isDue: isScheduledAction && elapsed >= dueAfter,
+      overdueBy: isScheduledAction ? Math.max(0, elapsed - dueAfter) : 0,
+      remainingMs: isScheduledAction ? queueRemainingMs : queueRemainingMs + queuedBufferMs,
     }
   })
 
-  const primaryNeed = entries
-    .filter((entry) => entry.isDue)
-    .sort((left, right) => right.overdueBy - left.overdueBy)[0]?.action ?? null
-
   return {
-    primaryNeed,
+    primaryNeed: elapsed >= dueAfter ? scheduledAction : null,
     entries,
   }
 }

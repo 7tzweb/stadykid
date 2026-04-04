@@ -52,6 +52,12 @@ select {
   font: inherit;
 }
 
+button {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 ::selection {
   background: rgba(242, 106, 75, 0.2);
 }

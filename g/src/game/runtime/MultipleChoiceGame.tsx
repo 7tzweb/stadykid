@@ -5,12 +5,43 @@ import { Card } from '@/components/ui/Card'
 import type { MultipleChoiceActivity } from '@/game/engine/level-schema'
 import type { MiniGameRendererProps } from '@/game/runtime/renderer-types'
 
+type MultipleChoiceOption = MultipleChoiceActivity['content']['options'][number]
+
+function shuffleOptions(options: MultipleChoiceOption[]) {
+  const shuffled = [...options]
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1))
+    const current = shuffled[index]
+
+    shuffled[index] = shuffled[randomIndex]!
+    shuffled[randomIndex] = current!
+  }
+
+  return shuffled
+}
+
+function buildRandomizedOptions(activity: MultipleChoiceActivity) {
+  const correctOption = activity.content.options.find((option) => option.id === activity.content.correctOptionId)
+
+  if (!correctOption) {
+    return shuffleOptions(activity.content.options)
+  }
+
+  const wrongOptions = shuffleOptions(activity.content.options.filter((option) => option.id !== correctOption.id))
+  const correctOptionIndex = Math.floor(Math.random() * activity.content.options.length)
+
+  wrongOptions.splice(correctOptionIndex, 0, correctOption)
+  return wrongOptions
+}
+
 export function MultipleChoiceGame({
   activity,
   onSuccess,
   onMistake,
   disabled,
 }: MiniGameRendererProps<MultipleChoiceActivity>) {
+  const [shuffledOptions] = useState(() => buildRandomizedOptions(activity))
   const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null)
   const [isCompleted, setIsCompleted] = useState(false)
 
@@ -45,7 +76,7 @@ export function MultipleChoiceGame({
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        {activity.content.options.map((option) => {
+        {shuffledOptions.map((option) => {
           const isCorrect = option.id === activity.content.correctOptionId
           const isSelected = option.id === selectedOptionId
 

@@ -55,6 +55,7 @@ export interface GameContextValue extends GameState {
   completeSpecialRequest: (creatureId: string, rewardStars: number) => boolean
   toggleCreatureItem: (creatureId: string, itemId: string) => void
   placeProp: (placement: PlacedProp) => void
+  removeProp: (itemId: string) => void
   updateSettings: (input: Partial<GameSettings>) => void
   updateDailyLimits: (input: Partial<DailyLimits>) => void
   resetProgress: () => void

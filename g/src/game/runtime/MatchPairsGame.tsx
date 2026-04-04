@@ -16,6 +16,7 @@ export function MatchPairsGame({
   const [selectedRightId, setSelectedRightId] = useState<string | null>(null)
   const [matchedIds, setMatchedIds] = useState<string[]>([])
   const [hasCompleted, setHasCompleted] = useState(false)
+  const [shuffledLeftPairs] = useState(() => shuffleItems(activity.content.pairs))
   const [shuffledPairs] = useState(() =>
     shuffleItems(activity.content.pairs.map((pair) => ({ id: pair.id, right: pair.right }))),
   )
@@ -85,7 +86,7 @@ export function MatchPairsGame({
         <div className="rounded-[28px] bg-white/68 p-3 shadow-[0_12px_24px_rgba(15,23,42,0.04)]">
           <p className="mb-3 text-xs font-semibold tracking-[0.18em] text-slate-500">צַד רִאשׁוֹן</p>
           <div className="space-y-3">
-            {activity.content.pairs.map((pair) => {
+            {shuffledLeftPairs.map((pair) => {
               const isMatched = matchedIds.includes(pair.id)
 
               return (

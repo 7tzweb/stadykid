@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Card } from '@/components/ui/Card'
 import type { DragAndDropActivity } from '@/game/engine/level-schema'
 import type { MiniGameRendererProps } from '@/game/runtime/renderer-types'
+import { shuffleItems } from '@/game/runtime/utils'
 
 export function DragAndDropGame({
   activity,
@@ -11,9 +12,12 @@ export function DragAndDropGame({
   onMistake,
   disabled,
 }: MiniGameRendererProps<DragAndDropActivity>) {
+  const supportsTouch = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0
   const [activeItemId, setActiveItemId] = useState<string | null>(null)
   const [placements, setPlacements] = useState<Record<string, string>>({})
   const [isCompleted, setIsCompleted] = useState(false)
+  const [shuffledItems] = useState(() => shuffleItems(activity.content.items))
+  const [shuffledTargets] = useState(() => shuffleItems(activity.content.targets))
 
   function assignItem(targetId: string, itemId: string) {
     const target = activity.content.targets.find((entry) => entry.id === targetId)
@@ -61,45 +65,54 @@ export function DragAndDropGame({
           תחנת גרירה
         </div>
         <h3 className="font-display text-2xl text-slate-900 xl:text-3xl">{activity.content.prompt}</h3>
-        <p className="text-sm font-medium text-slate-600">אפשר לגרור עם עכבר, או ללחוץ על פריט ואז על יעד במסך מגע.</p>
+        <p className="text-sm font-medium text-slate-600">
+          {supportsTouch ? 'במסך מגע: לוחצים על פריט ואז על היעד המתאים.' : 'אפשר לגרור עם העכבר או ללחוץ על פריט ואז על יעד.'}
+        </p>
       </div>
 
       <div className="grid gap-3 rounded-[32px] bg-[linear-gradient(180deg,rgba(239,246,255,0.9),rgba(255,255,255,0.82))] p-3">
         <div className="grid gap-3 sm:grid-cols-2">
-          {activity.content.items.map((item) => {
+          {shuffledItems.map((item) => {
             const isPlaced = placedItemIds.has(item.id)
 
             return (
               <button
                 className={clsx(
-                  'rounded-[24px] border bg-white/94 px-4 py-3 text-right shadow-[0_12px_24px_rgba(15,23,42,0.05)] transition',
+                  'touch-manipulation rounded-[24px] border bg-white/94 px-4 py-3 text-right shadow-[0_12px_24px_rgba(15,23,42,0.05)] transition',
                   activeItemId === item.id && 'border-[#14b8a6] bg-[#ecfeff]',
                   isPlaced && 'border-emerald-200 bg-emerald-50 text-emerald-900',
                   !activeItemId && !isPlaced && 'border-white/80 hover:-translate-y-0.5 hover:border-[#14b8a6]',
                 )}
                 disabled={disabled || isPlaced}
-                draggable={!disabled && !isPlaced}
+                draggable={!disabled && !isPlaced && !supportsTouch}
                 key={item.id}
-                onClick={() => setActiveItemId(item.id)}
+                onClick={() => setActiveItemId((current) => (current === item.id ? null : item.id))}
                 onDragStart={(event) => {
+                  setActiveItemId(item.id)
                   event.dataTransfer.setData('text/plain', item.id)
                 }}
                 type="button"
               >
                 <p className="text-base font-black">{item.label}</p>
-                <p className="text-xs text-slate-500">{isPlaced ? 'שובץ בהצלחה' : 'גרור או בחר'}</p>
+                <p className="text-xs text-slate-500">
+                  {isPlaced ? 'שובץ בהצלחה' : activeItemId === item.id ? 'עכשיו בוחרים יעד' : supportsTouch ? 'לוחצים כדי לבחור' : 'גרור או בחר'}
+                </p>
               </button>
             )
           })}
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          {activity.content.targets.map((target) => {
+          {shuffledTargets.map((target) => {
             const assignedItem = activity.content.items.find((item) => item.id === placements[target.id])
 
             return (
-              <div
-                className="rounded-[26px] border-2 border-dashed border-sky-200 bg-white/80 p-3 shadow-[0_10px_24px_rgba(15,23,42,0.04)]"
+              <button
+                className={clsx(
+                  'touch-manipulation rounded-[26px] border-2 border-dashed border-sky-200 bg-white/80 p-3 text-right shadow-[0_10px_24px_rgba(15,23,42,0.04)] transition',
+                  activeItemId && 'border-[#38bdf8] bg-[#f0f9ff]',
+                )}
+                disabled={disabled}
                 key={target.id}
                 onClick={() => {
                   if (activeItemId) {
@@ -116,6 +129,7 @@ export function DragAndDropGame({
                     assignItem(target.id, itemId)
                   }
                 }}
+                type="button"
               >
                 <p className="text-xs font-semibold tracking-[0.18em] text-slate-500">יעד</p>
                 <h4 className="mt-1 text-lg font-black text-slate-900">{target.label}</h4>
@@ -126,10 +140,12 @@ export function DragAndDropGame({
                       <p className="text-xs text-emerald-700">הוצב במקום הנכון</p>
                     </div>
                   ) : (
-                    <p className="text-xs text-slate-500">שחרר כאן את הפריט המתאים</p>
+                    <p className="text-xs text-slate-500">
+                      {activeItemId ? 'לוחצים כדי לשבץ כאן' : supportsTouch ? 'בוחרים פריט ואז לוחצים כאן' : 'שחרר כאן את הפריט המתאים'}
+                    </p>
                   )}
                 </div>
-              </div>
+              </button>
             )
           })}
         </div>

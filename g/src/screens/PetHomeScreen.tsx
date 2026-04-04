@@ -1,6 +1,5 @@
 import {
   useEffect,
-  useEffectEvent,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -49,7 +48,7 @@ import {
 import { getShopItemById } from '@/game/content/catalog'
 import { getHomeWorldById, homeWorldCatalog } from '@/game/content/home-worlds'
 import { useGame } from '@/hooks/useGame'
-import type { CreatureCareAction } from '@/types/models'
+import type { CreatureCareAction, ShopItem } from '@/types/models'
 
 type HomePanel = 'creatures' | 'food' | 'style' | 'props' | 'rooms' | null
 type FoodMode = 'feed' | 'drink'
@@ -76,6 +75,14 @@ interface DragTrayItem {
   emoji?: string
   image?: string
   itemName?: string
+  x: number
+  y: number
+}
+
+type TraySourceItem = Pick<DragTrayItem, 'kind' | 'id' | 'emoji' | 'image' | 'itemName'>
+
+interface DraggedPlacedPropState {
+  itemId: string
   x: number
   y: number
 }
@@ -163,6 +170,24 @@ const equippedItemPositions = [
 ] as const
 
 const maxCreaturesInRoom = 4
+
+function renderWearablePreview(item: ShopItem, size: 'panel' | 'equipped' = 'panel'): ReactNode {
+  if (item.image) {
+    return (
+      <img
+        alt={item.name}
+        className={
+          size === 'panel'
+            ? 'h-11 w-11 object-contain drop-shadow-[0_10px_18px_rgba(86,63,118,0.18)]'
+            : 'h-6 w-6 object-contain'
+        }
+        src={item.image}
+      />
+    )
+  }
+
+  return <span className={size === 'panel' ? 'text-3xl leading-none' : 'text-sm leading-none'}>{item.icon}</span>
+}
 
 function getCareBurstDurationMs(action: CreatureVisualAction) {
   if (action === 'rest') {
@@ -399,6 +424,70 @@ function createSceneCreature(creatureId: string): SceneCreature {
   }
 }
 
+function resolvePropAnimation(itemId: string): CreatureVisualAction {
+  if (itemId === 'moon-pillow') {
+    return 'doze'
+  }
+
+  if (itemId === 'sparkle-ball') {
+    return 'sprint'
+  }
+
+  if (itemId === 'flower-sniff-mat') {
+    return 'sniffle'
+  }
+
+  if (itemId === 'cloud-blanket') {
+    return 'snuggle'
+  }
+
+  if (itemId === 'rainbow-tunnel') {
+    return 'zoom'
+  }
+
+  if (itemId === 'butterfly-ribbon') {
+    return 'play'
+  }
+
+  if (itemId === 'squeaky-duck') {
+    return 'cheer'
+  }
+
+  if (itemId === 'heart-plush') {
+    return 'snuggle'
+  }
+
+  if (itemId === 'dream-unicorn-playground' || itemId === 'garden-slide-park') {
+    return 'zoom'
+  }
+
+  if (itemId === 'sweet-skateboard') {
+    return 'sprint'
+  }
+
+  if (itemId === 'tea-party-table' || itemId === 'teddy-twin-seat') {
+    return 'snuggle'
+  }
+
+  if (itemId === 'heart-surprise-booth' || itemId === 'starlight-play-console') {
+    return 'cheer'
+  }
+
+  if (itemId === 'fluffy-heart-rug' || itemId === 'flower-dream-bed') {
+    return 'nest'
+  }
+
+  if (itemId === 'rainbow-splash-pool' || itemId === 'rainbow-beach-ball') {
+    return 'play'
+  }
+
+  if (itemId === 'golden-moon-swing') {
+    return 'sway'
+  }
+
+  return 'play'
+}
+
 function WorldIconButton({
   active = false,
   children,
@@ -438,6 +527,7 @@ export function PetHomeScreen() {
     ownedCreatures,
     placeProp,
     placedProps,
+    removeProp,
     setCurrentHomeWorld,
     stars,
     toggleCreatureItem,
@@ -450,6 +540,7 @@ export function PetHomeScreen() {
   const [selectedCreatureId, setSelectedCreatureId] = useState<string | null>(ownedCreatures[0]?.creatureId ?? null)
   const [sceneCreatures, setSceneCreatures] = useState<SceneCreature[]>([])
   const [draggedTrayItem, setDraggedTrayItem] = useState<DragTrayItem | null>(null)
+  const [draggedPlacedProp, setDraggedPlacedProp] = useState<DraggedPlacedPropState | null>(null)
   const [draggedCreatureId, setDraggedCreatureId] = useState<string | null>(null)
   const [careBurst, setCareBurst] = useState<CareBurstState | null>(null)
   const [reactionBubble, setReactionBubble] = useState<CreatureReactionState | null>(null)
@@ -472,8 +563,10 @@ export function PetHomeScreen() {
   const inventoryItems = inventory
     .map((itemId) => getShopItemById(itemId))
     .filter((item): item is NonNullable<typeof item> => Boolean(item))
-  const wearableItems = inventoryItems.filter((item) => item.category === 'Clothes' || item.category === 'Accessories')
-  const propItems = inventoryItems.filter((item) => item.category === 'Props')
+  const wearableItems = inventoryItems
+    .filter((item) => item.category === 'Clothes' || item.category === 'Accessories')
+    .reverse()
+  const propItems = inventoryItems.filter((item) => item.category === 'Props').reverse()
   const completedLevelCount = currentChildProfile?.completedLevelIds.length ?? 0
   const unlockedHomeWorlds = homeWorldCatalog.filter(
     (homeWorld) => completedLevelCount >= homeWorld.requiredCompletedLevels,
@@ -762,224 +855,6 @@ export function PetHomeScreen() {
     return () => window.clearInterval(timer)
   }, [draggedCreatureId, homeCreatures])
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      if (careBurstRef.current || draggedCreatureId || !placedRoomProps.length) {
-        return
-      }
-
-      const nowTs = Date.now()
-      const candidates = homeCreatures.flatMap((ownedCreature) => {
-        const creature = getCreatureById(ownedCreature.creatureId)
-        const sceneCreature = sceneCreatures.find((entry) => entry.creatureId === ownedCreature.creatureId)
-
-        if (!creature || !sceneCreature || !isCreatureHatched(creature, ownedCreature, nowTs)) {
-          return []
-        }
-
-        const needs = getCreatureNeedState(creature, ownedCreature, nowTs)
-
-        if (needs.primaryNeed) {
-          return []
-        }
-
-        const lastPropInteractionAt = lastPropInteractionAtRef.current[ownedCreature.creatureId] ?? 0
-
-        if (nowTs - lastPropInteractionAt < 5200) {
-          return []
-        }
-
-        const nearbyProp = placedRoomProps.find((placedProp) => {
-          const deltaX = Math.abs(placedProp.x - sceneCreature.x)
-          const deltaY = Math.abs(placedProp.y - sceneCreature.y)
-          return deltaX <= 8 && deltaY <= 10
-        })
-
-        if (!nearbyProp) {
-          return []
-        }
-
-        const item = getShopItemById(nearbyProp.itemId)
-
-        if (!item || item.category !== 'Props') {
-          return []
-        }
-
-        const resolvedRequest = resolveActiveSpecialRequest(ownedCreature.creatureId)
-
-        if (resolvedRequest?.request.requiredItemId && resolvedRequest.request.requiredItemId !== item.id) {
-          return []
-        }
-
-        return [{ ownedCreature, item, resolvedRequest }]
-      })
-
-      if (!candidates.length || Math.random() < 0.38) {
-        return
-      }
-
-      const pickedInteraction = candidates[Math.floor(Math.random() * candidates.length)]
-
-      if (!pickedInteraction) {
-        return
-      }
-
-      lastPropInteractionAtRef.current[pickedInteraction.ownedCreature.creatureId] = nowTs
-      setSelectedCreatureId(pickedInteraction.ownedCreature.creatureId)
-
-      if (
-        pickedInteraction.resolvedRequest &&
-        pickedInteraction.resolvedRequest.request.requiredItemId === pickedInteraction.item.id
-      ) {
-        void advanceSpecialRequest(
-          pickedInteraction.ownedCreature.creatureId,
-          pickedInteraction.resolvedRequest.specialRequestState,
-          pickedInteraction.resolvedRequest.request.id,
-          pickedInteraction.resolvedRequest.request.animation,
-          pickedInteraction.resolvedRequest.ownedCreature.specialRequestCount,
-          pickedInteraction.resolvedRequest.request.progressEmojis,
-          pickedInteraction.resolvedRequest.request.completionEmoji,
-          pickedInteraction.resolvedRequest.request.tapsRequired,
-        )
-        return
-      }
-
-      setCareBurst({
-        creatureId: pickedInteraction.ownedCreature.creatureId,
-        action: resolvePropAnimation(pickedInteraction.item.id),
-      })
-      showReaction(pickedInteraction.ownedCreature.creatureId, pickedInteraction.item.icon)
-    }, 1450)
-
-    return () => window.clearInterval(timer)
-  }, [draggedCreatureId, homeCreatures, placedRoomProps, sceneCreatures])
-
-  useEffect(() => {
-    const availablePropIdsByHomeWorld = placedProps.reduce<Record<string, string[]>>((mapping, placedProp) => {
-      if (!mapping[placedProp.homeWorldId]) {
-        mapping[placedProp.homeWorldId] = []
-      }
-
-      mapping[placedProp.homeWorldId]?.push(placedProp.itemId)
-      return mapping
-    }, {})
-
-    setSpecialRequestByCreatureId((current) => {
-      const nextState: Record<string, ActiveSpecialRequestState> = {}
-      let changed = false
-
-      ownedCreatures
-        .filter((creature) => creature.placedInHome)
-        .forEach((ownedCreature) => {
-          const creature = getCreatureById(ownedCreature.creatureId)
-          const hatched = creature ? isCreatureHatched(creature, ownedCreature, now) : false
-          const currentRequestState = current[ownedCreature.creatureId]
-
-          if (!creature || !hatched) {
-            if (currentRequestState) {
-              nextState[ownedCreature.creatureId] = currentRequestState
-            }
-            return
-          }
-
-          const baseState =
-            currentRequestState ??
-            {
-              requestId: null,
-              progress: 0,
-              nextRequestAt: now + getInitialSpecialRequestDelayMs(),
-              previousRequestId: null,
-            }
-
-          let resolvedState = baseState
-          const availablePropItemIds = availablePropIdsByHomeWorld[ownedCreature.placedHomeWorldId ?? ''] ?? []
-
-          if (!currentRequestState) {
-            changed = true
-          }
-
-          if (resolvedState.requestId) {
-            const activeRequest = getCreatureSpecialRequestById(resolvedState.requestId)
-
-            if (activeRequest?.requiredItemId && !availablePropItemIds.includes(activeRequest.requiredItemId)) {
-              resolvedState = {
-                requestId: null,
-                progress: 0,
-                nextRequestAt: now + Math.round(getInitialSpecialRequestDelayMs() * 0.45),
-                previousRequestId: activeRequest.id,
-              }
-              changed = true
-            }
-          }
-
-          if (!resolvedState.requestId && now >= resolvedState.nextRequestAt) {
-            const request = pickRandomCreatureSpecialRequest(resolvedState.previousRequestId, availablePropItemIds)
-
-            resolvedState = {
-              ...resolvedState,
-              requestId: request.id,
-              progress: 0,
-            }
-            changed = true
-          }
-
-          nextState[ownedCreature.creatureId] = resolvedState
-        })
-
-      if (Object.keys(current).length !== Object.keys(nextState).length) {
-        changed = true
-      }
-
-      if (!changed) {
-        changed = Object.entries(nextState).some(([creatureId, requestState]) => {
-          const currentRequestState = current[creatureId]
-
-          return (
-            !currentRequestState ||
-            currentRequestState.requestId !== requestState.requestId ||
-            currentRequestState.progress !== requestState.progress ||
-            currentRequestState.nextRequestAt !== requestState.nextRequestAt ||
-            currentRequestState.previousRequestId !== requestState.previousRequestId
-          )
-        })
-      }
-
-      if (!changed) {
-        return current
-      }
-
-      return nextState
-    })
-  }, [now, ownedCreatures, placedProps])
-
-  function triggerCareAction(creatureId: string, action: CreatureCareAction) {
-    const ownedCreature = getOwnedCreatureById(creatureId, ownedCreatures)
-    const creature = getCreatureById(creatureId)
-
-    if (!ownedCreature || !creature || !isCreatureHatched(creature, ownedCreature, now)) {
-      return false
-    }
-
-    const needs = getCreatureNeedState(creature, ownedCreature, now)
-    const dueEntry = needs.entries.find((entry) => entry.action === action)
-    const rewardStars = dueEntry?.isDue ? creature.needs.rewardStars[action] : 0
-    const didCare = careForCreature(creatureId, action, rewardStars)
-
-    if (!didCare) {
-      return false
-    }
-
-    setSelectedCreatureId(creatureId)
-    setCareBurst({ creatureId, action })
-    showReaction(creatureId, getCareReactionEmoji(action))
-
-    if (rewardStars > 0) {
-      setStarRewardCreatureId(creatureId)
-    }
-
-    return true
-  }
-
   function updateHeartProgress(creatureId: string, progress: number) {
     heartProgressRef.current = {
       ...heartProgressRef.current,
@@ -1110,6 +985,228 @@ export function PetHomeScreen() {
     }
 
     scheduleNextSpecialRequest(creatureId, requestId)
+    return true
+  }
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      if (careBurstRef.current || draggedCreatureId || !placedRoomProps.length) {
+        return
+      }
+
+      const nowTs = Date.now()
+      const candidates = homeCreatures.flatMap((ownedCreature) => {
+        const creature = getCreatureById(ownedCreature.creatureId)
+        const sceneCreature = sceneCreatures.find((entry) => entry.creatureId === ownedCreature.creatureId)
+
+        if (!creature || !sceneCreature || !isCreatureHatched(creature, ownedCreature, nowTs)) {
+          return []
+        }
+
+        const needs = getCreatureNeedState(creature, ownedCreature, nowTs)
+
+        if (needs.primaryNeed) {
+          return []
+        }
+
+        const lastPropInteractionAt = lastPropInteractionAtRef.current[ownedCreature.creatureId] ?? 0
+
+        if (nowTs - lastPropInteractionAt < 5200) {
+          return []
+        }
+
+        const nearbyProp = placedRoomProps.find((placedProp) => {
+          const deltaX = Math.abs(placedProp.x - sceneCreature.x)
+          const deltaY = Math.abs(placedProp.y - sceneCreature.y)
+          return deltaX <= 8 && deltaY <= 10
+        })
+
+        if (!nearbyProp) {
+          return []
+        }
+
+        const item = getShopItemById(nearbyProp.itemId)
+
+        if (!item || item.category !== 'Props') {
+          return []
+        }
+
+        const resolvedRequest = resolveActiveSpecialRequest(ownedCreature.creatureId)
+
+        if (resolvedRequest?.request.requiredItemId && resolvedRequest.request.requiredItemId !== item.id) {
+          return []
+        }
+
+        return [{ ownedCreature, item, resolvedRequest }]
+      })
+
+      if (!candidates.length || Math.random() < 0.38) {
+        return
+      }
+
+      const pickedInteraction = candidates[Math.floor(Math.random() * candidates.length)]
+
+      if (!pickedInteraction) {
+        return
+      }
+
+      lastPropInteractionAtRef.current[pickedInteraction.ownedCreature.creatureId] = nowTs
+      setSelectedCreatureId(pickedInteraction.ownedCreature.creatureId)
+
+      if (
+        pickedInteraction.resolvedRequest &&
+        pickedInteraction.resolvedRequest.request.requiredItemId === pickedInteraction.item.id
+      ) {
+        void advanceSpecialRequest(
+          pickedInteraction.ownedCreature.creatureId,
+          pickedInteraction.resolvedRequest.specialRequestState,
+          pickedInteraction.resolvedRequest.request.id,
+          pickedInteraction.resolvedRequest.request.animation,
+          pickedInteraction.resolvedRequest.ownedCreature.specialRequestCount,
+          pickedInteraction.resolvedRequest.request.progressEmojis,
+          pickedInteraction.resolvedRequest.request.completionEmoji,
+          pickedInteraction.resolvedRequest.request.tapsRequired,
+        )
+        return
+      }
+
+      setCareBurst({
+        creatureId: pickedInteraction.ownedCreature.creatureId,
+        action: resolvePropAnimation(pickedInteraction.item.id),
+      })
+      showReaction(pickedInteraction.ownedCreature.creatureId, pickedInteraction.item.icon)
+    }, 1450)
+
+    return () => window.clearInterval(timer)
+  }, [draggedCreatureId, homeCreatures, placedRoomProps, sceneCreatures])
+
+  useEffect(() => {
+    const availablePropIdsByHomeWorld = placedProps.reduce<Record<string, string[]>>((mapping, placedProp) => {
+      if (!mapping[placedProp.homeWorldId]) {
+        mapping[placedProp.homeWorldId] = []
+      }
+
+      mapping[placedProp.homeWorldId]?.push(placedProp.itemId)
+      return mapping
+    }, {})
+
+    const frameId = window.requestAnimationFrame(() => {
+      setSpecialRequestByCreatureId((current) => {
+        const nextState: Record<string, ActiveSpecialRequestState> = {}
+        let changed = false
+
+        ownedCreatures
+          .filter((creature) => creature.placedInHome)
+          .forEach((ownedCreature) => {
+            const creature = getCreatureById(ownedCreature.creatureId)
+            const hatched = creature ? isCreatureHatched(creature, ownedCreature, now) : false
+            const currentRequestState = current[ownedCreature.creatureId]
+
+            if (!creature || !hatched) {
+              if (currentRequestState) {
+                nextState[ownedCreature.creatureId] = currentRequestState
+              }
+              return
+            }
+
+            const baseState =
+              currentRequestState ??
+              {
+                requestId: null,
+                progress: 0,
+                nextRequestAt: now + getInitialSpecialRequestDelayMs(),
+                previousRequestId: null,
+              }
+
+            let resolvedState = baseState
+            const availablePropItemIds = availablePropIdsByHomeWorld[ownedCreature.placedHomeWorldId ?? ''] ?? []
+
+            if (!currentRequestState) {
+              changed = true
+            }
+
+            if (resolvedState.requestId) {
+              const activeRequest = getCreatureSpecialRequestById(resolvedState.requestId)
+
+              if (activeRequest?.requiredItemId && !availablePropItemIds.includes(activeRequest.requiredItemId)) {
+                resolvedState = {
+                  requestId: null,
+                  progress: 0,
+                  nextRequestAt: now + Math.round(getInitialSpecialRequestDelayMs() * 0.45),
+                  previousRequestId: activeRequest.id,
+                }
+                changed = true
+              }
+            }
+
+            if (!resolvedState.requestId && now >= resolvedState.nextRequestAt) {
+              const request = pickRandomCreatureSpecialRequest(resolvedState.previousRequestId, availablePropItemIds)
+
+              resolvedState = {
+                ...resolvedState,
+                requestId: request.id,
+                progress: 0,
+              }
+              changed = true
+            }
+
+            nextState[ownedCreature.creatureId] = resolvedState
+          })
+
+        if (Object.keys(current).length !== Object.keys(nextState).length) {
+          changed = true
+        }
+
+        if (!changed) {
+          changed = Object.entries(nextState).some(([creatureId, requestState]) => {
+            const currentRequestState = current[creatureId]
+
+            return (
+              !currentRequestState ||
+              currentRequestState.requestId !== requestState.requestId ||
+              currentRequestState.progress !== requestState.progress ||
+              currentRequestState.nextRequestAt !== requestState.nextRequestAt ||
+              currentRequestState.previousRequestId !== requestState.previousRequestId
+            )
+          })
+        }
+
+        if (!changed) {
+          return current
+        }
+
+        return nextState
+      })
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [now, ownedCreatures, placedProps])
+
+  function triggerCareAction(creatureId: string, action: CreatureCareAction) {
+    const ownedCreature = getOwnedCreatureById(creatureId, ownedCreatures)
+    const creature = getCreatureById(creatureId)
+
+    if (!ownedCreature || !creature || !isCreatureHatched(creature, ownedCreature, now)) {
+      return false
+    }
+
+    const needs = getCreatureNeedState(creature, ownedCreature, now)
+    const dueEntry = needs.entries.find((entry) => entry.action === action)
+    const rewardStars = dueEntry?.isDue ? creature.needs.rewardStars[action] : 0
+    const didCare = careForCreature(creatureId, action, rewardStars)
+
+    if (!didCare) {
+      return false
+    }
+
+    setSelectedCreatureId(creatureId)
+    setCareBurst({ creatureId, action })
+    showReaction(creatureId, getCareReactionEmoji(action))
+
+    if (rewardStars > 0) {
+      setStarRewardCreatureId(creatureId)
+    }
+
     return true
   }
 
@@ -1299,80 +1396,12 @@ export function PetHomeScreen() {
     setCareBurst({ creatureId: selectedCreature.id, action: 'play' })
   }
 
-  function resolvePropAnimation(itemId: string): CreatureVisualAction {
-    if (itemId === 'moon-pillow') {
-      return 'doze'
-    }
-
-    if (itemId === 'sparkle-ball') {
-      return 'sprint'
-    }
-
-    if (itemId === 'flower-sniff-mat') {
-      return 'sniffle'
-    }
-
-    if (itemId === 'cloud-blanket') {
-      return 'snuggle'
-    }
-
-    if (itemId === 'rainbow-tunnel') {
-      return 'zoom'
-    }
-
-    if (itemId === 'butterfly-ribbon') {
-      return 'play'
-    }
-
-    if (itemId === 'squeaky-duck') {
-      return 'cheer'
-    }
-
-    if (itemId === 'heart-plush') {
-      return 'snuggle'
-    }
-
-    if (itemId === 'dream-unicorn-playground' || itemId === 'garden-slide-park') {
-      return 'zoom'
-    }
-
-    if (itemId === 'sweet-skateboard') {
-      return 'sprint'
-    }
-
-    if (itemId === 'tea-party-table' || itemId === 'teddy-twin-seat') {
-      return 'snuggle'
-    }
-
-    if (itemId === 'heart-surprise-booth' || itemId === 'starlight-play-console') {
-      return 'cheer'
-    }
-
-    if (itemId === 'fluffy-heart-rug' || itemId === 'flower-dream-bed') {
-      return 'nest'
-    }
-
-    if (itemId === 'rainbow-splash-pool' || itemId === 'rainbow-beach-ball') {
-      return 'play'
-    }
-
-    if (itemId === 'golden-moon-swing') {
-      return 'sway'
-    }
-
-    return 'play'
-  }
-
-  function placePropAtPointer(clientX: number, clientY: number, itemId: string) {
-    const sceneBounds = sceneRef.current?.getBoundingClientRect()
+  function placePropAtScenePosition(itemId: string, x: number, y: number) {
     const item = getShopItemById(itemId)
 
-    if (!sceneBounds || !item || item.category !== 'Props') {
+    if (!item || item.category !== 'Props') {
       return false
     }
-
-    const x = clamp(((clientX - sceneBounds.left) / sceneBounds.width) * 100, 12, 88)
-    const y = clamp(((clientY - sceneBounds.top) / sceneBounds.height) * 100, 24, 84)
 
     placeProp({
       itemId,
@@ -1385,24 +1414,230 @@ export function PetHomeScreen() {
     return true
   }
 
-  function handleStartDragging(
-    event: ReactPointerEvent<HTMLButtonElement>,
-    item: { id: string; emoji?: string; image?: string; itemName?: string; kind: 'food' | 'prop' },
-  ) {
-    event.preventDefault()
-    setDraggedTrayItem({
-      ...item,
-      x: event.clientX,
-      y: event.clientY,
-    })
+  function handleReturnPlacedProp(itemId: string) {
+    const item = getShopItemById(itemId)
+
+    if (!item || item.category !== 'Props') {
+      return
+    }
+
+    removeProp(itemId)
+    setDraggedPlacedProp((current) => (current?.itemId === itemId ? null : current))
+    setPlacementMessage(`${item.name} חָזַר לְמַגֵּרַת הַחֲפָצִים`)
   }
 
-  const resolveTrayDrop = useEffectEvent((clientX: number, clientY: number, item: DragTrayItem) => {
+  function getScenePositionFromPointer(clientX: number, clientY: number) {
+    const sceneBounds = sceneRef.current?.getBoundingClientRect()
+
+    if (!sceneBounds) {
+      return null
+    }
+
+    return {
+      x: clamp(((clientX - sceneBounds.left) / sceneBounds.width) * 100, 12, 88),
+      y: clamp(((clientY - sceneBounds.top) / sceneBounds.height) * 100, 24, 84),
+    }
+  }
+
+  function placePropAtPointer(clientX: number, clientY: number, itemId: string) {
+    const scenePosition = getScenePositionFromPointer(clientX, clientY)
+
+    if (!scenePosition) {
+      return false
+    }
+
+    return placePropAtScenePosition(itemId, scenePosition.x, scenePosition.y)
+  }
+
+  function placePropNearCreature(itemId: string, creatureId: string | null) {
+    const sceneCreature = creatureId ? sceneCreatures.find((entry) => entry.creatureId === creatureId) ?? null : null
+    const x = sceneCreature ? clamp(sceneCreature.x + sceneCreature.directionX * 8, 12, 88) : 50
+    const y = sceneCreature ? clamp(sceneCreature.y + 10, 24, 84) : 70
+
+    return placePropAtScenePosition(itemId, x, y)
+  }
+
+  function resolveFeedTargetCreatureId() {
+    const orderedCreatureIds = [resolvedSelectedCreatureId, ...homeCreatures.map((creature) => creature.creatureId)].filter(
+      (creatureId, index, source): creatureId is string => Boolean(creatureId) && source.indexOf(creatureId) === index,
+    )
+
+    for (const creatureId of orderedCreatureIds) {
+      const ownedCreature = getOwnedCreatureById(creatureId, ownedCreatures)
+      const creature = getCreatureById(creatureId)
+
+      if (!ownedCreature || !creature || !isCreatureHatched(creature, ownedCreature, now)) {
+        continue
+      }
+
+      const feedNeed = getCreatureNeedState(creature, ownedCreature, now).entries.find((entry) => entry.action === 'feed')
+
+      if (feedNeed?.isDue) {
+        return creatureId
+      }
+    }
+
+    return orderedCreatureIds[0] ?? null
+  }
+
+  function handleTrayItemTap(item: TraySourceItem) {
     if (item.kind === 'food') {
-      const element = document.elementFromPoint(clientX, clientY)
-      const dropTarget =
-        element instanceof HTMLElement ? (element.closest('[data-drop-creature-id]') as HTMLElement | null) : null
-      const creatureId = dropTarget?.dataset.dropCreatureId
+      const targetCreatureId = resolveFeedTargetCreatureId()
+
+      if (!targetCreatureId || !handleFeedCreature(targetCreatureId)) {
+        setPlacementMessage('גּוֹרְרִים אֶת הָאֹכֶל אֶל גּוּר שֶׁמְּבַקֵּשׁ אֹכֶל')
+        return false
+      }
+
+      return true
+    }
+
+    const preferredCreatureId =
+      resolvedSelectedCreatureId && homeCreatures.some((creature) => creature.creatureId === resolvedSelectedCreatureId)
+        ? resolvedSelectedCreatureId
+        : homeCreatures[0]?.creatureId ?? null
+
+    return placePropNearCreature(item.id, preferredCreatureId)
+  }
+
+  function handleStartDragging(
+    event: ReactPointerEvent<HTMLButtonElement>,
+    item: TraySourceItem,
+  ) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const pointerId = event.pointerId
+    const pointerTarget = event.currentTarget
+    const startX = event.clientX
+    const startY = event.clientY
+    let moved = false
+
+    pointerTarget.setPointerCapture(pointerId)
+
+    function clearListeners() {
+      if (pointerTarget.hasPointerCapture(pointerId)) {
+        pointerTarget.releasePointerCapture(pointerId)
+      }
+
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerUp)
+      window.removeEventListener('pointercancel', handlePointerCancel)
+    }
+
+    function handlePointerMove(moveEvent: PointerEvent) {
+      if (moveEvent.pointerId !== pointerId) {
+        return
+      }
+
+      if (!moved && Math.hypot(moveEvent.clientX - startX, moveEvent.clientY - startY) > 12) {
+        moved = true
+        setDraggedTrayItem({
+          ...item,
+          x: startX,
+          y: startY,
+        })
+      }
+
+      if (!moved) {
+        return
+      }
+
+      moveEvent.preventDefault()
+
+      setDraggedTrayItem({
+        ...item,
+        x: moveEvent.clientX,
+        y: moveEvent.clientY,
+      })
+    }
+
+    function handlePointerUp(upEvent: PointerEvent) {
+      if (upEvent.pointerId !== pointerId) {
+        return
+      }
+
+      clearListeners()
+
+      if (!moved) {
+        setDraggedTrayItem(null)
+        handleTrayItemTap(item)
+        return
+      }
+
+      resolveTrayDrop(upEvent.clientX, upEvent.clientY, {
+        ...item,
+        x: upEvent.clientX,
+        y: upEvent.clientY,
+      })
+      setDraggedTrayItem(null)
+    }
+
+    function handlePointerCancel(cancelEvent: PointerEvent) {
+      if (cancelEvent.pointerId !== pointerId) {
+        return
+      }
+
+      clearListeners()
+      setDraggedTrayItem(null)
+    }
+
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerUp)
+    window.addEventListener('pointercancel', handlePointerCancel)
+  }
+
+  function resolveCreatureDropTargetId(clientX: number, clientY: number) {
+    const exactElement = document.elementFromPoint(clientX, clientY)
+    const exactDropTarget =
+      exactElement instanceof HTMLElement ? (exactElement.closest('[data-drop-creature-id]') as HTMLElement | null) : null
+
+    if (exactDropTarget?.dataset.dropCreatureId) {
+      return exactDropTarget.dataset.dropCreatureId
+    }
+
+    const candidateTargets = Array.from(document.querySelectorAll<HTMLElement>('[data-drop-creature-id]'))
+      .map((element) => {
+        const creatureId = element.dataset.dropCreatureId
+
+        if (!creatureId) {
+          return null
+        }
+
+        const rect = element.getBoundingClientRect()
+        const expandedRect = {
+          left: rect.left - 32,
+          right: rect.right + 32,
+          top: rect.top - 32,
+          bottom: rect.bottom + 32,
+        }
+
+        if (
+          clientX < expandedRect.left ||
+          clientX > expandedRect.right ||
+          clientY < expandedRect.top ||
+          clientY > expandedRect.bottom
+        ) {
+          return null
+        }
+
+        const centerX = rect.left + rect.width / 2
+        const centerY = rect.top + rect.height / 2
+
+        return {
+          creatureId,
+          distance: Math.hypot(clientX - centerX, clientY - centerY),
+        }
+      })
+      .filter((entry): entry is { creatureId: string; distance: number } => Boolean(entry))
+      .sort((left, right) => left.distance - right.distance)
+
+    return candidateTargets[0]?.creatureId ?? null
+  }
+
+  function resolveTrayDrop(clientX: number, clientY: number, item: DragTrayItem) {
+    if (item.kind === 'food') {
+      const creatureId = resolveCreatureDropTargetId(clientX, clientY)
 
       if (!creatureId) {
         return
@@ -1413,7 +1648,90 @@ export function PetHomeScreen() {
     }
 
     placePropAtPointer(clientX, clientY, item.id)
-  })
+  }
+
+  function handleStartDraggingPlacedProp(event: ReactPointerEvent<HTMLButtonElement>, itemId: string) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    const pointerId = event.pointerId
+    const pointerTarget = event.currentTarget
+    const currentPlacedProp = placedPropByItemId.get(itemId)
+
+    if (!currentPlacedProp) {
+      return
+    }
+
+    pointerTarget.setPointerCapture(pointerId)
+    setDraggedPlacedProp({
+      itemId,
+      x: currentPlacedProp.x,
+      y: currentPlacedProp.y,
+    })
+
+    function clearListeners() {
+      if (pointerTarget.hasPointerCapture(pointerId)) {
+        pointerTarget.releasePointerCapture(pointerId)
+      }
+
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerUp)
+      window.removeEventListener('pointercancel', handlePointerCancel)
+    }
+
+    function handlePointerMove(moveEvent: PointerEvent) {
+      if (moveEvent.pointerId !== pointerId) {
+        return
+      }
+
+      const nextScenePosition = getScenePositionFromPointer(moveEvent.clientX, moveEvent.clientY)
+
+      if (!nextScenePosition) {
+        return
+      }
+
+      moveEvent.preventDefault()
+      setDraggedPlacedProp({
+        itemId,
+        x: nextScenePosition.x,
+        y: nextScenePosition.y,
+      })
+    }
+
+    function handlePointerUp(upEvent: PointerEvent) {
+      if (upEvent.pointerId !== pointerId) {
+        return
+      }
+
+      clearListeners()
+
+      const finalScenePosition = getScenePositionFromPointer(upEvent.clientX, upEvent.clientY)
+
+      if (finalScenePosition) {
+        placeProp({
+          itemId,
+          homeWorldId: resolvedHomeWorldId,
+          x: finalScenePosition.x,
+          y: finalScenePosition.y,
+        })
+      }
+
+      setDraggedPlacedProp(null)
+    }
+
+    function handlePointerCancel(cancelEvent: PointerEvent) {
+      if (cancelEvent.pointerId !== pointerId) {
+        return
+      }
+
+      clearListeners()
+      setDraggedPlacedProp(null)
+    }
+
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerup', handlePointerUp)
+    window.addEventListener('pointercancel', handlePointerCancel)
+  }
 
   function getGestureOffset(
     interaction: Exclude<CreatureSpecialRequestInteraction, 'tap'>,
@@ -1763,41 +2081,6 @@ export function PetHomeScreen() {
     window.addEventListener('pointercancel', handlePointerEnd)
   }
 
-  useEffect(() => {
-    if (!draggedTrayItem) {
-      return
-    }
-
-    function handlePointerMove(event: PointerEvent) {
-      setDraggedTrayItem((current) =>
-        current
-          ? {
-              ...current,
-              x: event.clientX,
-              y: event.clientY,
-            }
-          : current,
-      )
-    }
-
-    function handlePointerUp(event: PointerEvent) {
-      if (!draggedTrayItem) {
-        return
-      }
-
-      resolveTrayDrop(event.clientX, event.clientY, draggedTrayItem)
-      setDraggedTrayItem(null)
-    }
-
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', handlePointerUp)
-
-    return () => {
-      window.removeEventListener('pointermove', handlePointerMove)
-      window.removeEventListener('pointerup', handlePointerUp)
-    }
-  }, [draggedTrayItem, resolveTrayDrop])
-
   return (
     <div
       className="relative h-[100dvh] w-screen overflow-hidden bg-[#f7f1ff]"
@@ -1878,7 +2161,7 @@ export function PetHomeScreen() {
         </div>
       )}
 
-      <div className="absolute left-4 top-4 z-40 flex items-center gap-2 rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(243,238,255,0.88))] p-2 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur-xl">
+      <div className="absolute left-4 top-4 z-40 flex max-w-[calc(100vw-1.5rem)] flex-wrap items-center gap-2 rounded-[28px] border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(243,238,255,0.88))] p-2 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur-xl">
         <div className="flex items-center gap-2 rounded-full border border-white/80 bg-white/80 px-4 py-3 text-sm font-bold text-[#b45309] shadow-[0_12px_30px_rgba(84,60,126,0.08)]">
           <Sparkles className="h-4 w-4" />
           {stars}
@@ -1887,6 +2170,22 @@ export function PetHomeScreen() {
           <Coins className="h-4 w-4" />
           {coins}
         </div>
+        <button
+          className="inline-flex h-12 items-center gap-2 rounded-full border border-white/80 bg-white/82 px-4 text-sm font-black text-slate-800 shadow-[0_12px_30px_rgba(84,60,126,0.08)] transition hover:scale-[1.02]"
+          onClick={() => navigate('/shop')}
+          type="button"
+        >
+          <ShoppingBag className="h-4 w-4 text-slate-700" />
+          חנות
+        </button>
+        <button
+          className="inline-flex h-12 items-center gap-2 rounded-full border border-white/80 bg-white/82 px-4 text-sm font-black text-slate-800 shadow-[0_12px_30px_rgba(84,60,126,0.08)] transition hover:scale-[1.02]"
+          onClick={() => navigate('/worlds')}
+          type="button"
+        >
+          <MapIcon className="h-4 w-4 text-[#f26a4b]" />
+          מפה
+        </button>
       </div>
 
       <div className="absolute right-4 top-4 z-40 flex items-center gap-2 rounded-full border border-white/90 bg-[linear-gradient(180deg,rgba(255,255,255,0.95),rgba(243,238,255,0.88))] p-2 shadow-[0_20px_50px_rgba(56,37,87,0.18)] backdrop-blur-xl">
@@ -1942,7 +2241,7 @@ export function PetHomeScreen() {
           <div className="flex flex-1 items-center justify-center gap-3 overflow-x-auto">
             {foodItems[foodMode].map((item) => (
               <button
-                className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] bg-white text-3xl shadow-sm transition hover:scale-105"
+                className="flex h-16 w-16 shrink-0 touch-none select-none items-center justify-center rounded-[22px] bg-white text-3xl shadow-sm transition hover:scale-105"
                 key={item.id}
                 onPointerDown={(event) => handleStartDragging(event, { ...item, kind: 'food' })}
                 type="button"
@@ -1970,37 +2269,50 @@ export function PetHomeScreen() {
           </div>
           <div className="flex flex-1 items-center justify-center gap-3 overflow-x-auto">
             {propItems.length ? (
-              propItems.map((item) => (
-                <button
-                  className={`flex h-20 min-w-[98px] shrink-0 flex-col items-center justify-center rounded-[24px] px-3 text-center shadow-sm transition hover:scale-105 ${
-                    placedPropByItemId.get(item.id)?.homeWorldId === resolvedHomeWorldId
-                      ? 'bg-[#fff1fb] ring-2 ring-[#f472b6]'
-                      : 'bg-white'
-                  }`}
-                  key={item.id}
-                  onPointerDown={(event) =>
-                    handleStartDragging(event, {
-                      id: item.id,
-                      emoji: item.icon,
-                      image: item.image,
-                      itemName: item.name,
-                      kind: 'prop',
-                    })}
-                  type="button"
-                >
-                  {item.image ? (
-                    <img alt={item.name} className="h-10 w-14 object-contain" src={item.image} />
-                  ) : (
-                    <span className="text-2xl leading-none">{item.icon}</span>
-                  )}
-                  <span className="mt-1 line-clamp-1 text-[10px] font-bold text-slate-500">{item.name}</span>
-                  {placedPropByItemId.get(item.id)?.homeWorldId === resolvedHomeWorldId && (
-                    <span className="mt-1 rounded-full bg-[#fde7f5] px-2 py-0.5 text-[9px] font-black text-[#be185d]">
-                      בַּחֶדֶר
-                    </span>
-                  )}
-                </button>
-              ))
+              propItems.map((item) => {
+                const isPlacedInCurrentRoom = placedPropByItemId.get(item.id)?.homeWorldId === resolvedHomeWorldId
+
+                return (
+                  <div className="flex min-h-[114px] w-[108px] shrink-0 flex-col items-center justify-start gap-2" key={item.id}>
+                    <button
+                      className={`flex h-20 w-full touch-none select-none flex-col items-center justify-center rounded-[24px] px-3 text-center shadow-sm transition hover:scale-105 ${
+                        isPlacedInCurrentRoom ? 'bg-[#fff1fb] ring-2 ring-[#f472b6]' : 'bg-white'
+                      }`}
+                      onPointerDown={(event) =>
+                        handleStartDragging(event, {
+                          id: item.id,
+                          emoji: item.icon,
+                          image: item.image,
+                          itemName: item.name,
+                          kind: 'prop',
+                        })}
+                      type="button"
+                    >
+                      {item.image ? (
+                        <img alt={item.name} className="h-10 w-14 object-contain" src={item.image} />
+                      ) : (
+                        <span className="text-2xl leading-none">{item.icon}</span>
+                      )}
+                      <span className="mt-1 line-clamp-1 text-[10px] font-bold text-slate-500">{item.name}</span>
+                      {isPlacedInCurrentRoom && (
+                        <span className="mt-1 rounded-full bg-[#fde7f5] px-2 py-0.5 text-[9px] font-black text-[#be185d]">
+                          בַּחֶדֶר
+                        </span>
+                      )}
+                    </button>
+
+                    {isPlacedInCurrentRoom ? (
+                      <button
+                        className="rounded-full bg-[#ffe4ec] px-3 py-1 text-[10px] font-black text-[#be185d] shadow-sm transition hover:scale-105"
+                        onClick={() => handleReturnPlacedProp(item.id)}
+                        type="button"
+                      >
+                        להחזיר
+                      </button>
+                    ) : null}
+                  </div>
+                )
+              })
             ) : (
               <button
                 className="flex h-16 items-center gap-2 rounded-[22px] bg-slate-100 px-5 text-sm font-bold text-slate-500"
@@ -2113,14 +2425,19 @@ export function PetHomeScreen() {
 
                 return (
                   <button
-                    className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-[22px] text-2xl shadow-sm transition hover:scale-105 ${
+                    aria-label={item.name}
+                    className={`flex h-[86px] w-[86px] shrink-0 flex-col items-center justify-center gap-1 rounded-[24px] px-2 py-2 shadow-sm transition hover:scale-105 ${
                       isEquipped ? 'bg-[#fff1fb] ring-2 ring-[#f472b6]' : 'bg-white'
                     }`}
                     key={item.id}
                     onClick={() => handleWearableItem(item.id)}
+                    title={item.name}
                     type="button"
                   >
-                    {item.icon}
+                    <span className="flex h-12 w-12 items-center justify-center rounded-[18px] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(255,246,252,0.94))]">
+                      {renderWearablePreview(item)}
+                    </span>
+                    <span className="w-full text-center text-[10px] font-bold leading-3 text-slate-600">{item.name}</span>
                   </button>
                 )
               })
@@ -2274,33 +2591,46 @@ export function PetHomeScreen() {
           return null
         }
 
+        const renderedX = draggedPlacedProp?.itemId === placedProp.itemId ? draggedPlacedProp.x : placedProp.x
+        const renderedY = draggedPlacedProp?.itemId === placedProp.itemId ? draggedPlacedProp.y : placedProp.y
+        const isDraggingPlacedProp = draggedPlacedProp?.itemId === placedProp.itemId
+
         return (
-          <div
-            className="pointer-events-none absolute z-[12] -translate-x-1/2 -translate-y-1/2"
+          <button
+            aria-label={`להזיז את ${item.name}`}
+            className="absolute z-[12] -translate-x-1/2 -translate-y-1/2 touch-none select-none bg-transparent"
             key={`${placedProp.homeWorldId}:${placedProp.itemId}`}
+            onPointerDown={(event) => handleStartDraggingPlacedProp(event, placedProp.itemId)}
             style={{
-              left: `${placedProp.x}%`,
-              top: `${placedProp.y}%`,
+              left: `${renderedX}%`,
+              top: `${renderedY}%`,
             }}
+            type="button"
           >
             <div className="relative flex items-center justify-center">
               <div
-                className="absolute inset-x-6 bottom-1 h-6 rounded-full bg-[rgba(86,63,118,0.18)] blur-md"
-                style={{ transform: 'translateY(18px) scale(1.05)' }}
+                className="absolute inset-x-5 bottom-1 h-7 rounded-full bg-[rgba(86,63,118,0.18)] blur-md"
+                style={{ transform: `translateY(20px) scale(${isDraggingPlacedProp ? 1.16 : 1.08})` }}
               />
               {item.image ? (
                 <img
                   alt={item.name}
-                  className="max-h-[170px] max-w-[220px] object-contain drop-shadow-[0_18px_34px_rgba(86,63,118,0.16)]"
+                  className={`max-h-[198px] max-w-[264px] object-contain drop-shadow-[0_18px_34px_rgba(86,63,118,0.16)] transition ${
+                    isDraggingPlacedProp ? 'scale-[1.04]' : ''
+                  }`}
                   src={item.image}
                 />
               ) : (
-                <div className="flex h-24 w-24 items-center justify-center rounded-[28px] bg-white/88 text-5xl shadow-[0_18px_34px_rgba(86,63,118,0.12)]">
+                <div
+                  className={`flex h-28 w-28 items-center justify-center rounded-[32px] bg-white/88 text-6xl shadow-[0_18px_34px_rgba(86,63,118,0.12)] transition ${
+                    isDraggingPlacedProp ? 'scale-[1.04]' : ''
+                  }`}
+                >
                   {item.icon}
                 </div>
               )}
             </div>
-          </div>
+          </button>
         )
       })}
 
@@ -2464,7 +2794,7 @@ export function PetHomeScreen() {
 	                {showNeedBubble && (
 	                  <button
 	                    className={`absolute right-3 top-6 z-30 flex h-12 w-12 items-center justify-center rounded-full shadow-[0_18px_40px_rgba(56,37,87,0.14)] transition ${
-	                      careBubbleClasses[needs.primaryNeed]
+	                      careBubbleClasses[needs.primaryNeed!]
 	                    }`}
 	                    onClick={(event) => {
 	                      event.stopPropagation()
@@ -2550,20 +2880,25 @@ export function PetHomeScreen() {
 	                      className={hatched ? 'h-32 w-32 object-contain' : 'h-[104px] w-[104px] object-contain'}
 	                      src={hatched ? stage?.image ?? creature.cardImage : creature.eggImage}
 	                    />
-	                    {hatched &&
-	                      ownedCreature.equippedItems.slice(0, 4).map((itemId, index) => (
-	                        <span
-	                          className="absolute rounded-full bg-white/92 px-2 py-1 text-xs font-bold text-slate-700 shadow-sm"
-	                          key={itemId}
-	                          style={{
-	                            ...equippedItemPositions[index],
-	                            transform: 'scaleX(-1)',
-	                          }}
-	                        >
-	                          {getShopItemById(itemId)?.icon ?? '✨'}
-	                        </span>
-	                      ))}
-	                  </div>
+		                    {hatched &&
+		                      ownedCreature.equippedItems.slice(0, 4).map((itemId, index) => {
+		                        const equippedItem = getShopItemById(itemId)
+
+		                        return (
+		                          <span
+		                            className="absolute flex h-9 w-9 items-center justify-center rounded-full bg-white/92 px-1 py-1 text-xs font-bold text-slate-700 shadow-sm"
+		                            key={itemId}
+		                            style={{
+		                              ...equippedItemPositions[index],
+		                              transform: 'scaleX(-1)',
+		                            }}
+		                            title={equippedItem?.name}
+		                          >
+		                            {equippedItem ? renderWearablePreview(equippedItem, 'equipped') : '✨'}
+		                          </span>
+		                        )
+		                      })}
+		                  </div>
 	                </div>
               </div>
             </div>

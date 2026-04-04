@@ -1077,8 +1077,154 @@ function createMemoryHints(age, prompt, explanation) {
   ]
 }
 
+function countDecimalPlaces(value) {
+  const stringValue = String(value)
+  const decimalPart = stringValue.split('.')[1]
+  return decimalPart ? decimalPart.length : 0
+}
+
+function parseChoiceLabel(label) {
+  const normalizedLabel = String(label).trim()
+  const fractionMatch = normalizedLabel.match(/^(-?\d+)\/(\d+)$/)
+
+  if (fractionMatch) {
+    return {
+      kind: 'fraction',
+      numerator: Number(fractionMatch[1]),
+      denominator: Number(fractionMatch[2]),
+    }
+  }
+
+  const percentMatch = normalizedLabel.match(/^(-?\d+(?:\.\d+)?)%$/)
+
+  if (percentMatch) {
+    return {
+      kind: 'percent',
+      value: Number(percentMatch[1]),
+      decimals: countDecimalPlaces(percentMatch[1]),
+    }
+  }
+
+  const numberMatch = normalizedLabel.match(/^-?\d+(?:\.\d+)?$/)
+
+  if (numberMatch) {
+    return {
+      kind: 'number',
+      value: Number(normalizedLabel),
+      decimals: countDecimalPlaces(normalizedLabel),
+    }
+  }
+
+  return null
+}
+
+function formatParsedChoiceLabel(parsed, value) {
+  if (parsed.kind === 'fraction') {
+    return `${value.numerator}/${value.denominator}`
+  }
+
+  const nextValue = parsed.decimals > 0 ? value.toFixed(parsed.decimals) : String(Math.round(value))
+  return parsed.kind === 'percent' ? `${nextValue}%` : nextValue
+}
+
+function buildChoiceLabelCandidates(label) {
+  const parsed = parseChoiceLabel(label)
+
+  if (!parsed) {
+    return []
+  }
+
+  if (parsed.kind === 'fraction') {
+    const candidates = []
+    const numeratorOffsets = [1, -1, 2, -2, 3, -3]
+    const denominatorOffsets = [1, -1, 2, -2]
+
+    for (const offset of numeratorOffsets) {
+      const nextNumerator = parsed.numerator + offset
+
+      if (nextNumerator > 0) {
+        candidates.push(formatParsedChoiceLabel(parsed, { numerator: nextNumerator, denominator: parsed.denominator }))
+      }
+    }
+
+    for (const offset of denominatorOffsets) {
+      const nextDenominator = parsed.denominator + offset
+
+      if (nextDenominator > 0) {
+        candidates.push(formatParsedChoiceLabel(parsed, { numerator: parsed.numerator, denominator: nextDenominator }))
+      }
+    }
+
+    candidates.push(formatParsedChoiceLabel(parsed, { numerator: parsed.denominator, denominator: parsed.denominator }))
+    candidates.push(formatParsedChoiceLabel(parsed, { numerator: 1, denominator: parsed.denominator + 1 }))
+
+    return candidates
+  }
+
+  const candidates = []
+  const baseStep = parsed.kind === 'percent' ? 5 : parsed.decimals > 0 ? 10 ** (-parsed.decimals) : 1
+
+  for (const multiplier of [1, -1, 2, -2, 3, -3, 4, -4, 5, -5]) {
+    const nextValue = parsed.value + baseStep * multiplier
+
+    if (parsed.kind === 'percent' && (nextValue < 0 || nextValue > 100)) {
+      continue
+    }
+
+    candidates.push(formatParsedChoiceLabel(parsed, nextValue))
+  }
+
+  return candidates
+}
+
+function ensureUniqueMultipleChoiceOptions(options, correctIndex, activityId) {
+  const normalizedOptions = options.map((option) =>
+    typeof option === 'string'
+      ? { label: option }
+      : {
+          ...option,
+        },
+  )
+  const usedLabels = new Set()
+
+  for (let optionIndex = 0; optionIndex < normalizedOptions.length; optionIndex += 1) {
+    const option = normalizedOptions[optionIndex]
+
+    if (!option) {
+      continue
+    }
+
+    if (!usedLabels.has(option.label)) {
+      usedLabels.add(option.label)
+      continue
+    }
+
+    const replacementLabel = buildChoiceLabelCandidates(option.label).find((candidate) => !usedLabels.has(candidate))
+
+    if (!replacementLabel) {
+      throw new Error(`Duplicate multiple choice labels remained in ${activityId}: ${option.label}`)
+    }
+
+    normalizedOptions[optionIndex] = {
+      ...option,
+      label: replacementLabel,
+    }
+    usedLabels.add(replacementLabel)
+  }
+
+  const correctOption = normalizedOptions[correctIndex]
+
+  if (!correctOption) {
+    throw new Error(`Missing correct option for ${activityId}`)
+  }
+
+  return normalizedOptions
+}
+
 function createMultipleChoiceActivity(age, stageId, index, difficulty, prompt, question, options, correctIndex, explanation) {
-  const mappedOptions = options.map((option, optionIndex) =>
+  const activityId = `${stageId}-q${String(index + 1).padStart(2, '0')}`
+  const normalizedOptions = ensureUniqueMultipleChoiceOptions(options, correctIndex, activityId)
+  const mappedOptions = normalizedOptions.map((option, optionIndex) =>
     makeOption(
       `option-${optionIndex + 1}`,
       typeof option === 'string' ? option : option.label,
@@ -1087,7 +1233,7 @@ function createMultipleChoiceActivity(age, stageId, index, difficulty, prompt, q
   )
 
   return {
-    id: `${stageId}-q${String(index + 1).padStart(2, '0')}`,
+    id: activityId,
     type: 'multiple_choice',
     difficulty,
     hints: createMultipleChoiceHints(age, prompt, explanation),
